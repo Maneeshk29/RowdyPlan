@@ -1,24 +1,2254 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>RowdyPlan</title><style>
-:root{--orange:#f15a24;--navy:#07182c;--ink:#101827;--muted:#6b7280;--bg:#f5f7fb;--card:#fff;--green:#0f9d68;--red:#d83b3b;--line:#e6e9ef}*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}button,input{font:inherit}button{cursor:pointer}.app{display:flex;min-height:100vh}.side{width:235px;background:var(--navy);color:#fff;padding:26px 18px;position:fixed;inset:0 auto 0 0}.brand{font-size:23px;font-weight:900;letter-spacing:-.7px;margin:0 8px 32px}.brand b{color:var(--orange)}.nav{display:grid;gap:8px}.nav button{border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px 14px;border-radius:10px;font-weight:650}.nav button:hover,.nav button.active{background:#ffffff12;color:#fff}.rowdyBtn{position:absolute;bottom:22px;left:18px;right:18px;border:0;background:var(--orange);color:white;border-radius:12px;padding:13px;font-weight:800}.main{margin-left:235px;width:calc(100% - 235px);padding:34px 42px 80px}.top{display:flex;justify-content:space-between;align-items:center}.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.2px;color:var(--orange)}h1{font-size:34px;margin:5px 0 5px;letter-spacing:-1.2px}h2{letter-spacing:-.5px}.sub{color:var(--muted);margin:0}.avatar{width:42px;height:42px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800}.ask{margin:30px 0 22px;background:linear-gradient(120deg,#07182c,#112d4f);border-radius:18px;padding:24px;color:white;display:flex;gap:18px;align-items:center}.bird{width:52px;height:52px;border-radius:15px;background:var(--orange);display:grid;place-items:center;font-size:27px}.askbox{flex:1}.askbox b{font-size:17px}.search{display:flex;margin-top:10px}.search input{flex:1;border:0;padding:13px 14px;border-radius:10px 0 0 10px;outline:none}.search button{border:0;background:var(--orange);color:white;font-weight:800;padding:0 18px;border-radius:0 10px 10px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}.stat{background:white;border:1px solid var(--line);border-radius:14px;padding:18px}.stat strong{font-size:26px}.stat span{display:block;color:var(--muted);font-size:13px;margin-top:3px}.sectionHead{display:flex;justify-content:space-between;align-items:center;margin-top:24px}.sectionHead h2{margin:0}.link{border:0;background:none;color:var(--orange);font-weight:800}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;transition:.2s;cursor:pointer}.card:hover{transform:translateY(-3px);box-shadow:0 10px 28px #0b1b3212}.pill{display:inline-block;font-size:11px;font-weight:850;letter-spacing:.5px;background:#fff0ea;color:#c84415;padding:6px 9px;border-radius:20px}.match{font-size:28px;font-weight:900;margin:14px 0 2px}.green{color:var(--green)}.card h3{margin:8px 0 4px}.meta{font-size:13px;color:var(--muted)}.tags{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.tag{background:#f0f3f7;border-radius:7px;padding:5px 8px;font-size:11px;color:#4b5563}.progress{height:7px;background:#edf0f4;border-radius:9px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:var(--orange);border-radius:9px}.page{display:none}.page.active{display:block}.detail{max-width:900px}.back{border:0;background:none;padding:0;color:var(--muted);font-weight:700;margin-bottom:20px}.heroCard{background:white;border:1px solid var(--line);border-radius:20px;padding:28px}.scoreGrid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px}.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:22px}.req{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #eee}.req:last-child{border:0}.cta{background:var(--navy);color:white;border:0;padding:14px 18px;border-radius:11px;font-weight:850}.cta.orange{background:var(--orange)}.planStep{display:flex;gap:16px;margin:18px 0}.dot{width:34px;height:34px;min-width:34px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-weight:800}.stepCard{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px;flex:1}.chat{position:fixed;right:-390px;top:0;width:380px;height:100vh;background:white;box-shadow:-10px 0 35px #0002;z-index:5;transition:.25s;padding:22px}.chat.open{right:0}.chatHead{display:flex;justify-content:space-between;align-items:center}.bubble{margin:20px 0;background:#f2f5f8;padding:14px;border-radius:12px;line-height:1.45}.chatInput{position:absolute;bottom:20px;left:20px;right:20px;display:flex}.chatInput input{flex:1;padding:12px;border:1px solid var(--line);border-radius:9px 0 0 9px}.chatInput button{border:0;background:var(--orange);color:#fff;padding:0 14px;border-radius:0 9px 9px 0}.empty{color:var(--muted)}@media(max-width:900px){.side{width:76px}.brand{font-size:0}.brand:after{content:'RP';font-size:20px}.nav button{font-size:0}.nav button:before{content:'•';font-size:20px}.rowdyBtn{font-size:0}.rowdyBtn:after{content:'🐦';font-size:22px}.main{margin-left:76px;width:calc(100% - 76px);padding:24px}.cards,.stats,.scoreGrid{grid-template-columns:1fr}.chat{width:92vw;right:-95vw}}
-</style></head><body><div class='app'><aside class='side'><div class='brand'>ROWDY<b>PLAN</b></div><div class='nav'><button class='active' onclick="go('home',this)">⌂ &nbsp; For You</button><button onclick="go('explore',this)">◎ &nbsp; Explore</button><button onclick="go('plan',this)">⌁ &nbsp; My Plan</button><button onclick="go('missions',this)">✓ &nbsp; Missions</button><button onclick="go('practice',this)">◉ &nbsp; Practice</button><button onclick="go('dossier',this)">▣ &nbsp; My Dossier</button></div><button class='rowdyBtn' onclick='toggleChat()'>🐦 &nbsp; Ask Rowdy</button></aside><main class='main'>
-<section id='home' class='page active'><div class='top'><div><div class='eyebrow'>YOUR OPPORTUNITY INTELLIGENCE</div><h1>Good afternoon, Ranya.</h1><p class='sub'>Rowdy found 4 new opportunities worth your attention.</p></div><div class='avatar'>RB</div></div><div class='ask'><div class='bird'>🐦</div><div class='askbox'><b>What are you working toward?</b><div class='search'><input id='q' placeholder="e.g. Find me paid AI opportunities I'm eligible for"><button onclick='askRowdy()'>Ask Rowdy</button></div></div></div><div class='stats'><div class='stat'><strong>8</strong><span>Strong matches</span></div><div class='stat'><strong>3</strong><span>Closing soon</span></div><div class='stat'><strong>4</strong><span>New opportunities</span></div><div class='stat'><strong>2</strong><span>Active missions</span></div></div><div class='sectionHead'><h2>🎯 Top Targets For You</h2><button class='link' onclick="go('explore')">View all →</button></div><div class='cards' id='topcards'></div><div class='sectionHead'><h2>📈 Stretch Opportunities</h2></div><div class='cards' id='stretchcards'></div></section>
-<section id='explore' class='page'><h1>Explore opportunities</h1><p class='sub'>Every opportunity. One place.</p><div class='ask' style='margin-top:20px'><div class='askbox'><div class='search'><input id='filter' placeholder='Search internships, research, scholarships, events...' oninput='renderExplore()'><button>Search</button></div></div></div><div class='cards' id='allcards'></div></section>
-<section id='detail' class='page detail'><button class='back' onclick="go('home')">← Back to matches</button><div id='detailbody'></div></section>
-<section id='plan' class='page detail'><div class='eyebrow'>THE PLAN</div><h1>Your path to an AI internship</h1><p class='sub'>Rowdy sequenced opportunities that close your biggest qualification gaps.</p><div class='panel' style='margin-top:22px'><b>Current readiness</b><div style='font-size:34px;font-weight:900;margin-top:6px'>78%</div><div class='progress'><i style='width:78%'></i></div></div><div id='steps'></div></section>
-<section id='missions' class='page'><h1>Active Missions</h1><p class='sub'>Track opportunities you're actively pursuing.</p><div class='cards' style='grid-template-columns:repeat(2,1fr);margin-top:24px'><div class='card'><span class='pill'>MISSION</span><h3>USAA Data Internship</h3><div class='progress'><i style='width:80%'></i></div><div class='meta'>80% complete · Next: Practice interview</div><button class='cta' style='margin-top:16px' onclick="go('practice')">Practice with Rowdy</button></div><div class='card'><span class='pill'>MISSION</span><h3>AI Research Fellowship</h3><div class='progress'><i style='width:60%'></i></div><div class='meta'>60% complete · Next: Find faculty mentor</div><button class='cta' style='margin-top:16px' onclick='toggleChat()'>Ask Rowdy</button></div></div></section>
-<section id='practice' class='page detail'><div class='eyebrow'>ROWDY INTERVIEW</div><h1>Practice Room</h1><div class='heroCard' style='margin-top:22px;text-align:center;padding:55px'><div class='bird' style='margin:auto'>🐦</div><h2>Data Analyst Internship</h2><p class='sub'>Behavioral practice · Question 1 of 5</p><h2 style='max-width:600px;margin:32px auto'>“Tell me about a project where you used data to solve a difficult problem.”</h2><button class='cta orange' onclick="this.textContent='● Listening…';setTimeout(()=>this.textContent='End Answer',800)">Start Answer</button></div></section>
-<section id='dossier' class='page detail'><div class='eyebrow'>YOUR DOSSIER</div><h1>Career profile</h1><div class='scoreGrid'><div class='panel'><h3>Education</h3><div class='req'><span>Major</span><b>Computer Science</b></div><div class='req'><span>Classification</span><b>Senior</b></div><div class='req'><span>GPA</span><b>3.70</b></div><div class='req'><span>Graduation</span><b>May 2027</b></div></div><div class='panel'><h3>Skills Rowdy detected</h3><div class='tags'><span class='tag'>Python</span><span class='tag'>SQL</span><span class='tag'>PySpark</span><span class='tag'>AI</span><span class='tag'>Data Analysis</span><span class='tag'>Project Management</span></div><button class='cta'>Update résumé</button></div></div></section>
-</main></div><aside id='chat' class='chat'><div class='chatHead'><div><b>🐦 Ask Rowdy</b><div class='meta'>Your opportunity copilot</div></div><button onclick='toggleChat()' style='border:0;background:none;font-size:22px'>×</button></div><div id='chatMsgs'><div class='bubble'>Hey Ranya — I know your dossier and your current target. Ask me to find opportunities, explain a match, or build your plan.</div></div><div class='chatInput'><input id='chatQ' placeholder='Ask Rowdy...' onkeydown="if(event.key==='Enter')sendChat()"><button onclick='sendChat()'>↑</button></div></aside>
-<script>
-const opps=[{id:1,type:'RESEARCH',title:'AI Undergraduate Research Fellowship',org:'UTSA Research',match:94,money:'$3,000',days:'12 days left',skills:['Python','AI','Data Analysis'],missing:['Faculty mentor'],why:'Your AI, Python and data experience strongly align with this research opportunity.'},{id:2,type:'CAREER',title:'Data & AI Career Accelerator',org:'UTSA Career Center',match:89,money:'Paid',days:'18 days left',skills:['SQL','Analytics','Leadership'],missing:['Portfolio project'],why:'Your analytics background and career goals make this a strong next step.'},{id:3,type:'COMPETITION',title:'RowdyHacks Innovation Challenge',org:'ACM UTSA',match:87,money:'Prizes',days:'25 days left',skills:['Python','Teamwork','AI'],missing:['ML project'],why:'A hackathon project would strengthen the exact evidence missing from your target roles.'},{id:4,type:'INTERNSHIP',title:'AI Engineering Internship',org:'Partner Employer',match:58,money:'Paid',days:'31 days left',skills:['Python','Machine Learning','Cloud'],missing:['AWS','Production ML project','Docker'],why:'You meet the baseline, but cloud and production ML evidence are holding your score back.'},{id:5,type:'EVENT',title:'STEM Career Expo',org:'UTSA Career Center',match:82,money:'Free',days:'8 days left',skills:['Networking','Career'],missing:['Elevator pitch'],why:'Your target employers recruit from technical career events like this one.'},{id:6,type:'LEADERSHIP',title:'Student Tech Organization Officer',org:'UTSA Student Org',match:76,money:'Experience',days:'20 days left',skills:['Leadership','Communication'],missing:['Org involvement'],why:'This adds visible leadership evidence to your profile.'}];
-function card(o){return `<div class='card' onclick='openOpp(${o.id})'><span class='pill'>${o.type}</span><div class='match ${o.match>80?'green':''}'>${o.match}%</div><div class='meta'>MATCH</div><h3>${o.title}</h3><div class='meta'>${o.org} · ${o.money} · ${o.days}</div><div class='tags'>${o.skills.map(s=>`<span class='tag'>${s}</span>`).join('')}</div><div class='progress'><i style='width:${o.match}%'></i></div></div>`}
-function init(){document.getElementById('topcards').innerHTML=opps.slice(0,3).map(card).join('');document.getElementById('stretchcards').innerHTML=opps.slice(3,6).map(card).join('');renderExplore();document.getElementById('steps').innerHTML=[['OCT','Attend AI + Cloud Workshop','Close AWS fundamentals gap'],['NOV','Build at RowdyHacks','Create a production-ready ML project'],['DEC','Apply to AI Research Fellowship','Add research evidence + faculty mentorship'],['JAN','Polish résumé + portfolio','Convert completed work into strong evidence'],['FEB','Attend STEM Career Expo','Meet target employers and practice your pitch'],['MAR','Apply to AI internships','Projected readiness: 86%']].map((s,i)=>`<div class='planStep'><div class='dot'>${i+1}</div><div class='stepCard'><div class='eyebrow'>${s[0]}</div><b>${s[1]}</b><div class='meta' style='margin-top:4px'>${s[2]}</div></div></div>`).join('')}
-function go(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');window.scrollTo(0,0)}
-function renderExplore(){let q=(document.getElementById('filter')?.value||'').toLowerCase();document.getElementById('allcards').innerHTML=opps.filter(o=>(o.title+o.type+o.org+o.skills.join(' ')).toLowerCase().includes(q)).map(card).join('')}
-function openOpp(id){let o=opps.find(x=>x.id===id);document.getElementById('detailbody').innerHTML=`<div class='heroCard'><span class='pill'>${o.type}</span><h1>${o.title}</h1><p class='sub'>${o.org} · ${o.money} · ${o.days}</p><div class='match ${o.match>80?'green':''}'>${o.match}% MATCH</div><div class='progress'><i style='width:${o.match}%'></i></div><p>${o.why}</p></div><div class='scoreGrid'><div class='panel'><h2>Why Rowdy matched you</h2>${o.skills.map(s=>`<div class='req'><span>✓ ${s}</span><b class='green'>Strong</b></div>`).join('')}<h3 style='margin-top:22px'>Gaps</h3>${o.missing.map(s=>`<div class='req'><span>⚠ ${s}</span><b style='color:var(--red)'>Missing</b></div>`).join('')}</div><div class='panel'><h2>${o.match<75?'Why not me?':'How do I win this?'}</h2><p class='sub'>Rowdy can turn your missing qualifications into a personalized sequence of real opportunities and actions.</p><div style='font-size:42px;font-weight:900;margin:25px 0'>${o.match}% <span style='font-size:14px;color:var(--muted)'>READY</span></div><button class='cta orange' onclick='buildPlan()'>🐦 MAKE ME COMPETITIVE</button></div></div>`;go('detail')}
-function buildPlan(){go('plan');setTimeout(()=>alert('Rowdy analyzed your gaps and built a personalized pathway using opportunities in the demo database.'),150)}
-function toggleChat(){document.getElementById('chat').classList.toggle('open')}
-function askRowdy(){let v=document.getElementById('q').value||'Find me paid AI opportunities I am eligible for';toggleChat();document.getElementById('chatQ').value=v;sendChat()}
-function sendChat(){let i=document.getElementById('chatQ'),v=i.value.trim();if(!v)return;let m=document.getElementById('chatMsgs');m.innerHTML+=`<div class='bubble' style='background:#07182c;color:white'>${v}</div>`;i.value='';setTimeout(()=>{m.innerHTML+=`<div class='bubble'><b>I found 3 strong targets.</b><br><br>Your strongest match is the AI Undergraduate Research Fellowship at 94%. For your longer-term AI internship target, your biggest gaps are AWS and production ML evidence. I can build those into your Plan.</div>`;m.scrollTop=m.scrollHeight},450)}
-init();
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RowdyPlan | Your Opportunities. Your Path. One Plan.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-950: #040d1a;
+      --navy-900: #07182c;
+      --navy-800: #0d233e;
+      --navy-700: #163255;
+      --orange-500: #f15a24;
+      --orange-600: #d84513;
+      --orange-400: #ff7442;
+      --orange-100: #fff0ea;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --muted-light: #94a3b8;
+      --line: #e2e8f0;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --green: #10b981;
+      --green-bg: #ecfdf5;
+      --yellow: #f59e0b;
+      --yellow-bg: #fffbeb;
+      --red: #ef4444;
+      --red-bg: #fef2f2;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+
+    /* VIEW SWITCHING */
+    .view-container { display: none; width: 100%; min-height: 100vh; }
+    .view-container.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================================
+       1. LANDING PAGE (MINIMALIST & CRISP)
+       ======================================================== */
+    .landing {
+      background: radial-gradient(circle at 50% 20%, #0d233e 0%, var(--navy-950) 80%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .landing-nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 28px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+    .landing-brand {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .landing-brand span { color: var(--orange-500); }
+    .landing-brand-badge {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      background: rgba(241, 90, 36, 0.15);
+      border: 1px solid rgba(241, 90, 36, 0.4);
+      color: var(--orange-400);
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+    .landing-hero {
+      max-width: 860px;
+      margin: 40px auto 30px;
+      padding: 0 24px;
+      text-align: center;
+      z-index: 10;
+    }
+    .landing-tagline {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--orange-400);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: inline-block;
+      background: rgba(255,255,255,0.06);
+      padding: 6px 14px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .landing-title {
+      font-size: clamp(38px, 6vw, 62px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 18px;
+    }
+    .landing-title span {
+      background: linear-gradient(135deg, #fff 40%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .landing-sub {
+      font-size: 18px;
+      color: #94a3b8;
+      max-width: 640px;
+      margin: 0 auto 32px;
+      font-weight: 400;
+    }
+    .landing-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-hero {
+      background: var(--orange-500);
+      color: white;
+      border: 0;
+      padding: 16px 36px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 10px 25px rgba(241, 90, 36, 0.4);
+    }
+    .btn-hero:hover {
+      background: var(--orange-400);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(241, 90, 36, 0.5);
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* LIVE DEMO TERMINAL BOX */
+    .landing-demo {
+      max-width: 720px;
+      margin: 36px auto;
+      background: rgba(7, 24, 44, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      text-align: left;
+    }
+    .demo-bar {
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .demo-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .demo-dot.r { background: #ef4444; }
+    .demo-dot.y { background: #f59e0b; }
+    .demo-dot.g { background: #10b981; }
+    .demo-content { padding: 24px 28px; }
+    .demo-query {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      color: #f8fafc;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .demo-query .bird-icon {
+      font-size: 20px;
+      background: rgba(241, 90, 36, 0.2);
+      border: 1px solid rgba(241,90,36,0.4);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+    }
+    .demo-logs {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(0,0,0,0.3);
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .log-item { display: flex; align-items: center; gap: 8px; }
+    .log-item.success { color: #34d399; }
+    .log-item.final { color: #ff9d75; font-weight: 700; margin-top: 4px; }
+
+    /* 3 VALUE PROPS */
+    .landing-values {
+      max-width: 980px;
+      margin: 10px auto 60px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      z-index: 10;
+    }
+    .val-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: left;
+    }
+    .val-card h3 {
+      font-size: 17px;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .val-card p { font-size: 14px; color: #94a3b8; line-height: 1.5; }
+
+    /* ========================================================
+       2. ONBOARDING / DOSSIER CREATION WIZARD
+       ======================================================== */
+    .onboarding {
+      background: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+    .wizard-card {
+      max-width: 680px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 40px -15px rgba(7, 24, 44, 0.1);
+      position: relative;
+    }
+    .wizard-steps-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .w-step {
+      flex: 1;
+      height: 5px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .w-step.active { background: var(--orange-500); }
+    .w-step.done { background: var(--navy-900); }
+
+    .wizard-head { margin-bottom: 24px; }
+    .wizard-head .badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange-500);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .wizard-head h2 {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--navy-900);
+      letter-spacing: -0.5px;
+    }
+    .wizard-head p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+    /* STEP 1: FORM FIELDS */
+    .w-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .w-field { display: flex; flex-direction: column; gap: 6px; }
+    .w-field.full { grid-column: span 2; }
+    .w-field label { font-size: 13px; font-weight: 700; color: var(--ink); }
+    .w-field input, .w-field select, .w-field textarea {
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      font-size: 14px;
+      background: #fff;
+    }
+    .w-field input:focus, .w-field select:focus, .w-field textarea:focus {
+      border-color: var(--orange-500);
+      box-shadow: 0 0 0 3px rgba(241, 90, 36, 0.1);
+    }
+
+    /* STEP 2: LOOKING FOR CHIPS */
+    .w-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .w-card-choice {
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy-900);
+      transition: all 0.2s;
+    }
+    .w-card-choice:hover { border-color: #cbd5e1; transform: translateY(-2px); }
+    .w-card-choice.selected {
+      border-color: var(--orange-500);
+      background: var(--orange-100);
+      color: var(--orange-600);
+    }
+    .w-card-choice span { font-size: 22px; }
+
+    /* STEP 3: TARGET PROMPTS */
+    .target-pills { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .target-pill {
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy-900);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .target-pill:hover { border-color: #cbd5e1; background: #f8fafc; }
+    .target-pill.selected {
+      border-color: var(--orange-500);
+      background: var(--orange-100);
+      color: var(--orange-600);
+    }
+
+    /* STEP 4: RESUME UPLOAD */
+    .dropzone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 18px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+    .dropzone:hover { border-color: var(--orange-500); background: #fff8f5; }
+    .skills-preview-box {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+    .skill-scan-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #edf2f7;
+      font-size: 13px;
+    }
+    .skill-scan-row:last-child { border: 0; }
+
+    /* STEP 5: REVEAL */
+    .reveal-box {
+      text-align: center;
+      padding: 24px 0 10px;
+    }
+    .reveal-bird {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: var(--orange-500);
+      display: grid;
+      place-items: center;
+      font-size: 36px;
+      margin: 0 auto 20px;
+      box-shadow: 0 12px 30px rgba(241, 90, 36, 0.4);
+      animation: float 2s infinite ease-in-out;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .wizard-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    /* ========================================================
+       3. MAIN DASHBOARD SHELL & SIDEBAR
+       ======================================================== */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+    .sidebar {
+      width: 240px;
+      background: var(--navy-900);
+      color: #fff;
+      padding: 26px 16px;
+      position: fixed;
+      inset: 0 auto 0 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 30;
+    }
+    .sidebar-brand {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin: 0 10px 28px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sidebar-brand b { color: var(--orange-500); }
+    .sidebar-brand .tag {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      background: rgba(241,90,36,0.2);
+      color: var(--orange-400);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      color: #94a3b8;
+      text-align: left;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+    .nav-btn:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    .nav-btn.active {
+      background: linear-gradient(135deg, rgba(241, 90, 36, 0.25), rgba(241, 90, 36, 0.08));
+      color: #fff;
+      font-weight: 700;
+      border-left: 3px solid var(--orange-500);
+    }
+    .nav-btn .icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      background: var(--orange-500);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+    .sidebar-footer {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .btn-ask-side {
+      border: 0;
+      background: var(--orange-500);
+      color: white;
+      border-radius: 11px;
+      padding: 12px;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(241, 90, 36, 0.35);
+    }
+    .btn-ask-side:hover { background: var(--orange-400); }
+
+    .main-canvas {
+      margin-left: 240px;
+      width: calc(100% - 240px);
+      padding: 34px 44px 100px;
+      max-width: 1250px;
+    }
+
+    /* HEADER & STATS BAR */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--orange-500);
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--navy-900);
+      letter-spacing: -0.8px;
+    }
+    .sub { color: var(--muted); font-size: 15px; }
+
+    .ask-box-dash {
+      margin: 18px 0 24px;
+      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 100%);
+      border-radius: 18px;
+      padding: 22px 26px;
+      color: white;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(7, 24, 44, 0.1);
+    }
+    .bird-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--orange-500);
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      box-shadow: 0 6px 16px rgba(241, 90, 36, 0.35);
+    }
+    .ask-input-wrap { flex: 1; }
+    .ask-input-wrap b { font-size: 16px; font-weight: 800; display: block; margin-bottom: 8px; }
+    .ask-field-row {
+      display: flex;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .ask-field-row input {
+      flex: 1;
+      border: 0;
+      padding: 13px 16px;
+      outline: none;
+      font-size: 14px;
+    }
+    .ask-field-row button {
+      border: 0;
+      background: var(--orange-500);
+      color: white;
+      font-weight: 800;
+      padding: 0 22px;
+    }
+    .ask-field-row button:hover { background: var(--orange-400); }
+
+    /* SUMMARY STATS TILES */
+    .dash-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .metric-tile {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .metric-tile strong {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--navy-900);
+      display: block;
+      line-height: 1;
+    }
+    .metric-tile span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* OPPORTUNITY CARDS & SECTION HEADERS */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 28px 0 14px;
+    }
+    .section-head h2 { font-size: 20px; font-weight: 800; color: var(--navy-900); }
+    .opp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .opp-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .opp-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(7, 24, 44, 0.08);
+      border-color: #cbd5e1;
+    }
+    .opp-pill {
+      align-self: flex-start;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--orange-100);
+      color: var(--orange-500);
+      padding: 4px 9px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+    .opp-score {
+      font-size: 30px;
+      font-weight: 900;
+      margin: 12px 0 2px;
+      color: var(--ink);
+    }
+    .opp-score.high { color: var(--green); }
+    .opp-score-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.8px;
+    }
+    .opp-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--navy-900);
+      margin: 8px 0 4px;
+      line-height: 1.35;
+    }
+    .opp-meta { font-size: 13px; color: var(--muted); }
+    .opp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 16px; }
+    .opp-tag {
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+    }
+    .progress-bar {
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: auto;
+    }
+    .progress-bar i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange-500), #ff7e47);
+      border-radius: 8px;
+    }
+
+    /* ========================================================
+       4. EXPLORE HUB & ELIGIBILITY TOGGLE
+       ======================================================== */
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .f-chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+    }
+    .f-chip:hover { border-color: #cbd5e1; }
+    .f-chip.active {
+      background: var(--navy-900);
+      color: #fff;
+      border-color: var(--navy-900);
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-bottom: 22px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy-900);
+    }
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #cbd5e1;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-switch.on { background: var(--green); }
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-switch.on .toggle-knob { transform: translateX(20px); }
+
+    /* ========================================================
+       5. OPPORTUNITY DETAIL & MATCH BREAKDOWN
+       ======================================================== */
+    .detail-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+    }
+    .match-breakdown-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 0;
+      font-size: 13px;
+    }
+    .match-breakdown-row .label { width: 140px; font-weight: 700; color: var(--navy-900); }
+    .match-breakdown-row .bar { flex: 1; height: 8px; background: #e2e8f0; border-radius: 6px; overflow: hidden; }
+    .match-breakdown-row .bar span { display: block; height: 100%; background: var(--navy-900); border-radius: 6px; }
+    .match-breakdown-row .val { width: 44px; text-align: right; font-weight: 800; font-family: var(--font-mono); }
+
+    .checklist-section { margin-top: 20px; }
+    .cl-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+    }
+    .cl-icon { font-size: 16px; width: 22px; text-align: center; }
+    .cl-icon.good { color: var(--green); }
+    .cl-icon.warn { color: var(--yellow); }
+    .cl-icon.bad { color: var(--red); }
+
+    /* ========================================================
+       6. WHY NOT ME? MODAL & AGENT RUNNER
+       ======================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 13, 26, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: grid; }
+    .modal-box {
+      max-width: 580px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      position: relative;
+      animation: scaleIn 0.25s ease;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .agent-runner-logs {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: var(--navy-950);
+      color: #34d399;
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 150px;
+    }
+    .agent-step { display: flex; align-items: center; gap: 10px; animation: fadeIn 0.3s ease; }
+
+    /* ========================================================
+       7. MY PLAN (VERTICAL ROADMAP)
+       ======================================================== */
+    .plan-target-hero {
+      background: linear-gradient(135deg, var(--navy-900) 0%, #1a365d 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .roadmap-track {
+      position: relative;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 20px 0 40px;
+    }
+    .roadmap-track::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 28px;
+      width: 3px;
+      background: #cbd5e1;
+    }
+    .roadmap-node {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .node-pin {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--orange-500);
+      color: var(--orange-500);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 14px;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+    .roadmap-node.active .node-pin {
+      background: var(--orange-500);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(241,90,36,0.25);
+    }
+    .node-body {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px 22px;
+      flex: 1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .node-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange-500);
+      text-transform: uppercase;
+    }
+    .node-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--navy-900);
+      margin: 4px 0 6px;
+    }
+    .node-desc { font-size: 13px; color: var(--muted); }
+
+    /* ========================================================
+       8. MISSIONS (APPLICATIONS AS MISSIONS)
+       ======================================================== */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .mission-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .checklist-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    /* ========================================================
+       9. INTERVIEW ROOM (DISTRACTION FREE)
+       ======================================================== */
+    .interview-view {
+      background: var(--navy-950);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .interview-box {
+      max-width: 680px;
+      width: 100%;
+      background: var(--navy-900);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 48px 36px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    }
+    .live-pulse-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: blink 1.2s infinite;
+      margin-right: 6px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--orange-400);
+      margin: 20px 0;
+    }
+
+    /* ========================================================
+       10. ASK ROWDY (GLOBAL SIDE DRAWER)
+       ======================================================== */
+    .chat-drawer {
+      position: fixed;
+      right: -420px;
+      top: 0;
+      width: 400px;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+      z-index: 120;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+    .chat-drawer.open { right: 0; }
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .chat-bubble {
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 88%;
+    }
+    .chat-bubble.ai { background: #f1f5f9; color: var(--navy-900); }
+    .chat-bubble.user { background: var(--navy-900); color: #fff; align-self: flex-end; }
+    .chat-card-attachment {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+
+    .fab-bird {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--orange-500);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      box-shadow: 0 10px 25px rgba(241, 90, 36, 0.45);
+      border: 0;
+      z-index: 90;
+      transition: all 0.25s;
+    }
+    .fab-bird:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 14px 30px rgba(241, 90, 36, 0.6);
+    }
+
+    /* GENERAL BUTTON STYLES */
+    .btn-solid {
+      background: var(--orange-500);
+      color: white;
+      border: 0;
+      padding: 12px 22px;
+      border-radius: 11px;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .btn-solid:hover { background: var(--orange-400); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--line);
+      color: var(--navy-900);
+      padding: 11px 20px;
+      border-radius: 11px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+    /* RESPONSIVE */
+    @media(max-width: 960px) {
+      .sidebar { width: 70px; padding: 20px 8px; }
+      .sidebar-brand { font-size: 0; margin-bottom: 20px; justify-content: center; }
+      .sidebar-brand b { font-size: 20px; }
+      .sidebar-brand .tag { display: none; }
+      .nav-btn { font-size: 0; justify-content: center; padding: 12px; }
+      .nav-btn .icon { font-size: 20px; }
+      .nav-badge { display: none; }
+      .sidebar-footer { display: none; }
+      .main-canvas { margin-left: 70px; width: calc(100% - 70px); padding: 20px; }
+      .opp-grid, .dash-metrics, .w-form-grid, .w-cards-grid, .landing-values, .mission-grid {
+        grid-template-columns: 1fr;
+      }
+      .chat-drawer { width: 90vw; right: -95vw; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       SCREEN 1: LANDING PAGE (MINIMALIST & CRISP)
+       ======================================================== -->
+  <div id="view-landing" class="view-container active landing">
+    <header class="landing-nav">
+      <div class="landing-brand">
+        ROWDY<span>PLAN</span>
+        <span class="landing-brand-badge">UTSA INTEL</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button class="btn-ghost" style="padding:10px 18px; font-size:13px;" onclick="switchMasterView('dashboard')">
+          Demo Dashboard →
+        </button>
+      </div>
+    </header>
+
+    <main class="landing-hero">
+      <div class="landing-tagline">Opportunity Intelligence Engine</div>
+      <h1 class="landing-title">
+        Your opportunities. Your path. <span>One plan.</span>
+      </h1>
+      <p class="landing-sub">
+        Rowdy discovers verified opportunities across UTSA, matches them to your exact profile, and sequences a tactical plan to get you where you want to go.
+      </p>
+
+      <div class="landing-actions">
+        <button class="btn-hero" onclick="startOnboardingFlow()">
+          Build My Plan →
+        </button>
+        <button class="btn-ghost" onclick="switchMasterView('dashboard')">
+          Explore as Ranya (Senior CS)
+        </button>
+      </div>
+
+      <!-- ANIMATED DEMO TERMINAL -->
+      <div class="landing-demo">
+        <div class="demo-bar">
+          <span class="demo-dot r"></span>
+          <span class="demo-dot y"></span>
+          <span class="demo-dot g"></span>
+          <span style="font-family:var(--font-mono); font-size:11px; color:#94a3b8; margin-left:8px;">ask-rowdy-agent.sh</span>
+        </div>
+        <div class="demo-content">
+          <div class="demo-query">
+            <div class="bird-icon">🐦</div>
+            <span>"I'm a sophomore CS major with no experience. Help me land an AI internship."</span>
+          </div>
+          <div class="demo-logs">
+            <div class="log-item"><span>›</span> Analyzing your student profile & transcripts...</div>
+            <div class="log-item success"><span>✓</span> 47 UTSA opportunities evaluated</div>
+            <div class="log-item success"><span>✓</span> 13 you meet full baseline eligibility for</div>
+            <div class="log-item success"><span>✓</span> 6 high-yield strong matches identified</div>
+            <div class="log-item final"><span>★</span> Personalized 6-month qualification plan generated</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3 VALUES -->
+    <section class="landing-values">
+      <div class="val-card">
+        <h3><span>◎</span> Discover</h3>
+        <p>Every UTSA research lab, corporate fellowship, hackathon, and departmental grant unified in one live system.</p>
+      </div>
+      <div class="val-card">
+        <h3><span>🎯</span> Match</h3>
+        <p>Zero generic job spam. Every opportunity is mathematically scored against your coursework, GPA, and verified skills.</p>
+      </div>
+      <div class="val-card">
+        <h3><span>📈</span> Grow</h3>
+        <p>When you're not ready for a dream role, Rowdy answers "Why Not Me?" and sequences the exact stepping stones to get you qualified.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========================================================
+       SCREEN 2: ONBOARDING / DOSSIER WIZARD (ENGAGING STEPS)
+       ======================================================== -->
+  <div id="view-onboarding" class="view-container onboarding">
+    <div class="wizard-card">
+      <div class="wizard-steps-bar">
+        <div class="w-step active" id="ws-1"></div>
+        <div class="w-step" id="ws-2"></div>
+        <div class="w-step" id="ws-3"></div>
+        <div class="w-step" id="ws-4"></div>
+        <div class="w-step" id="ws-5"></div>
+      </div>
+
+      <!-- STEP 1: ABOUT YOU -->
+      <div id="w-content-1">
+        <div class="wizard-head">
+          <span class="badge">STEP 1 OF 5 · DOSSIER FOUNDATION</span>
+          <h2>Let's build your Dossier.</h2>
+          <p>We'll calibrate matches directly against your academic eligibility.</p>
+        </div>
+        <div class="w-form-grid">
+          <div class="w-field">
+            <label>Major</label>
+            <input type="text" id="ob-major" value="Computer Science">
+          </div>
+          <div class="w-field">
+            <label>Minor (Optional)</label>
+            <input type="text" id="ob-minor" placeholder="e.g. Data Science">
+          </div>
+          <div class="w-field">
+            <label>Classification</label>
+            <select id="ob-class">
+              <option value="Senior" selected>Senior</option>
+              <option value="Junior">Junior</option>
+              <option value="Sophomore">Sophomore</option>
+              <option value="Freshman">Freshman</option>
+              <option value="Graduate">Graduate</option>
+            </select>
+          </div>
+          <div class="w-field">
+            <label>Expected Graduation</label>
+            <input type="text" id="ob-grad" value="May 2027">
+          </div>
+          <div class="w-field full">
+            <label>Current Cumulative GPA</label>
+            <input type="text" id="ob-gpa" value="3.70">
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: WHAT ARE YOU LOOKING FOR? -->
+      <div id="w-content-2" style="display:none;">
+        <div class="wizard-head">
+          <span class="badge">STEP 2 OF 5 · OPPORTUNITY SCOPE</span>
+          <h2>What are you looking for?</h2>
+          <p>Select everything you want Rowdy to track across UTSA (Select multiple).</p>
+        </div>
+        <div class="w-cards-grid">
+          <div class="w-card-choice selected" onclick="toggleChoice(this)">
+            <span>💼</span> Internships
+          </div>
+          <div class="w-card-choice selected" onclick="toggleChoice(this)">
+            <span>🔬</span> Research
+          </div>
+          <div class="w-card-choice" onclick="toggleChoice(this)">
+            <span>💰</span> Scholarships
+          </div>
+          <div class="w-card-choice selected" onclick="toggleChoice(this)">
+            <span>🏆</span> Competitions
+          </div>
+          <div class="w-card-choice" onclick="toggleChoice(this)">
+            <span>🎤</span> Career Events
+          </div>
+          <div class="w-card-choice" onclick="toggleChoice(this)">
+            <span>🚀</span> Entrepreneurship
+          </div>
+          <div class="w-card-choice" onclick="toggleChoice(this)">
+            <span>🤝</span> Student Orgs
+          </div>
+          <div class="w-card-choice" onclick="toggleChoice(this)">
+            <span>💵</span> On-Campus Jobs
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: WHAT'S YOUR TARGET? -->
+      <div id="w-content-3" style="display:none;">
+        <div class="wizard-head">
+          <span class="badge">STEP 3 OF 5 · TARGET DEFINITION</span>
+          <h2>What's your primary target?</h2>
+          <p>This anchors your custom qualification roadmap and sequence.</p>
+        </div>
+        <div class="target-pills">
+          <div class="target-pill selected" onclick="pickTarget(this, 'Land an AI internship')">
+            <span>🤖 Land an AI / Machine Learning Internship</span>
+            <span>✓</span>
+          </div>
+          <div class="target-pill" onclick="pickTarget(this, 'Get research experience')">
+            <span>🔬 Secure Undergraduate Research Assistantship</span>
+            <span></span>
+          </div>
+          <div class="target-pill" onclick="pickTarget(this, 'Win scholarships')">
+            <span>💰 Win Merit & Departmental STEM Scholarships</span>
+            <span></span>
+          </div>
+          <div class="target-pill" onclick="pickTarget(this, 'Build my résumé')">
+            <span>🛠 Build my first portfolio projects from scratch</span>
+            <span></span>
+          </div>
+        </div>
+        <div class="w-field">
+          <label>Or describe in your own words:</label>
+          <input type="text" id="ob-target-text" value="Land an AI internship by Summer 2027">
+        </div>
+      </div>
+
+      <!-- STEP 4: UPLOAD RÉSUMÉ & SKILLS SCAN -->
+      <div id="w-content-4" style="display:none;">
+        <div class="wizard-head">
+          <span class="badge">STEP 4 OF 5 · AUTOMATED PARSING</span>
+          <h2>Upload your résumé</h2>
+          <p>Rowdy extracts verified competencies and builds your evidence profile.</p>
+        </div>
+        <div class="dropzone" onclick="triggerResumeScan()">
+          <div style="font-size:36px; margin-bottom:8px;">📄</div>
+          <b style="color:var(--navy-900); font-size:15px; display:block;">Drop your résumé here (PDF or DOCX)</b>
+          <span style="color:var(--muted); font-size:13px;">Or click to simulate instant upload</span>
+        </div>
+        <div class="skills-preview-box" id="scan-preview-box" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <b style="font-size:13px; color:var(--navy-900);">🐦 Rowdy Parsed Competencies:</b>
+            <span style="font-size:11px; color:var(--green); font-weight:700;">Extraction Complete</span>
+          </div>
+          <div class="skill-scan-row"><span>Python</span><b style="color:var(--green)">✓ Advanced</b></div>
+          <div class="skill-scan-row"><span>SQL</span><b style="color:var(--green)">✓ Advanced</b></div>
+          <div class="skill-scan-row"><span>Data Analysis</span><b style="color:var(--green)">✓ Proficient</b></div>
+          <div class="skill-scan-row"><span>Leadership</span><b style="color:var(--green)">✓ Intermediate</b></div>
+          <div class="skill-scan-row"><span>AWS / Cloud</span><b style="color:var(--yellow)">⚠ Beginner (Identified Gap)</b></div>
+        </div>
+      </div>
+
+      <!-- STEP 5: BIG REVEAL -->
+      <div id="w-content-5" style="display:none;">
+        <div class="reveal-box">
+          <div class="reveal-bird">🐦</div>
+          <div class="eyebrow" style="margin-bottom:8px;">DOSSIER VERIFIED & READY</div>
+          <h2 style="font-size:32px; font-weight:900; color:var(--navy-900);">We found 12 high-priority matches.</h2>
+          <p style="color:var(--muted); font-size:15px; max-width:480px; margin:8px auto 24px;">
+            Rowdy sequenced opportunities across UTSA Computer Science, research labs, and partner employers ready for your application.
+          </p>
+          <button class="btn-solid" style="padding:16px 36px; font-size:16px;" onclick="finishOnboardingToDashboard()">
+            See My Matches →
+          </button>
+        </div>
+      </div>
+
+      <!-- WIZARD NAV FOOTER -->
+      <div class="wizard-actions" id="wizard-nav-footer">
+        <button class="btn-outline" id="w-btn-back" onclick="wizardPrev()" style="display:none;">← Back</button>
+        <div style="flex:1;"></div>
+        <button class="btn-solid" id="w-btn-next" onclick="wizardNext()">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       SCREEN 3: MAIN APP (DASHBOARD, EXPLORE, PLAN, MISSIONS)
+       ======================================================== -->
+  <div id="view-dashboard" class="view-container">
+    <div class="app-shell">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          ROWDY<b>PLAN</b>
+          <span class="tag">UTSA</span>
+        </div>
+
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" onclick="showAppTab('tab-foryou', this)">
+            <span class="icon">⌂</span> For You
+          </button>
+          <button class="nav-btn" onclick="showAppTab('tab-explore', this)">
+            <span class="icon">◎</span> Explore
+          </button>
+          <button class="nav-btn" onclick="showAppTab('tab-plan', this)">
+            <span class="icon">⌁</span> My Plan
+          </button>
+          <button class="nav-btn" onclick="showAppTab('tab-missions', this)">
+            <span class="icon">✓</span> Missions
+            <span class="nav-badge">2</span>
+          </button>
+          <button class="nav-btn" onclick="enterDistractionFreeInterview()">
+            <span class="icon">🎙</span> Practice
+          </button>
+          <button class="nav-btn" onclick="showAppTab('tab-dossier', this)">
+            <span class="icon">▣</span> My Dossier
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button class="btn-ask-side" onclick="toggleChatDrawer()">
+            <span>🐦</span> Ask Rowdy
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT TABS -->
+      <main class="main-canvas">
+
+        <!-- TAB 1: FOR YOU -->
+        <section id="tab-foryou" class="app-tab active">
+          <div class="top-bar">
+            <div>
+              <div class="eyebrow">YOUR OPPORTUNITY INTELLIGENCE</div>
+              <h1 id="userGreeting">Good afternoon, Ranya.</h1>
+              <p class="sub">Rowdy found 4 new verified opportunities aligned with your targets.</p>
+            </div>
+            <div style="width:42px; height:42px; border-radius:50%; background:var(--navy-900); color:#fff; display:grid; place-items:center; font-weight:800;">
+              RB
+            </div>
+          </div>
+
+          <!-- ASK ROWDY BAR -->
+          <div class="ask-box-dash">
+            <div class="bird-badge">🐦</div>
+            <div class="ask-input-wrap">
+              <b>What are you working toward today?</b>
+              <div class="ask-field-row">
+                <input id="dash-ask-input" placeholder="e.g. Find me paid AI opportunities I'm eligible for...">
+                <button onclick="askFromDash()">Ask Rowdy 🐦</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUMMARY TILES -->
+          <div class="dash-metrics">
+            <div class="metric-tile">
+              <strong>8</strong>
+              <span>🎯 Strong Matches</span>
+            </div>
+            <div class="metric-tile">
+              <strong>3</strong>
+              <span>🔥 Closing Soon</span>
+            </div>
+            <div class="metric-tile">
+              <strong>4</strong>
+              <span>🆕 Just Discovered</span>
+            </div>
+            <div class="metric-tile">
+              <strong>2</strong>
+              <span>📋 Active Missions</span>
+            </div>
+          </div>
+
+          <!-- TOP TARGETS -->
+          <div class="section-head">
+            <h2>🎯 Top Targets For You</h2>
+            <button class="btn-outline" style="padding:6px 14px; font-size:13px;" onclick="showAppTab('tab-explore')">View all (8) →</button>
+          </div>
+          <div class="opp-grid" id="top-targets-container"></div>
+
+          <!-- STRETCH OPPORTUNITIES -->
+          <div class="section-head" style="margin-top:34px;">
+            <h2>📈 Stretch Opportunities (Unlock with Roadmap)</h2>
+          </div>
+          <div class="opp-grid" id="stretch-targets-container"></div>
+        </section>
+
+        <!-- TAB 2: EXPLORE -->
+        <section id="tab-explore" class="app-tab" style="display:none;">
+          <div class="eyebrow">CENTRALIZED REPOSITORY</div>
+          <h1>Every opportunity. One place.</h1>
+          <p class="sub" style="margin-bottom:20px;">Browse every internship, lab fellowship, hackathon, and award across UTSA.</p>
+
+          <div class="filter-chips">
+            <button class="f-chip active" onclick="setFilterCategory('All', this)">All Opportunities</button>
+            <button class="f-chip" onclick="setFilterCategory('INTERNSHIP', this)">💼 Internships</button>
+            <button class="f-chip" onclick="setFilterCategory('RESEARCH', this)">🔬 Research</button>
+            <button class="f-chip" onclick="setFilterCategory('COMPETITION', this)">🏆 Competitions</button>
+            <button class="f-chip" onclick="setFilterCategory('EVENT', this)">🎤 Events</button>
+            <button class="f-chip" onclick="setFilterCategory('SCHOLARSHIP', this)">💰 Scholarships</button>
+          </div>
+
+          <!-- CRUCIAL DIFFERENTIATOR TOGGLE -->
+          <div class="toggle-row">
+            <span>Filter Mode:</span>
+            <div class="toggle-switch on" id="eligibility-toggle" onclick="toggleEligibilityFilter()">
+              <div class="toggle-knob"></div>
+            </div>
+            <span id="toggle-label" style="color:var(--green)">● Only show opportunities I'm eligible for</span>
+          </div>
+
+          <div class="opp-grid" id="all-explore-container"></div>
+        </section>
+
+        <!-- TAB 3: OPPORTUNITY DETAIL SCREEN -->
+        <section id="tab-detail" class="app-tab" style="display:none;">
+          <button class="btn-outline" style="margin-bottom:18px; padding:6px 14px;" onclick="showAppTab('tab-foryou')">← Back to matches</button>
+          <div id="detail-render-area"></div>
+        </section>
+
+        <!-- TAB 4: MY PLAN -->
+        <section id="tab-plan" class="app-tab" style="display:none;">
+          <div class="plan-target-hero">
+            <div>
+              <div class="eyebrow" style="color:var(--orange-400);">OPTIMAL CAREER SEQUENCER</div>
+              <h1 style="color:white; margin:4px 0 6px;">Your Plan</h1>
+              <p style="color:#cbd5e1; font-size:15px;">🎯 Target: AI Internship — Summer 2027</p>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:12px; color:#94a3b8; font-weight:700;">CURRENT READINESS</span>
+              <div style="font-size:38px; font-weight:900; color:var(--orange-400);">78%</div>
+            </div>
+          </div>
+
+          <div class="roadmap-track" id="roadmap-items-area"></div>
+        </section>
+
+        <!-- TAB 5: MISSIONS -->
+        <section id="tab-missions" class="app-tab" style="display:none;">
+          <div class="eyebrow">EXECUTION CONTROL</div>
+          <h1>Active Missions</h1>
+          <p class="sub">Track applications that have converted into active high-stakes missions.</p>
+
+          <div class="mission-grid">
+            <div class="mission-card">
+              <span class="opp-pill">MISSION #1 · 80% READY</span>
+              <h3 style="font-size:19px; font-weight:800; margin:10px 0 4px; color:var(--navy-900);">USAA Data Analyst Internship</h3>
+              <div class="progress-bar" style="margin:12px 0 16px;"><i style="width:80%;"></i></div>
+              <div class="checklist-row"><span style="color:var(--green)">✓</span> Opportunity discovered & matched</div>
+              <div class="checklist-row"><span style="color:var(--green)">✓</span> Résumé tailored to SQL & risk analytics</div>
+              <div class="checklist-row"><span style="color:var(--green)">✓</span> Application submitted</div>
+              <div class="checklist-row"><span style="color:var(--muted)">○</span> Technical Assessment</div>
+              <div class="checklist-row"><span style="color:var(--muted)">○</span> Final Round Interview</div>
+              <div style="margin-top:20px; padding-top:14px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:12px; font-weight:700; color:var(--orange-500);">NEXT: Practice behavioral & SQL with Rowdy</span>
+                <button class="btn-solid" style="padding:8px 16px; font-size:13px;" onclick="enterDistractionFreeInterview()">Practice 🎙</button>
+              </div>
+            </div>
+
+            <div class="mission-card">
+              <span class="opp-pill">MISSION #2 · 60% READY</span>
+              <h3 style="font-size:19px; font-weight:800; margin:10px 0 4px; color:var(--navy-900);">AI Undergraduate Research Fellowship</h3>
+              <div class="progress-bar" style="margin:12px 0 16px;"><i style="width:60%;"></i></div>
+              <div class="checklist-row"><span style="color:var(--green)">✓</span> Eligibility verified (3.70 GPA)</div>
+              <div class="checklist-row"><span style="color:var(--green)">✓</span> Résumé evidence synchronized</div>
+              <div class="checklist-row"><span style="color:var(--muted)">○</span> Faculty mentor endorsement</div>
+              <div class="checklist-row"><span style="color:var(--muted)">○</span> Personal research proposal draft</div>
+              <div class="checklist-row"><span style="color:var(--muted)">○</span> Formal UTSA submission</div>
+              <div style="margin-top:20px; padding-top:14px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:12px; font-weight:700; color:var(--orange-500);">NEXT: Find & pitch faculty mentor</span>
+                <button class="btn-outline" style="padding:8px 16px; font-size:13px;" onclick="toggleChatDrawer()">Ask Rowdy 🐦</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 6: MY DOSSIER -->
+        <section id="tab-dossier" class="app-tab" style="display:none;">
+          <div class="eyebrow">STUDENT CREDENTIAL PROFILE</div>
+          <h1>My Dossier</h1>
+          <p class="sub">Verified academic records, extracted competencies, and detected career targets.</p>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px;">
+            <div class="detail-card">
+              <h3 style="font-size:18px; margin-bottom:14px; color:var(--navy-900);">Academic Record</h3>
+              <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px;">
+                <span style="color:var(--muted)">University</span><b>UT San Antonio</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px;">
+                <span style="color:var(--muted)">Major</span><b>Computer Science</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px;">
+                <span style="color:var(--muted)">Classification</span><b>Senior</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px;">
+                <span style="color:var(--muted)">Cumulative GPA</span><b>3.70 / 4.00</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:10px 0; font-size:14px;">
+                <span style="color:var(--muted)">Graduation</span><b>May 2027</b>
+              </div>
+            </div>
+
+            <div class="detail-card">
+              <h3 style="font-size:18px; margin-bottom:14px; color:var(--navy-900);">Career Profile · Data & AI</h3>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:13px;">
+                <span>Python</span><b style="color:var(--green)">Advanced</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:13px;">
+                <span>SQL</span><b style="color:var(--green)">Advanced</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:13px;">
+                <span>Data Analysis</span><b style="color:var(--green)">Advanced</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:13px;">
+                <span>Machine Learning</span><b style="color:var(--navy-700)">Intermediate</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:13px;">
+                <span>AWS / Cloud</span><b style="color:var(--red)">Beginner (Current Gap)</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:13px;">
+                <span>Leadership</span><b style="color:var(--navy-700)">Intermediate</b>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       SCREEN 4: DISTRACTION-FREE INTERVIEW ROOM
+       ======================================================== -->
+  <div id="view-interview" class="view-container interview-view">
+    <div class="interview-box">
+      <div style="font-size:42px; margin-bottom:10px;">🐦</div>
+      <div class="eyebrow" style="color:var(--orange-400);">ROWDY INTERVIEW SIMULATOR</div>
+      <h2 style="font-size:24px; font-weight:900; margin:6px 0 2px;">Data Analyst Internship</h2>
+      <p style="color:#94a3b8; font-size:14px;">Behavioral Practice #1</p>
+
+      <div style="margin:28px 0;">
+        <span class="live-pulse-dot"></span>
+        <span style="font-family:var(--font-mono); font-size:14px; color:#f8fafc; font-weight:700;">Rowdy is listening...</span>
+      </div>
+
+      <h3 style="font-size:22px; font-weight:700; max-width:540px; margin:0 auto; line-height:1.45; color:#ffffff;">
+        "Tell me about a project where you used data to solve a difficult problem."
+      </h3>
+
+      <div class="timer-display" id="interview-timer">01:34</div>
+
+      <div style="display:flex; gap:12px; justify-content:center;">
+        <button class="btn-solid" onclick="finishInterviewAnswer()" style="padding:14px 28px;">
+          End Answer & View Debrief →
+        </button>
+        <button class="btn-ghost" onclick="switchMasterView('dashboard')">
+          Exit Room
+        </button>
+      </div>
+    </div>
+
+    <!-- INTERVIEW DEBRIEF SCORECARD MODAL -->
+    <div id="interview-debrief" style="display:none; max-width:680px; width:100%; margin-top:24px; background:#fff; color:var(--ink); border-radius:20px; padding:32px; text-align:left;">
+      <div class="eyebrow" style="color:var(--orange-500);">INTERVIEW DEBRIEF</div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin:8px 0 16px;">
+        <h2 style="font-size:26px; font-weight:900; color:var(--navy-900);">Performance: 7.8 / 10</h2>
+        <span style="font-weight:700; color:var(--green)">Strong Baseline</span>
+      </div>
+
+      <div style="margin-bottom:18px;">
+        <div class="match-breakdown-row"><span class="label">Communication</span><div class="bar"><span style="width:82%"></span></div><span class="val">8.2</span></div>
+        <div class="match-breakdown-row"><span class="label">STAR Structure</span><div class="bar"><span style="width:64%"></span></div><span class="val">6.4</span></div>
+        <div class="match-breakdown-row"><span class="label">Specificity</span><div class="bar"><span style="width:71%"></span></div><span class="val">7.1</span></div>
+        <div class="match-breakdown-row"><span class="label">Technical Depth</span><div class="bar"><span style="width:80%"></span></div><span class="val">8.0</span></div>
+      </div>
+
+      <div style="background:var(--orange-100); border:1px solid #ffccb8; border-radius:12px; padding:16px; margin:16px 0;">
+        <b style="color:var(--orange-600); font-size:13px; display:block; margin-bottom:4px;">🐦 Rowdy's Tactical Feedback:</b>
+        <p style="font-size:14px; color:#7c2d12;">
+          "Your technical explanations are strong, but you described team accomplishments more often than your individual contribution. When asked 'what did you do?', lead directly with your specific Python scripts and data metrics."
+        </p>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:20px;">
+        <button class="btn-solid" onclick="switchMasterView('dashboard')">Return to Dashboard</button>
+        <button class="btn-outline" onclick="showAppTab('tab-plan'); switchMasterView('dashboard');">Add STAR Workshop to Plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       KILLER MODAL: WHY NOT ME? & AGENT RUNNER
+       ======================================================== -->
+  <div class="modal-backdrop" id="whyNotMeModal">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div class="eyebrow">GAP DIAGNOSTIC</div>
+          <h2 id="wnm-title" style="font-size:24px; font-weight:900; color:var(--navy-900); margin-top:2px;">
+            AI Engineering Internship
+          </h2>
+        </div>
+        <button onclick="closeWhyNotMe()" style="border:0; background:none; font-size:22px; color:var(--muted);">✕</button>
+      </div>
+
+      <div style="margin:18px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <b style="font-size:14px;">Current readiness</b>
+          <span style="font-size:22px; font-weight:900; color:var(--orange-500);" id="wnm-score">61%</span>
+        </div>
+        <div class="progress-bar" style="height:9px;"><i id="wnm-bar" style="width:61%;"></i></div>
+      </div>
+
+      <div style="background:#f8fafc; border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:18px;">
+        <div style="font-size:13px; color:var(--green); font-weight:700; margin-bottom:4px;">✓ Strengths in your dossier: Python, SQL, 3.70 GPA</div>
+        <div style="font-size:13px; color:var(--yellow); font-weight:700; margin-bottom:4px;">⚠ Moderate gap: Machine learning production project</div>
+        <div style="font-size:13px; color:var(--red); font-weight:700;">✕ Critical missing gaps: AWS Cloud certification, Docker containerization</div>
+      </div>
+
+      <p style="font-size:14px; color:var(--muted); line-height:1.5;">
+        Rowdy estimates you can reach <b>88%+ readiness</b> within 90 days by sequencing two specific UTSA student opportunities.
+      </p>
+
+      <!-- AGENT EXECUTION CONTAINER -->
+      <div class="agent-runner-logs" id="agentLogsArea" style="display:none;"></div>
+
+      <button class="btn-solid" id="btnMakeCompetitive" style="width:100%; padding:14px; font-size:15px; margin-top:14px;" onclick="runMakeMeCompetitiveAgent()">
+        🐦 MAKE ME COMPETITIVE →
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       GLOBAL CHAT DRAWER: ASK ROWDY 🐦
+       ======================================================== -->
+  <div class="chat-drawer" id="globalChatDrawer">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid var(--line);">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:22px;">🐦</span>
+        <div>
+          <b style="font-size:15px; color:var(--navy-900);">Ask Rowdy</b>
+          <div style="font-size:11px; color:var(--muted);">Your Opportunity Agent</div>
+        </div>
+      </div>
+      <button onclick="toggleChatDrawer()" style="border:0; background:none; font-size:20px; color:var(--muted);">✕</button>
+    </div>
+
+    <div class="chat-body" id="chatMsgsArea">
+      <div class="chat-bubble ai">
+        Hey! I'm Rowdy. I've indexed your dossier (Senior CS, 3.70 GPA) and 47 active UTSA opportunities. What are we working toward?
+      </div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('Find paid AI opportunities')">Find paid AI opps</button>
+        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('Why did AI Research match me?')">Explain my 94% match</button>
+        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('How do I close my AWS gap?')">Close my AWS gap</button>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:8px; border-top:1px solid var(--line); padding-top:12px;">
+      <input id="chatInputText" placeholder="Ask Rowdy anything..." style="flex:1; padding:10px 14px; border:1px solid var(--line); border-radius:10px; font-size:13px; outline:none;" onkeydown="if(event.key==='Enter')sendGlobalChat()">
+      <button class="btn-solid" style="padding:0 16px;" onclick="sendGlobalChat()">↑</button>
+    </div>
+  </div>
+
+  <!-- FLOATING BIRD AGENT BUTTON -->
+  <button class="fab-bird" onclick="toggleChatDrawer()" title="Ask Rowdy Copilot">
+    🐦
+  </button>
+
+  <script>
+    /* ========================================================
+       MASTER DATA STORE
+       ======================================================== */
+    const opportunities = [
+      {
+        id: 1,
+        type: 'RESEARCH',
+        category: 'RESEARCH',
+        title: 'AI Undergraduate Research Fellowship',
+        org: 'UTSA AI Consortium',
+        match: 94,
+        eligible: true,
+        money: '$3,000 Stipend',
+        deadline: 'Oct 19 (12 days left)',
+        skills: ['Python', 'PyTorch', 'Data Analysis'],
+        breakdown: { skills: 92, interests: 100, experience: 82, major: 100, classification: 100 },
+        strengths: ['Python experience', 'SQL proficiency', 'Required 3.70 GPA', 'Senior CS classification'],
+        gaps: ['Requires faculty mentor endorsement', 'Formal academic literature review sample'],
+        why: 'Your data analysis coursework and Python foundations directly mirror the lab\'s NLP dataset project.'
+      },
+      {
+        id: 2,
+        type: 'CAREER',
+        category: 'INTERNSHIP',
+        title: 'Data & AI Career Accelerator',
+        org: 'UTSA Career Center',
+        match: 89,
+        eligible: true,
+        money: 'Paid Cohort',
+        deadline: 'Nov 02 (18 days left)',
+        skills: ['SQL', 'Analytics', 'Leadership'],
+        breakdown: { skills: 88, interests: 95, experience: 85, major: 100, classification: 100 },
+        strengths: ['Demonstrated SQL fluency', 'Verified high academic standing'],
+        gaps: ['Needs an end-to-end portfolio case study'],
+        why: 'Fast-tracks direct employer interviews with HEB Digital, USAA, and Dell.'
+      },
+      {
+        id: 3,
+        type: 'COMPETITION',
+        category: 'COMPETITION',
+        title: 'RowdyHacks Innovation Challenge',
+        org: 'ACM UTSA',
+        match: 87,
+        eligible: true,
+        money: '$10,000 Prizes',
+        deadline: 'Nov 15 (25 days left)',
+        skills: ['Python', 'Teamwork', 'AI APIs'],
+        breakdown: { skills: 86, interests: 90, experience: 80, major: 100, classification: 100 },
+        strengths: ['Strong programming baseline', 'Hackathon eligibility'],
+        gaps: ['Needs production deployment proof on AWS/Vercel'],
+        why: 'Building an ML project here creates the exact missing proof on your résumé for summer internships.'
+      },
+      {
+        id: 4,
+        type: 'INTERNSHIP',
+        category: 'INTERNSHIP',
+        title: 'AI Engineering Internship',
+        org: 'Partner Employer Network',
+        match: 58,
+        eligible: false,
+        money: '$35 / hr Paid',
+        deadline: 'Dec 01 (31 days left)',
+        skills: ['Python', 'Machine Learning', 'Cloud Infra'],
+        breakdown: { skills: 55, interests: 100, experience: 50, major: 100, classification: 100 },
+        strengths: ['Strong core Python', 'Computer Science major'],
+        gaps: ['Missing AWS cloud certification', 'No Docker containerization proof', 'Needs production ML model in portfolio'],
+        why: 'You meet the academic bar, but cloud deployment gaps hold your readiness back to 58%.'
+      },
+      {
+        id: 5,
+        type: 'EVENT',
+        category: 'EVENT',
+        title: 'STEM Career Expo',
+        org: 'UTSA University Career Center',
+        match: 82,
+        eligible: true,
+        money: 'Free Admission',
+        deadline: 'Oct 15 (8 days left)',
+        skills: ['Networking', 'Pitching'],
+        breakdown: { skills: 80, interests: 85, experience: 80, major: 100, classification: 100 },
+        strengths: ['Current student status', 'Senior standing for immediate hire'],
+        gaps: ['30-second elevator pitch needs calibration in The Forge'],
+        why: 'Direct hiring managers for USAA and Austin AI startups recruit on-site.'
+      },
+      {
+        id: 6,
+        type: 'SCHOLARSHIP',
+        category: 'SCHOLARSHIP',
+        title: 'Cyber & AI Merit Scholar Award',
+        org: 'UTSA Foundation',
+        match: 91,
+        eligible: true,
+        money: '$5,000 Award',
+        deadline: 'Nov 20 (30 days left)',
+        skills: ['Academic Merit', 'CS Coursework'],
+        breakdown: { skills: 90, interests: 90, experience: 90, major: 100, classification: 100 },
+        strengths: ['Exceeds 3.50 GPA cutoff (3.70)', 'Full-time CS enrollment'],
+        gaps: ['One faculty reference letter needed'],
+        why: 'Direct match for computer science seniors targeting research careers.'
+      }
+    ];
+
+    let currentFilter = 'All';
+    let onlyEligible = true;
+    let selectedOppForWNM = null;
+
+    /* ========================================================
+       VIEW SWITCHING LOGIC
+       ======================================================== */
+    function switchMasterView(viewId) {
+      document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById(`view-${viewId}`);
+      if (target) target.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function startOnboardingFlow() {
+      switchMasterView('onboarding');
+      currentWStep = 1;
+      showWizardStep(1);
+    }
+
+    function finishOnboardingToDashboard() {
+      const name = "Ranya";
+      document.getElementById('userGreeting').textContent = `Good afternoon, ${name}.`;
+      switchMasterView('dashboard');
+      showAppTab('tab-foryou');
+    }
+
+    /* ========================================================
+       ONBOARDING WIZARD STEPS
+       ======================================================== */
+    let currentWStep = 1;
+    function showWizardStep(step) {
+      for (let i = 1; i <= 5; i++) {
+        const content = document.getElementById(`w-content-${i}`);
+        const bar = document.getElementById(`ws-${i}`);
+        if (content) content.style.display = (i === step) ? 'block' : 'none';
+        if (bar) {
+          bar.className = 'w-step';
+          if (i < step) bar.classList.add('done');
+          if (i === step) bar.classList.add('active');
+        }
+      }
+      const btnBack = document.getElementById('w-btn-back');
+      const btnNext = document.getElementById('w-btn-next');
+      const footer = document.getElementById('wizard-nav-footer');
+
+      btnBack.style.display = (step > 1 && step < 5) ? 'block' : 'none';
+      if (step === 5) {
+        footer.style.display = 'none';
+      } else {
+        footer.style.display = 'flex';
+        btnNext.textContent = (step === 4) ? 'Finish & Generate Matches →' : 'Continue →';
+      }
+    }
+
+    function wizardNext() {
+      if (currentWStep < 5) {
+        currentWStep++;
+        showWizardStep(currentWStep);
+      }
+    }
+
+    function wizardPrev() {
+      if (currentWStep > 1) {
+        currentWStep--;
+        showWizardStep(currentWStep);
+      }
+    }
+
+    function toggleChoice(el) {
+      el.classList.toggle('selected');
+    }
+
+    function pickTarget(el, txt) {
+      document.querySelectorAll('.target-pill').forEach(p => {
+        p.classList.remove('selected');
+        p.querySelector('span:last-child').textContent = '';
+      });
+      el.classList.add('selected');
+      el.querySelector('span:last-child').textContent = '✓';
+      document.getElementById('ob-target-text').value = txt;
+    }
+
+    function triggerResumeScan() {
+      const box = document.getElementById('scan-preview-box');
+      box.style.display = 'block';
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ========================================================
+       DASHBOARD TAB SWITCHING
+       ======================================================== */
+    function showAppTab(tabId, btn) {
+      document.querySelectorAll('.app-tab').forEach(t => t.style.display = 'none');
+      const target = document.getElementById(tabId);
+      if (target) target.style.display = 'block';
+
+      if (btn) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ========================================================
+       RENDER OPPORTUNITY CARDS
+       ======================================================== */
+    function renderCardHTML(o) {
+      return `
+        <div class="opp-card" onclick="openOppDetail(${o.id})">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="opp-pill">${o.type}</span>
+            <span style="font-size:11px; font-weight:700; color:${o.eligible ? 'var(--green)' : 'var(--muted)'};">
+              ${o.eligible ? '✓ Eligible' : 'Gap to bridge'}
+            </span>
+          </div>
+          <div class="opp-score ${o.match >= 85 ? 'high' : ''}">${o.match}%</div>
+          <div class="opp-score-sub">MATCH READINESS</div>
+          <h3 class="opp-title">${o.title}</h3>
+          <div class="opp-meta">${o.org} · <b style="color:var(--navy-900)">${o.money}</b></div>
+          <div class="opp-meta" style="margin-top:2px;">⏱ ${o.deadline}</div>
+          <div class="opp-tags">
+            ${o.skills.map(s => `<span class="opp-tag">${s}</span>`).join('')}
+          </div>
+          <div class="progress-bar"><i style="width:${o.match}%;"></i></div>
+        </div>
+      `;
+    }
+
+    function initDashboardCards() {
+      // Top targets
+      document.getElementById('top-targets-container').innerHTML = opportunities.slice(0, 3).map(renderCardHTML).join('');
+      // Stretch targets (58% match etc)
+      document.getElementById('stretch-targets-container').innerHTML = opportunities.slice(3, 6).map(renderCardHTML).join('');
+      // Render Explore
+      renderExploreCards();
+      // Render Roadmap
+      renderRoadmap();
+    }
+
+    function renderExploreCards() {
+      let filtered = opportunities;
+      if (currentFilter !== 'All') {
+        filtered = filtered.filter(o => o.category === currentFilter);
+      }
+      if (onlyEligible) {
+        filtered = filtered.filter(o => o.eligible);
+      }
+      document.getElementById('all-explore-container').innerHTML = filtered.length
+        ? filtered.map(renderCardHTML).join('')
+        : `<p style="grid-column:1/-1; text-align:center; padding:40px; color:var(--muted)">No opportunities match your current filter.</p>`;
+    }
+
+    function setFilterCategory(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      renderExploreCards();
+    }
+
+    function toggleEligibilityFilter() {
+      onlyEligible = !onlyEligible;
+      const toggle = document.getElementById('eligibility-toggle');
+      const label = document.getElementById('toggle-label');
+      if (onlyEligible) {
+        toggle.classList.add('on');
+        label.textContent = "● Only show opportunities I'm eligible for";
+        label.style.color = "var(--green)";
+      } else {
+        toggle.classList.remove('on');
+        label.textContent = "○ Showing all opportunities (including stretch & missing qualifications)";
+        label.style.color = "var(--muted)";
+      }
+      renderExploreCards();
+    }
+
+    /* ========================================================
+       OPPORTUNITY DETAIL & WHY NOT ME? TRIGGER
+       ======================================================== */
+    function openOppDetail(id) {
+      const o = opportunities.find(x => x.id === id);
+      if (!o) return;
+      selectedOppForWNM = o;
+
+      const isHighMatch = o.match >= 85;
+      const ctaLabel = isHighMatch ? '🐦 HOW DO I WIN THIS?' : '🐦 WHY NOT ME?';
+
+      document.getElementById('detail-render-area').innerHTML = `
+        <div class="detail-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <span class="opp-pill">${o.type}</span>
+              <h1 style="font-size:28px; margin:8px 0 4px;">${o.title}</h1>
+              <p class="sub">${o.org} · <b style="color:var(--navy-900)">${o.money}</b> · ${o.deadline}</p>
+            </div>
+            <div style="text-align:right;">
+              <div class="opp-score ${isHighMatch ? 'high' : ''}" style="margin:0;">${o.match}%</div>
+              <div class="opp-score-sub">COMPETITIVE MATCH</div>
+            </div>
+          </div>
+
+          <div style="margin:24px 0 16px;">
+            <b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Your Match Breakdown</b>
+            <div style="margin-top:10px;">
+              <div class="match-breakdown-row"><span class="label">Skills</span><div class="bar"><span style="width:${o.breakdown.skills}%"></span></div><span class="val">${o.breakdown.skills}%</span></div>
+              <div class="match-breakdown-row"><span class="label">Interests</span><div class="bar"><span style="width:${o.breakdown.interests}%"></span></div><span class="val">${o.breakdown.interests}%</span></div>
+              <div class="match-breakdown-row"><span class="label">Experience</span><div class="bar"><span style="width:${o.breakdown.experience}%"></span></div><span class="val">${o.breakdown.experience}%</span></div>
+              <div class="match-breakdown-row"><span class="label">Major</span><div class="bar"><span style="width:${o.breakdown.major}%"></span></div><span class="val">${o.breakdown.major}%</span></div>
+              <div class="match-breakdown-row"><span class="label">Classification</span><div class="bar"><span style="width:${o.breakdown.classification}%"></span></div><span class="val">${o.breakdown.classification}%</span></div>
+            </div>
+          </div>
+
+          <div class="checklist-section">
+            <b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Why Rowdy matched you</b>
+            <div style="margin-top:8px;">
+              <div style="font-size:13px; font-weight:700; color:var(--green); margin:8px 0 4px;">🟢 You have verified evidence:</div>
+              ${o.strengths.map(s => `<div class="cl-item"><span class="cl-icon good">✓</span> <span>${s}</span></div>`).join('')}
+
+              <div style="font-size:13px; font-weight:700; color:var(--red); margin:16px 0 4px;">🔴 Gaps holding score back:</div>
+              ${o.gaps.map(g => `<div class="cl-item"><span class="cl-icon bad">✕</span> <span>${g}</span></div>`).join('')}
+            </div>
+          </div>
+
+          <div style="margin-top:28px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+            <p style="font-size:14px; color:var(--muted); max-width:480px;">${o.why}</p>
+            <button class="btn-solid" style="padding:14px 28px; font-size:15px;" onclick="openWhyNotMeModal()">
+              ${ctaLabel}
+            </button>
+          </div>
+        </div>
+      `;
+
+      showAppTab('tab-detail');
+    }
+
+    function openWhyNotMeModal() {
+      if (!selectedOppForWNM) return;
+      const modal = document.getElementById('whyNotMeModal');
+      document.getElementById('wnm-title').textContent = selectedOppForWNM.title;
+      document.getElementById('wnm-score').textContent = `${selectedOppForWNM.match}%`;
+      document.getElementById('wnm-bar').style.width = `${selectedOppForWNM.match}%`;
+      document.getElementById('agentLogsArea').style.display = 'none';
+      document.getElementById('btnMakeCompetitive').style.display = 'block';
+      modal.classList.add('open');
+    }
+
+    function closeWhyNotMe() {
+      document.getElementById('whyNotMeModal').classList.remove('open');
+    }
+
+    function runMakeMeCompetitiveAgent() {
+      const logs = document.getElementById('agentLogsArea');
+      const btn = document.getElementById('btnMakeCompetitive');
+      btn.style.display = 'none';
+      logs.style.display = 'flex';
+      logs.innerHTML = '';
+
+      const steps = [
+        "🐦 Building your plan...",
+        "✓ Analyzing employer requirements & ATS filters",
+        "✓ Comparing your dossier experience against applicant pool",
+        "✓ Searching UTSA campus opportunities & workshops",
+        "✓ Finding skill-building interventions for AWS & Docker",
+        "✓ Sequencing your optimal 6-month pathway"
+      ];
+
+      steps.forEach((text, idx) => {
+        setTimeout(() => {
+          logs.innerHTML += `<div class="agent-step"><span>›</span> ${text}</div>`;
+        }, (idx + 1) * 350);
+      });
+
+      setTimeout(() => {
+        closeWhyNotMe();
+        showAppTab('tab-plan');
+        const planTabBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.textContent.includes('My Plan'));
+        if (planTabBtn) {
+          document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+          planTabBtn.classList.add('active');
+        }
+      }, (steps.length + 1) * 350 + 400);
+    }
+
+    /* ========================================================
+       RENDER ROADMAP IN MY PLAN
+       ======================================================== */
+    function renderRoadmap() {
+      const nodes = [
+        { month: 'OCTOBER', title: 'UTSA AI & Cloud Fundamentals Workshop', status: '✓ Enrolled', desc: 'Closes AWS deployment gap identified in target internships.' },
+        { month: 'NOVEMBER', title: 'RowdyHacks Innovation Challenge', status: '87% Match', desc: 'Build and ship full-stack containerized ML application.' },
+        { month: 'DECEMBER', title: 'AI Undergraduate Research Fellowship', status: 'Apply (94% Match)', desc: 'Adds formal faculty mentorship and $3,000 research credentials.' },
+        { month: 'JANUARY', title: 'Polish Résumé & Calibrate STAR Answers in The Forge', status: 'Practice Room', desc: 'Converts finished projects into crisp interview evidence.' },
+        { month: 'FEBRUARY', title: 'UTSA STEM Career Expo with Rowdy Dossier', status: 'Direct Hiring', desc: 'Meet partner employer recruiting managers with 88%+ verified readiness.' },
+        { month: 'TARGET', title: 'AI Engineering Internship Offer — Summer 2027', status: '🎯 TARGET REACHED', desc: 'Projected candidate standing: Top 5%.' }
+      ];
+
+      document.getElementById('roadmap-itemsArea' || 'roadmap-items-area').innerHTML = nodes.map((n, i) => `
+        <div class="roadmap-node ${i === 0 ? 'active' : ''}">
+          <div class="node-pin">${i === nodes.length - 1 ? '🎯' : (i + 1)}</div>
+          <div class="node-body">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="node-tag">${n.month}</span>
+              <span style="font-size:11px; font-weight:800; color:${n.status.includes('✓') ? 'var(--green)' : 'var(--orange-500)'}">${n.status}</span>
+            </div>
+            <div class="node-title">${n.title}</div>
+            <div class="node-desc">${n.desc}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ========================================================
+       INTERVIEW ROOM SIMULATION
+       ======================================================== */
+    function enterDistractionFreeInterview() {
+      switchMasterView('interview');
+      document.getElementById('interview-debrief').style.display = 'none';
+      let sec = 94;
+      const timer = document.getElementById('interview-timer');
+      clearInterval(window.itvInterval);
+      window.itvInterval = setInterval(() => {
+        sec++;
+        const m = String(Math.floor(sec / 60)).padStart(2, '0');
+        const s = String(sec % 60).padStart(2, '0');
+        timer.textContent = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function finishInterviewAnswer() {
+      clearInterval(window.itvInterval);
+      const debrief = document.getElementById('interview-debrief');
+      debrief.style.display = 'block';
+      debrief.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ========================================================
+       GLOBAL CHAT DRAWER: ASK ROWDY 🐦
+       ======================================================== */
+    function toggleChatDrawer() {
+      document.getElementById('globalChatDrawer').classList.toggle('open');
+    }
+
+    function askFromDash() {
+      const txt = document.getElementById('dash-ask-input').value.trim();
+      toggleChatDrawer();
+      if (txt) {
+        document.getElementById('chatInputText').value = txt;
+        sendGlobalChat();
+      }
+    }
+
+    function quickPrompt(txt) {
+      document.getElementById('chatInputText').value = txt;
+      sendGlobalChat();
+    }
+
+    function sendGlobalChat() {
+      const input = document.getElementById('chatInputText');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const area = document.getElementById('chatMsgsArea');
+      area.innerHTML += `<div class="chat-bubble user">${val}</div>`;
+      input.value = '';
+      area.scrollTop = area.scrollHeight;
+
+      setTimeout(() => {
+        let reply = "I analyzed your dossier and active opportunities.";
+        let cardHTML = "";
+
+        if (val.toLowerCase().includes('plan') || val.toLowerCase().includes('prioritize')) {
+          reply = "I prioritized the top 3 high-impact actions for your graduation timeline:";
+          cardHTML = `
+            <div class="chat-card-attachment">
+              <div style="font-size:12px; font-weight:800; color:var(--navy-900);">🎯 Rowdy Priority Sequence:</div>
+              <div style="font-size:12px; margin-top:4px;">1. <b>94%</b> AI Research Assistant Fellowship</div>
+              <div style="font-size:12px;">2. <b>89%</b> Data & AI Career Accelerator</div>
+              <div style="font-size:12px;">3. <b>87%</b> RowdyHacks ML Innovation Challenge</div>
+              <button class="btn-solid" style="width:100%; margin-top:8px; padding:6px; font-size:11px;" onclick="showAppTab('tab-plan'); toggleChatDrawer();">
+                Add all to my plan →
+              </button>
+            </div>
+          `;
+        } else if (val.toLowerCase().includes('aws') || val.toLowerCase().includes('gap')) {
+          reply = "Your biggest bottleneck for $35/hr AI Engineering roles is AWS cloud deployment and containerization. Attending the October UTSA Cloud Workshop closes 80% of that gap!";
+        } else {
+          reply = "I found 3 strong opportunities matching that. Your 3.70 GPA and CS coursework make you an immediate top-tier candidate for the AI Undergraduate Research Fellowship (94%).";
+        }
+
+        area.innerHTML += `
+          <div class="chat-bubble ai">
+            ${reply}
+            ${cardHTML}
+          </div>
+        `;
+        area.scrollTop = area.scrollHeight;
+      }, 500);
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initDashboardCards();
+    });
+  </script>
+</body>
+</html>
