@@ -1,63 +1,141 @@
 # RowdyPlan
+### Your career. All in one place.
 
-### *"Every heist starts with a plan. So does your career."*
+> *“Every heist starts with a plan. So does your career.”*
 
-RowdyPlan is a career intelligence platform built for UTSA students. It scrapes real opportunities from Handshake, matches them to your profile using deterministic scoring, and gives you an AI interview coach named Rowdy who preps you for every conversation.
+Finding a job is only one part of building a career. You also need to understand your options, build experience, strengthen your resume, and prepare to explain what you bring to the table. Too often, those steps are scattered across different platforms—with little guidance connecting them.
 
-You tell Rowdy who you are. Rowdy tells you exactly where you stand, what you're missing, and how to close the gap — then drills you until you're ready.
+**RowdyPlan brings that journey into one place.**
+
+Designed for UTSA students, RowdyPlan connects your background, experiences, and current interests to relevant opportunities and actionable next steps. From finding your first campus event to preparing for your next interview, it helps you move forward with direction and support.
+
+**Find opportunities. Build your resume. Plan your future. Practice with Rowdy. All in one place.**
 
 ---
 
-## Features
+## Your Journey Starts With You
 
-### 1. Live Opportunity Scraping
-- Pulls jobs, internships, research positions, events, and organizations from **Handshake** and across UTSA
-- Deduplicates, normalizes, and indexes every opportunity into one searchable hub
-- Provider pattern — plug in any university career platform (Handshake, LinkedIn, Indeed)
-- Currently loaded with **48 real UTSA-area opportunities** from USAA, H-E-B, Rackspace, Accenture, SwRI, UTSA labs, and more
+Before recommending where to go, RowdyPlan gets to know where you are.
 
-### 2. Deterministic Career Matching
-- Every score is a formula, not a guess — same input always produces the same output
-- **Career path prediction** across 15 careers (SWE, Data Science, ML, Cybersecurity, PM, DevOps, etc.)
-- **Job/opportunity matching** with a 6-factor weighted score:
-  - 35% skill overlap | 20% experience | 15% education | 10% career interest | 10% location | 10% goal fit
-- **Qualification filter** — each opportunity is tagged QUALIFIED, LIKELY_QUALIFIED, SKILL_GAP, or NOT_ELIGIBLE
-- **"Why Not Me?"** — click any opportunity to see exactly which gaps hold your score back
+An engaging, guided introduction gathers your:
 
-### 3. Rowdy — Your AI Interview Coach
-- Rowdy is a live AI agent with a personality and an avatar
-- **Interview simulation** — Rowdy asks you real behavioral and technical questions based on the job you're targeting
-- **Real-time feedback** — after each answer, Rowdy scores your response on Communication, STAR Structure, Specificity, and Technical Depth
-- **Tactical coaching** — "You described team accomplishments more than your individual contribution. Lead with your specific Python scripts and data metrics."
-- **Career chat** — ask Rowdy anything: "What are my skill gaps?", "Which jobs should I apply to first?", "How do I close my AWS gap?"
-- Available everywhere in the app via the floating bird button
+- Major, academic year, and expected graduation.
+- Skills, coursework, projects, and previous experiences.
+- Work, volunteering, leadership, and campus involvement.
+- Current interests, career goals, and areas you want to explore.
+- Starting point—whether you have multiple internships or no experience yet.
 
-### 4. Resume Intelligence
-- Upload a real PDF or DOCX resume — Rowdy parses it with pdfplumber/PyPDF2/python-docx
-- **ATS compatibility score** — how well your resume survives automated screening
-- **Bullet quality analysis** — flags weak bullets, suggests rewrites with measurable impact
-- **Keyword gap detection** — which technical skills and certifications are missing for your target career
-- **Resume score** = 40pts keyword coverage + 20pts section completeness + 20pts bullet quality + 20pts impact metrics
+You don’t need a polished resume or a perfectly defined career goal to begin. RowdyPlan helps you turn what you already know about yourself into a starting point.
 
-### 5. Skill Gap Analysis & Action Plan
-- Maps your skills against a **122-skill taxonomy** using feature vectors
-- Prioritizes gaps as CRITICAL, HIGH, MEDIUM, or LOW based on career requirements
-- Recommends specific resources (courses, certifications, projects) for each gap
-- Generates a **timeline**: what to do now, in 30 days, next semester, and next year
+---
 
-### 6. The Dashboard
-- **For You** — top matched opportunities sorted by score, plus stretch goals
-- **Explore** — browse all 48+ opportunities with category filters and an eligibility toggle
-- **My Plan** — personalized roadmap with sequenced milestones
-- **Missions** — track active applications through each stage (applied → assessment → interview → offer)
-- **My Dossier** — your verified academic record, extracted competencies, and career targets
-- **Practice Room** — distraction-free interview simulator with timer and debrief scorecard
+## One Platform. Dedicated Spaces for Every Step.
 
-### 7. Feedback Loop (Learning to Rank)
-- Collects click, view, apply, dismiss, and rating events on every opportunity
-- Stores structured feedback for future model training
-- The system is designed to get smarter over time — recommendations improve as more students interact
+### 1. Best Matched Jobs — Find Opportunities That Fit You
 
+Discover jobs and internships aligned with **both your background and what interests you now**.
+
+RowdyPlan helps you understand:
+
+- Which opportunities connect to your skills and experiences.
+- Why a role could be a good fit.
+- Which requirements you already meet.
+- What gaps you could work on before applying.
+- Which opportunities are worth prioritizing.
+
+Transparent matching makes recommendations easier to understand, so you can make informed choices about where to focus your effort.
+
+### 2. Resume Fixes — Tell Your Story With Purpose
+
+Your resume should connect your experiences to the opportunity you want.
+
+The Resume Fixes tab focuses on improvements for your **specific target role or career goal**, including:
+
+- Highlighting relevant skills and accomplishments.
+- Strengthening vague bullet points with clear actions and outcomes.
+- Identifying missing keywords and supporting evidence.
+- Organizing content so your strongest qualifications stand out.
+- Turning coursework, projects, volunteering, and part-time work into meaningful resume content.
+
+For students with limited experience, RowdyPlan helps identify what they can already showcase—and what they could build next.
+
+### 3. Career Planning Dashboard — Turn Uncertainty Into Next Steps
+
+> “What can I do with my background?”  
+> “What should I work on next?”  
+> “How do I move toward a career that interests me?”
+
+The Career Planning Dashboard connects those questions to a practical roadmap.
+
+Using your experience, interests, and goals, it helps you:
+
+- Explore possible career directions.
+- Identify strengths and areas for development.
+- Connect skill gaps to projects, learning resources, and experiences.
+- Organize priorities into immediate, short-term, and longer-term steps.
+- Revisit your plan as your interests and experience change.
+
+The goal is to give you a clearer view of your possibilities and a manageable way to explore them.
+
+### 4. Interview Prep With Rowdy — Build Confidence, One Conversation at a Time
+
+Meet **Rowdy**, your bird companion and AI interview coach.
+
+With Rowdy’s profile picture featured on its dedicated tab, interview preparation becomes a more welcoming part of the experience. This space is designed to help students practice without feeling overwhelmed.
+
+Rowdy supports you through:
+
+- Behavioral and technical questions tailored to your target role.
+- Practice explaining your background and experiences.
+- Guidance on structuring answers using the STAR method.
+- Feedback on clarity, specificity, and individual contribution.
+- Opportunities to retry, improve, and build confidence at your own pace.
+
+**You don’t have to know the perfect answer before you start practicing.**
+
+### 5. Campus Opportunities — Build Experience From Wherever You Are
+
+Not everyone starts with internships, industry connections, or a strong resume. RowdyPlan makes discovering a first step a central part of the experience.
+
+The campus discovery hub is designed to bring together relevant information from **RowdyLink, UTSA websites, Handshake, Instagram, LinkedIn, and other social channels**, helping students find:
+
+- Career fairs and employer information sessions.
+- Resume workshops and interview preparation events.
+- Student organizations and leadership opportunities.
+- Research, volunteering, and campus involvement.
+- Hackathons, competitions, and projects that build practical skills.
+
+Instead of depending on which account you follow or which announcement you happen to see, you have one place to start exploring.
+
+**No experience should mean a starting point—not a closed door.**
+
+### 6. Agentic Career Center With Career Advisors — Coming Soon
+
+The next chapter of RowdyPlan brings AI-supported preparation and human career guidance closer together.
+
+The planned Agentic Career Center will help students prepare for more productive advisor conversations by organizing their goals, experiences, resume priorities, and progress in one place.
+
+The vision includes:
+
+- Personalized preparation before advisor meetings.
+- Shared context about a student’s goals and current challenges.
+- Action plans informed by career advisor guidance.
+- Follow-through that connects recommendations to concrete next steps.
+
+**Coming Soon: a more connected experience between students, Rowdy, and career advisors.**
+
+---
+
+## Why RowdyPlan Matters
+
+Career opportunities are easier to act on when you know where to find them, how they connect to your goals, and what to do next.
+
+RowdyPlan is built to make that clarity more accessible—especially for students who are still exploring, building their first experience, or navigating the process without an established professional network.
+
+Its purpose is to help students move from **“I don’t know where to start”** to **“I know my next step.”**
+
+### Your opportunities. Your preparation. Your future.
+### All in one place.
 ---
 
 ## How Scoring Works
