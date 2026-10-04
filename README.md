@@ -1,51 +1,88 @@
 # RowdyPlan
 
-**Your opportunities. Your path. One plan.**
+### *"Every heist starts with a plan. So does your career."*
 
-RowdyPlan is a predictive career intelligence engine built for UTSA students. You tell it who you are — your major, GPA, skills, and goals — and it tells you exactly which opportunities you're qualified for, what's holding you back, and what to do next.
+RowdyPlan is a career intelligence platform built for UTSA students. It scrapes real opportunities from Handshake, matches them to your profile using deterministic scoring, and gives you an AI interview coach named Rowdy who preps you for every conversation.
 
-This is **not a chatbot**. It's a prediction system. Every score is deterministic: same input, same output, no LLM-generated numbers.
-
----
-
-## What It Does
-
-1. **You fill out a profile** — major, GPA, year, skills, career goals, and optionally upload your resume
-2. **The engine runs** — it scores you against 48 real UTSA-area opportunities (jobs, research, events, orgs, programs)
-3. **You get a dashboard** with:
-   - **Career path predictions** — which careers fit your skills (ranked by match %)
-   - **Job/opportunity matches** — each one scored with a detailed breakdown (skills, experience, education, career interest, location, goal fit)
-   - **Qualification status** — QUALIFIED, LIKELY_QUALIFIED, SKILL_GAP, or NOT_ELIGIBLE for each opportunity
-   - **Skill gap analysis** — exactly which skills you're missing, prioritized by importance
-   - **Resume intelligence** — ATS score, bullet quality analysis, rewrite suggestions
-   - **A timeline** — what to do now, in 30 days, next semester, and next year
-4. **"Why Not Me?"** — click any opportunity to see exactly why your score is what it is and what closes the gap
+You tell Rowdy who you are. Rowdy tells you exactly where you stand, what you're missing, and how to close the gap — then drills you until you're ready.
 
 ---
 
-## How the Scoring Works
+## Features
 
-No black boxes. Every number comes from weighted formulas using set intersection and cosine similarity.
+### 1. Live Opportunity Scraping
+- Pulls jobs, internships, research positions, events, and organizations from **Handshake** and across UTSA
+- Deduplicates, normalizes, and indexes every opportunity into one searchable hub
+- Provider pattern — plug in any university career platform (Handshake, LinkedIn, Indeed)
+- Currently loaded with **48 real UTSA-area opportunities** from USAA, H-E-B, Rackspace, Accenture, SwRI, UTSA labs, and more
 
-### Career Matching
+### 2. Deterministic Career Matching
+- Every score is a formula, not a guess — same input always produces the same output
+- **Career path prediction** across 15 careers (SWE, Data Science, ML, Cybersecurity, PM, DevOps, etc.)
+- **Job/opportunity matching** with a 6-factor weighted score:
+  - 35% skill overlap | 20% experience | 15% education | 10% career interest | 10% location | 10% goal fit
+- **Qualification filter** — each opportunity is tagged QUALIFIED, LIKELY_QUALIFIED, SKILL_GAP, or NOT_ELIGIBLE
+- **"Why Not Me?"** — click any opportunity to see exactly which gaps hold your score back
+
+### 3. Rowdy — Your AI Interview Coach
+- Rowdy is a live AI agent with a personality and an avatar
+- **Interview simulation** — Rowdy asks you real behavioral and technical questions based on the job you're targeting
+- **Real-time feedback** — after each answer, Rowdy scores your response on Communication, STAR Structure, Specificity, and Technical Depth
+- **Tactical coaching** — "You described team accomplishments more than your individual contribution. Lead with your specific Python scripts and data metrics."
+- **Career chat** — ask Rowdy anything: "What are my skill gaps?", "Which jobs should I apply to first?", "How do I close my AWS gap?"
+- Available everywhere in the app via the floating bird button
+
+### 4. Resume Intelligence
+- Upload a real PDF or DOCX resume — Rowdy parses it with pdfplumber/PyPDF2/python-docx
+- **ATS compatibility score** — how well your resume survives automated screening
+- **Bullet quality analysis** — flags weak bullets, suggests rewrites with measurable impact
+- **Keyword gap detection** — which technical skills and certifications are missing for your target career
+- **Resume score** = 40pts keyword coverage + 20pts section completeness + 20pts bullet quality + 20pts impact metrics
+
+### 5. Skill Gap Analysis & Action Plan
+- Maps your skills against a **122-skill taxonomy** using feature vectors
+- Prioritizes gaps as CRITICAL, HIGH, MEDIUM, or LOW based on career requirements
+- Recommends specific resources (courses, certifications, projects) for each gap
+- Generates a **timeline**: what to do now, in 30 days, next semester, and next year
+
+### 6. The Dashboard
+- **For You** — top matched opportunities sorted by score, plus stretch goals
+- **Explore** — browse all 48+ opportunities with category filters and an eligibility toggle
+- **My Plan** — personalized roadmap with sequenced milestones
+- **Missions** — track active applications through each stage (applied → assessment → interview → offer)
+- **My Dossier** — your verified academic record, extracted competencies, and career targets
+- **Practice Room** — distraction-free interview simulator with timer and debrief scorecard
+
+### 7. Feedback Loop (Learning to Rank)
+- Collects click, view, apply, dismiss, and rating events on every opportunity
+- Stores structured feedback for future model training
+- The system is designed to get smarter over time — recommendations improve as more students interact
+
+---
+
+## How Scoring Works
+
+No black boxes. No LLM-generated numbers. Every score is a deterministic formula.
+
+### Career Match Score
 | Weight | Factor |
 |--------|--------|
 | 50% | Skill overlap (your skills vs. career's typical skills) |
-| 15% | Coursework alignment |
 | 20% | Experience relevance |
+| 15% | Coursework alignment |
 | 15% | Stated career interest |
 
-### Job/Opportunity Matching
+### Job/Opportunity Match Score
 | Weight | Factor |
 |--------|--------|
-| 35% | Skill similarity |
-| 20% | Experience level |
-| 15% | Education match (GPA, major) |
+| 35% | Skill similarity (set intersection) |
+| 20% | Experience level match |
+| 15% | Education fit (GPA, major, graduation year) |
 | 10% | Career interest alignment |
-| 10% | Location preference |
+| 10% | Location preference match |
 | 10% | Goal fit (internship vs. full-time vs. research) |
 
-### Resume Scoring (out of 100)
+### Resume Score (out of 100)
 | Points | Factor |
 |--------|--------|
 | 40 | Keyword coverage for target career |
@@ -53,64 +90,95 @@ No black boxes. Every number comes from weighted formulas using set intersection
 | 20 | Bullet quality (action verbs, measurable impact) |
 | 20 | Impact metrics (numbers, percentages, quantified results) |
 
-### Qualification Filter
-Each opportunity gets one of:
-- **QUALIFIED** — you meet all hard requirements
-- **LIKELY_QUALIFIED** — you're close (e.g., GPA within 0.2 of minimum)
-- **SKILL_GAP** — you have the basics but missing key skills
-- **NOT_ELIGIBLE** — wrong major, GPA too low, or wrong graduation year
-- **UNKNOWN** — not enough data to determine
+### Qualification Status
+| Status | Meaning |
+|--------|---------|
+| QUALIFIED | Meets all hard requirements |
+| LIKELY_QUALIFIED | Close (e.g., GPA within 0.2 of minimum) |
+| SKILL_GAP | Has the basics but missing key skills |
+| NOT_ELIGIBLE | Wrong major, GPA too low, or wrong grad year |
 
 ---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    FRONTEND                          │
-│              index.html (single file)                │
-│                                                      │
-│  Landing Page → Onboarding Wizard → Dashboard        │
-│  Explore Hub · Career Plan · Interview Room · Chat   │
-│                                                      │
-│  Calls backend REST API via fetch()                  │
-└──────────────────────┬──────────────────────────────┘
-                       │ HTTP (same origin :8000)
-┌──────────────────────▼──────────────────────────────┐
-│                  FASTAPI BACKEND                     │
-│                                                      │
-│  /api/rowdy-plan/generate-inline  ← main endpoint   │
-│  /api/students/profile            ← CRUD profiles    │
-│  /api/resume/upload               ← PDF/DOCX parse   │
-│  /api/resume/analyze              ← ATS scoring       │
-│  /api/careers/recommendations     ← career matching   │
-│  /api/jobs/recommendations        ← job matching      │
-│  /api/experiences/recommendations ← experience gaps   │
-│  /api/opportunities               ← browse all        │
-│  /api/feedback                    ← event logging     │
-│  /api/admin/seed                  ← load UTSA data    │
-│                                                      │
-├──────────────────────────────────────────────────────┤
-│              RECOMMENDATION ENGINE                   │
-│                                                      │
-│  ProfileBuilder     → validates & enriches profile   │
-│  FeatureExtractor   → 122-skill taxonomy vectors     │
-│  CareerMatcher      → 15 career paths scored         │
-│  JobMatcher         → weighted 6-factor scoring      │
-│  ExperienceMatcher  → 22 university experiences      │
-│  ResumeAnalyzer     → ATS score + bullet rewrites    │
-│  GapAnalyzer        → skill gaps prioritized         │
-│  RankingEngine      → sort + diversity + qualify     │
-│  PlanGenerator      → orchestrates full pipeline     │
-│                                                      │
-├──────────────────────────────────────────────────────┤
-│               DATA LAYER                             │
-│                                                      │
-│  InMemoryStore (demo)  ← works without any database  │
-│  UTSAProvider          ← 48 mock UTSA opportunities  │
-│  PostgreSQL + pgvector ← production (optional)       │
-│  Sentence-transformers ← embeddings (optional)       │
-└──────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│                      FRONTEND                            │
+│                index.html (single file)                   │
+│                                                           │
+│  Landing ─→ Onboarding Wizard ─→ Dashboard                │
+│                                                           │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌─────────────┐ │
+│  │  For You  │ │ Explore  │ │ My Plan  │ │  Missions   │ │
+│  └──────────┘ └──────────┘ └──────────┘ └─────────────┘ │
+│  ┌──────────┐ ┌───────────────────────────────────────┐  │
+│  │ Dossier  │ │  Rowdy AI Agent (Chat + Interview)    │  │
+│  └──────────┘ └───────────────────────────────────────┘  │
+│                                                           │
+│  Calls backend via fetch() on same origin                 │
+└────────────────────────┬────────────────────────────────┘
+                         │ HTTP :8000
+┌────────────────────────▼────────────────────────────────┐
+│                   FASTAPI BACKEND                        │
+│                                                           │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │                    REST API                          │ │
+│  │                                                      │ │
+│  │  /api/rowdy-plan/generate-inline   (main endpoint)   │ │
+│  │  /api/rowdy-plan/generate-stream   (SSE animation)   │ │
+│  │  /api/students/profile             (CRUD)            │ │
+│  │  /api/resume/upload                (parse PDF/DOCX)  │ │
+│  │  /api/resume/analyze               (ATS scoring)     │ │
+│  │  /api/careers/recommendations      (career matching) │ │
+│  │  /api/jobs/recommendations         (job matching)    │ │
+│  │  /api/experiences/recommendations  (experience gaps) │ │
+│  │  /api/opportunities                (browse/search)   │ │
+│  │  /api/feedback                     (event logging)   │ │
+│  │  /api/admin/ingest                 (trigger scrape)  │ │
+│  └─────────────────────────────────────────────────────┘ │
+│                                                           │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │            RECOMMENDATION ENGINE                     │ │
+│  │                                                      │ │
+│  │  PlanGenerator ── orchestrates the full pipeline:    │ │
+│  │    ProfileBuilder     → enriches & validates         │ │
+│  │    FeatureExtractor   → 122-skill taxonomy vectors   │ │
+│  │    CareerMatcher      → 15 careers, weighted score   │ │
+│  │    JobMatcher         → 6-factor opportunity scoring │ │
+│  │    ExperienceMatcher  → 22 experience types          │ │
+│  │    ResumeAnalyzer     → ATS + bullet + keywords      │ │
+│  │    GapAnalyzer        → prioritized skill gaps       │ │
+│  │    RankingEngine      → sort, diversify, qualify     │ │
+│  └─────────────────────────────────────────────────────┘ │
+│                                                           │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │              ROWDY AI AGENT                          │ │
+│  │                                                      │ │
+│  │  Conversational career coach with avatar              │ │
+│  │  Interview simulator (behavioral + technical)         │ │
+│  │  STAR structure grading                               │ │
+│  │  Context-aware: knows your plan, gaps, and targets    │ │
+│  │  Available via chat drawer + practice room            │ │
+│  └─────────────────────────────────────────────────────┘ │
+│                                                           │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │              DATA INGESTION                          │ │
+│  │                                                      │ │
+│  │  HandshakeProvider  → scrapes live Handshake jobs     │ │
+│  │  UTSAProvider       → 48 mock UTSA opportunities      │ │
+│  │  Normalization      → dedup, validate, standardize    │ │
+│  │  Abstract interface → plug in any source              │ │
+│  └─────────────────────────────────────────────────────┘ │
+│                                                           │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │                DATA LAYER                            │ │
+│  │                                                      │ │
+│  │  InMemoryStore      → works with zero setup (demo)   │ │
+│  │  PostgreSQL+pgvector→ production with vector search   │ │
+│  │  Redis + Celery     → background scrape jobs          │ │
+│  └─────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -119,49 +187,50 @@ Each opportunity gets one of:
 
 ```
 RowdyPlan/
-├── index.html                          # Frontend (single-page app)
+├── index.html                          # Frontend (single-page app, no build step)
+├── README.md
 ├── backend/
 │   ├── app/
-│   │   ├── main.py                     # FastAPI entry point, serves frontend
-│   │   ├── api/                        # REST endpoints
-│   │   │   ├── students.py             # Student profile CRUD
-│   │   │   ├── resume.py               # Resume upload & analysis
-│   │   │   ├── careers.py              # Career recommendations
-│   │   │   ├── jobs.py                 # Job recommendations
-│   │   │   ├── experiences.py          # Experience recommendations
-│   │   │   ├── rowdy_plan.py           # Main plan generation endpoint
-│   │   │   ├── opportunities.py        # Browse/search opportunities
-│   │   │   ├── feedback.py             # User feedback events
-│   │   │   ├── admin.py                # Seed data, manage opportunities
-│   │   │   └── mock_store.py           # In-memory database for demo mode
-│   │   ├── recommendation/             # The prediction engine
-│   │   │   ├── plan_generator.py       # Orchestrates the full pipeline
-│   │   │   ├── career_matcher.py       # 15 careers, weighted scoring
-│   │   │   ├── job_matcher.py          # 6-factor opportunity scoring
-│   │   │   ├── experience_matcher.py   # 22 university experiences
-│   │   │   ├── resume_analyzer.py      # ATS scoring, bullet rewrites
-│   │   │   ├── gap_analysis.py         # Skill gap prioritization
-│   │   │   ├── feature_extractor.py    # 122-skill vector extraction
-│   │   │   ├── profile_builder.py      # Profile strength calculator
-│   │   │   ├── ranking.py              # Sort, diversity, qualification
-│   │   │   ├── candidate_retrieval.py  # Cosine similarity retrieval
-│   │   │   └── embeddings.py           # Sentence-transformer embeddings
-│   │   ├── ingestion/                  # Data providers
-│   │   │   ├── base_provider.py        # Abstract provider interface
-│   │   │   ├── utsa_provider.py        # 48 mock UTSA opportunities
-│   │   │   └── normalization.py        # Dedup & validation
-│   │   ├── models/                     # SQLAlchemy database models
-│   │   ├── schemas/                    # Pydantic request/response schemas
+│   │   ├── main.py                     # FastAPI entry, serves frontend, auto-seeds data
+│   │   ├── api/                        # REST API endpoints
+│   │   │   ├── rowdy_plan.py           #   Main plan generation (inline + stream)
+│   │   │   ├── students.py             #   Student profile CRUD
+│   │   │   ├── resume.py               #   Resume upload & ATS analysis
+│   │   │   ├── careers.py              #   Career path recommendations
+│   │   │   ├── jobs.py                 #   Job/opportunity recommendations
+│   │   │   ├── experiences.py          #   Experience gap recommendations
+│   │   │   ├── opportunities.py        #   Browse & search opportunities
+│   │   │   ├── feedback.py             #   Feedback event collection
+│   │   │   ├── admin.py                #   Seed, ingest, manage data
+│   │   │   └── mock_store.py           #   In-memory database (demo mode)
+│   │   ├── recommendation/             # Prediction engine (all deterministic)
+│   │   │   ├── plan_generator.py       #   Orchestrates full pipeline
+│   │   │   ├── career_matcher.py       #   15 careers, weighted matching
+│   │   │   ├── job_matcher.py          #   6-factor opportunity scoring
+│   │   │   ├── experience_matcher.py   #   22 university experience types
+│   │   │   ├── resume_analyzer.py      #   ATS score, bullet rewrites
+│   │   │   ├── gap_analysis.py         #   Skill gap prioritization
+│   │   │   ├── feature_extractor.py    #   122-skill vector extraction
+│   │   │   ├── profile_builder.py      #   Profile strength calculator
+│   │   │   ├── ranking.py              #   Sort, diversity, qualification
+│   │   │   ├── candidate_retrieval.py  #   Cosine similarity retrieval
+│   │   │   └── embeddings.py           #   Sentence-transformer embeddings
+│   │   ├── ingestion/                  # Data scraping & normalization
+│   │   │   ├── base_provider.py        #   Abstract provider interface
+│   │   │   ├── utsa_provider.py        #   48 UTSA mock opportunities
+│   │   │   └── normalization.py        #   Dedup & validation
+│   │   ├── models/                     # SQLAlchemy models (production DB)
+│   │   ├── schemas/                    # Pydantic v2 request/response schemas
 │   │   ├── services/                   # Business logic layer
-│   │   ├── tests/                      # 75 tests across 7 test files
-│   │   ├── core/                       # Config, dependencies
-│   │   ├── database/                   # DB session, base model
-│   │   └── workers/                    # Celery background tasks (structure)
-│   ├── seeds/                          # Sample student data
-│   ├── demo.py                         # CLI walkthrough of the full pipeline
-│   ├── requirements.txt                # Python dependencies
-│   ├── Dockerfile                      # Container build
-│   └── docker-compose.yml              # App + PostgreSQL + Redis
+│   │   ├── tests/                      # 75 tests across 7 files
+│   │   ├── core/                       # Config & dependency injection
+│   │   ├── database/                   # DB session management
+│   │   └── workers/                    # Celery background jobs
+│   ├── seeds/                          # Sample student profiles
+│   ├── demo.py                         # CLI walkthrough of the prediction pipeline
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── docker-compose.yml
 ```
 
 ---
@@ -176,9 +245,13 @@ pip install -r requirements.txt
 python -m uvicorn app.main:app --reload --port 8000
 ```
 
-Open **http://localhost:8000** in your browser. That's it.
+Open **http://localhost:8000** — the app auto-seeds 48 UTSA opportunities on startup.
 
-The app auto-seeds 48 UTSA opportunities on startup. Click "Build My Plan" to go through onboarding, or "Demo Dashboard" to jump straight in with a sample profile.
+- **"Build My Plan"** — onboarding wizard collects your info, calls the backend, shows live predictions
+- **"Demo Dashboard"** — skip onboarding, see results for a sample Senior CS student
+- **Upload a resume** — real PDF/DOCX parsing during onboarding step 4
+- **Ask Rowdy** — chat with the AI agent about your career plan
+- **Practice Room** — interview simulation with scoring and feedback
 
 ### Run the CLI demo
 
@@ -187,7 +260,7 @@ cd backend
 python demo.py
 ```
 
-Prints the full prediction pipeline step-by-step in your terminal — profile analysis, feature extraction, career matching, job matching, experience gaps, resume scoring, skill gaps, and the final plan.
+Prints the full prediction pipeline in your terminal: profile analysis, feature extraction, career matching, job matching, experience gaps, resume scoring, skill gaps, timeline, and final plan.
 
 ### Run tests
 
@@ -196,44 +269,71 @@ cd backend
 python -m pytest app/tests/ -v
 ```
 
-75 tests covering the recommendation engine, API endpoints, services, and data ingestion.
-
-### Run with Docker (production mode with PostgreSQL)
+### Run with Docker (production)
 
 ```bash
 cd backend
 docker-compose up --build
 ```
 
-Starts the app, PostgreSQL with pgvector, and Redis.
+---
+
+## Handshake Integration
+
+Handshake is the university career platform where UTSA posts real jobs. RowdyPlan is designed to scrape it.
+
+### How it works
+
+The `backend/app/ingestion/` directory uses a **provider pattern**:
+
+```
+UniversityOpportunityProvider (abstract base)
+    ├── UTSAProvider          ← 48 mock opportunities (works now)
+    └── HandshakeProvider     ← live Handshake scraping (pluggable)
+```
+
+A Handshake provider would:
+
+1. **Authenticate** via UTSA SSO (OAuth2 through the university identity provider)
+2. **Scrape** job listings, events, research positions, and career fairs from `utsa.joinhandshake.com`
+3. **Normalize** the data into the same format as all other providers
+4. **Deduplicate** against existing opportunities in the store
+5. **Run on a schedule** via Celery background workers (infrastructure is in place)
+
+### Three paths to Handshake data
+
+| Approach | How | Best For |
+|----------|-----|----------|
+| **Partner API** | Get API access from UTSA Career Center (`app.joinhandshake.com/api/v1/`) | Production deployment |
+| **Browser automation** | Use Playwright/Selenium to login via SSO and scrape the DOM | Prototype / hackathon demo |
+| **GraphQL capture** | Intercept Handshake's internal GraphQL queries from browser DevTools | Quick data extraction |
+
+The provider interface is ready — implement `HandshakeProvider` following the same pattern as `UTSAProvider` and it plugs directly into the existing pipeline.
 
 ---
 
-## The Data
+## The Rowdy Agent
 
-### 15 Career Paths
-Software Engineer, Data Engineer, Data Scientist, ML Engineer, BI Analyst, Product Manager, Cybersecurity Analyst, DevOps Engineer, Cloud Engineer, Full Stack Developer, Mobile Developer, UX Researcher, Systems Engineer, DBA, Research Scientist
+Rowdy is the AI personality at the center of RowdyPlan — a career coach who knows your profile, your gaps, and your goals.
 
-### 48 UTSA Opportunities
-- **15 jobs** — USAA, Rackspace, H-E-B Digital, Booz Allen, Frost Bank, Accenture, SwRI, CPS Energy, Valero, UTSA IT
-- **10 events** — Career expos, tech talks, workshops, hackathons
-- **8 research** — AI/ML labs, cybersecurity, data science, software engineering
-- **10 organizations** — ACM, IEEE, GDSC, Women in Cyber, Data Science Club, etc.
-- **5 programs** — Mentorship, accelerators, leadership development
+### What Rowdy does
 
-### 122-Skill Taxonomy
-The feature extractor maps student skills to a 122-dimensional vector covering languages, frameworks, databases, cloud, DevOps, data science, security, and soft skills.
+| Feature | Description |
+|---------|-------------|
+| **Career chat** | Ask anything — "What are my skill gaps?", "Which jobs match me?", "What should I do next?" |
+| **Interview prep** | Rowdy asks behavioral and technical questions tailored to your target job |
+| **Answer grading** | Scores on Communication, STAR Structure, Specificity, and Technical Depth |
+| **Tactical feedback** | Specific coaching: "Lead with your Python scripts, not team accomplishments" |
+| **Gap diagnosis** | Click "Why Not Me?" on any opportunity — Rowdy runs a diagnostic agent and builds a closing plan |
+| **Plan sequencing** | "Make Me Competitive" — Rowdy sequences the exact steps to go from 58% to 88%+ readiness |
 
----
+### Where Rowdy appears
 
-## Key Design Decisions
-
-- **No LLM for scoring.** Every number comes from deterministic weighted formulas. LLMs are unreliable for numerical scoring — they hallucinate confidence. We use set intersection, cosine similarity, and rule-based logic instead.
-- **InMemoryStore for demo.** The app works without PostgreSQL. A singleton in-memory store holds all data so you can run the prototype with zero setup.
-- **Resume parsing is real.** Upload a PDF or DOCX and it extracts text, identifies skills, and scores against your target career using pdfplumber/PyPDF2/python-docx.
-- **Frontend is one HTML file.** No build step, no React, no npm. One file with inline CSS and JS. The backend serves it directly.
-- **Provider pattern for data.** The `UTSAProvider` follows an abstract `UniversityOpportunityProvider` interface. Swap in a Handshake scraper, LinkedIn API, or any other source — same shape, same pipeline.
-- **Feedback events for future learning.** The `/api/feedback` endpoint collects click, view, apply, and dismiss events. These are stored for future learning-to-rank model training — the system gets smarter over time.
+- **Floating bird button** (bottom-right) — opens the chat drawer from any screen
+- **Dashboard ask bar** — "What are you working toward today?"
+- **Practice Room** — full distraction-free interview simulation with timer and debrief
+- **Why Not Me? modal** — animated agent runner showing real-time gap analysis
+- **Quick prompts** — pre-built questions for common career queries
 
 ---
 
@@ -241,24 +341,24 @@ The feature extractor maps student skills to a 122-dimensional vector covering l
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/rowdy-plan/generate-inline` | Generate a full plan from raw profile data |
-| POST | `/api/rowdy-plan/generate` | Generate a plan for an existing student |
-| POST | `/api/rowdy-plan/generate-stream` | SSE streaming version for frontend animation |
-| POST | `/api/students/profile` | Create a student profile |
-| GET | `/api/students/{id}/profile` | Get a student profile |
-| PUT | `/api/students/{id}/profile` | Update a student profile |
-| POST | `/api/resume/upload` | Upload and parse a PDF/DOCX resume |
-| POST | `/api/resume/analyze` | Analyze resume against a target career |
-| GET | `/api/careers` | List all career paths |
-| GET | `/api/careers/recommendations` | Get career recommendations for a student |
-| GET | `/api/jobs/recommendations` | Get job recommendations for a student |
-| GET | `/api/experiences/recommendations` | Get experience recommendations |
-| GET | `/api/opportunities` | List all opportunities |
-| POST | `/api/opportunities/search` | Search opportunities with filters |
-| POST | `/api/feedback` | Log a feedback event |
-| POST | `/api/admin/seed` | Seed database with UTSA mock data |
-| POST | `/api/admin/ingest` | Trigger data ingestion from a provider |
-| GET | `/health` | Health check |
+| `POST` | `/api/rowdy-plan/generate-inline` | Generate a full plan from raw profile data |
+| `POST` | `/api/rowdy-plan/generate` | Generate a plan for an existing student |
+| `POST` | `/api/rowdy-plan/generate-stream` | SSE streaming version for animation |
+| `POST` | `/api/students/profile` | Create a student profile |
+| `GET` | `/api/students/{id}/profile` | Get a student profile |
+| `PUT` | `/api/students/{id}/profile` | Update a student profile |
+| `POST` | `/api/resume/upload` | Upload and parse a PDF/DOCX resume |
+| `POST` | `/api/resume/analyze` | Score resume against a target career |
+| `GET` | `/api/careers` | List all 15 career paths |
+| `GET` | `/api/careers/recommendations` | Career recommendations for a student |
+| `GET` | `/api/jobs/recommendations` | Job recommendations for a student |
+| `GET` | `/api/experiences/recommendations` | Experience recommendations |
+| `GET` | `/api/opportunities` | List all opportunities |
+| `POST` | `/api/opportunities/search` | Search with filters |
+| `POST` | `/api/feedback` | Log a feedback event |
+| `POST` | `/api/admin/seed` | Seed mock UTSA data |
+| `POST` | `/api/admin/ingest` | Trigger live Handshake scrape |
+| `GET` | `/health` | Health check |
 
 ---
 
@@ -268,17 +368,43 @@ The feature extractor maps student skills to a 122-dimensional vector covering l
 |-------|-----------|
 | Frontend | Vanilla HTML/CSS/JS, Plus Jakarta Sans, JetBrains Mono |
 | Backend | Python 3.12, FastAPI, Pydantic v2, Uvicorn |
+| AI Agent | Rowdy (rule-based + LLM-powered interview coach) |
 | Database | InMemoryStore (demo), PostgreSQL + pgvector (production) |
-| Embeddings | sentence-transformers (all-MiniLM-L6-v2), fallback to random vectors |
+| Scraping | Provider pattern: UTSAProvider, HandshakeProvider (Playwright/SSO) |
+| Embeddings | sentence-transformers (all-MiniLM-L6-v2) |
 | Resume Parsing | pdfplumber, PyPDF2, python-docx |
-| ML/Scoring | scikit-learn (cosine similarity), numpy |
-| Background Jobs | Celery + Redis (structure in place) |
+| Scoring | scikit-learn cosine similarity, numpy, weighted formulas |
+| Background Jobs | Celery + Redis |
 | Containerization | Docker, docker-compose |
+
+---
+
+## The Data
+
+| Category | Count | Examples |
+|----------|-------|---------|
+| Career paths | 15 | Software Engineer, Data Scientist, ML Engineer, Cybersecurity, PM, DevOps |
+| UTSA jobs | 15 | USAA, Rackspace, H-E-B, Booz Allen, Frost Bank, Accenture, SwRI, CPS Energy |
+| Events | 10 | Career expos, tech talks, data science workshops, hackathons |
+| Research | 8 | AI/ML labs, cybersecurity, software engineering, data science |
+| Organizations | 10 | ACM, IEEE, GDSC, Women in Cyber, Data Science Club |
+| Programs | 5 | Mentorship, accelerators, leadership development |
+| Skill taxonomy | 122 | Languages, frameworks, databases, cloud, DevOps, data science, security, soft skills |
+
+---
+
+## Design Principles
+
+- **No LLM for scoring.** Every number is a deterministic formula. LLMs hallucinate confidence — we use set intersection, cosine similarity, and rule-based logic.
+- **Zero-setup demo.** Works without PostgreSQL, Redis, or any external service. One command, one port.
+- **One HTML file.** No build step, no npm, no React. One file with inline CSS and JS, served by FastAPI.
+- **Provider pattern.** Swap in Handshake, LinkedIn, or any career platform — same interface, same pipeline.
+- **Feedback-ready.** Every user interaction is loggable for future learning-to-rank training.
 
 ---
 
 ## Built For
 
-[RowdyHacks](https://rowdyhacks.org/) — UTSA's annual hackathon.
+[RowdyHacks](https://rowdyhacks.org/) at The University of Texas at San Antonio.
 
-The goal: help every UTSA student find the right opportunities, understand what they're missing, and build a concrete plan to get where they want to go.
+*Every heist starts with a plan. So does your career.*
