@@ -8,7 +8,13 @@ career interest, location, and goals.
 
 from __future__ import annotations
 
+import re
 from typing import Any, Optional
+
+try:
+    from app.recommendation.feature_extractor import SKILL_TAXONOMY
+except Exception:
+    SKILL_TAXONOMY = []
 
 
 class JobMatcher:
@@ -39,12 +45,45 @@ class JobMatcher:
     }
 
     GOAL_TYPE_MAP = {
-        "internship": {"internship", "co-op"},
-        "full-time": {"full-time", "full time", "job", "contract"},
+        "internship": {"internship", "intern", "co-op", "co op"},
+        "full-time": {"full-time", "full time", "full_time", "job", "contract"},
+        "full_time": {"full-time", "full time", "full_time", "job", "contract"},
         "part-time": {"part-time", "freelance"},
+        "part_time": {"part-time", "part time", "freelance"},
         "co-op": {"co-op", "internship"},
         "research": {"research", "research assistant", "lab"},
+        "campus_employment": {"student worker", "campus", "on-campus", "part-time"},
         "exploring": set(),  # matches everything loosely
+    }
+
+    SKILL_ALIASES = {
+        "js": "javascript",
+        "reactjs": "react",
+        "react.js": "react",
+        "node": "node.js",
+        "nodejs": "node.js",
+        "postgres": "postgresql",
+        "rest": "rest api",
+        "apis": "rest api",
+        "api": "rest api",
+        "ml": "machine learning",
+        "ai": "machine learning",
+        "ci cd": "ci/cd",
+        "cicd": "ci/cd",
+        "k8s": "kubernetes",
+        "ms excel": "excel",
+        "powerbi": "power bi",
+        "tableau desktop": "tableau",
+    }
+
+    MAJOR_ALIASES = {
+        "cs": "computer science",
+        "comp sci": "computer science",
+        "se": "software engineering",
+        "is": "information systems",
+        "it": "information technology",
+        "ds": "data science",
+        "cyber": "cybersecurity",
     }
 
     CAREER_KEYWORDS = {
@@ -81,34 +120,16 @@ class JobMatcher:
             Dict with match_score, score_breakdown, matched/missing skills,
             reasoning, recommended_actions, and qualification_status.
         """
-        # Gather student skills from all sources
-        all_student_skills = (
-            student.get("skills", [])
-            + student.get("programming_languages", [])
-            + student.get("frameworks", [])
-            + student.get("tools", [])
-        )
-
-        opp_skills = (
-            opportunity.get("required_skills", [])
-            + opportunity.get("skills", [])
-        )
-        # Deduplicate while preserving order
-        seen = set()
-        unique_opp_skills = []
-        for s in opp_skills:
-            sl = s.lower()
-            if sl not in seen:
-                seen.add(sl)
-                unique_opp_skills.append(s)
+        all_student_skills = self._collect_student_skills(student)
+        unique_opp_skills = self._collect_opportunity_skills(opportunity)
 
         # Compute sub-scores (each 0-100)
         skill_score, matched_skills, missing_skills = self._compute_skill_similarity(
             all_student_skills, unique_opp_skills,
         )
         experience_score = self._compute_experience_similarity(
-            student.get("experience", []),
-            opportunity.get("requirements", []),
+            self._collect_student_experience(student),
+            self._collect_opportunity_requirements(opportunity),
         )
         education_score = self._compute_education_match(student, opportunity)
         career_interest_score = self._compute_career_interest_match(
@@ -116,12 +137,12 @@ class JobMatcher:
             opportunity,
         )
         location_score = self._compute_location_match(
-            student.get("location_preferences", []),
-            opportunity.get("location", ""),
+            self._collect_location_preferences(student),
+            self._opportunity_location_text(opportunity),
         )
         goal_score = self._compute_goal_match(
             student.get("job_type_preference", student.get("current_goal", "")),
-            opportunity.get("type", ""),
+            self._opportunity_goal_text(opportunity),
         )
 
         # Deterministic weighted composite score
@@ -135,6 +156,15 @@ class JobMatcher:
         )
         match_score = min(100, max(0, int(round(match_score))))
 
+        # Determine qualification status before final score capping.
+        qualification_status = self._determine_qualification(
+            skill_score, student, opportunity, matched_skills, missing_skills,
+        )
+        if qualification_status == "NOT_ELIGIBLE":
+            match_score = min(match_score, 39)
+        elif qualification_status == "SKILL_GAP":
+            match_score = min(match_score, 69)
+
         # Build reasoning and actions
         reasoning = self._build_reasoning(
             skill_score, experience_score, education_score,
@@ -145,15 +175,16 @@ class JobMatcher:
             missing_skills, experience_score, student, opportunity,
         )
 
-        # Determine qualification status
-        qualification_status = self._determine_qualification(
-            skill_score, student, opportunity, matched_skills, missing_skills,
-        )
-
         return {
             "opportunity_id": str(opportunity.get("id", "")),
             "title": opportunity.get("title", ""),
             "organization": opportunity.get("organization", ""),
+            "description": opportunity.get("description", ""),
+            "location": opportunity.get("location", ""),
+            "deadline": opportunity.get("deadline"),
+            "url": opportunity.get("url", ""),
+            "source": opportunity.get("source", ""),
+            "compensation": opportunity.get("compensation", ""),
             "match_score": match_score,
             "score_breakdown": {
                 "skill": round(skill_score, 1),
@@ -184,8 +215,18 @@ class JobMatcher:
         if not opp_skills:
             return (50.0, [], [])  # Neutral score when no skills specified
 
-        student_set = set(s.lower().strip() for s in student_skills if s)
-        opp_set = set(s.lower().strip() for s in opp_skills if s)
+        student_map = {
+            self._canonical_skill(s): str(s).strip()
+            for s in student_skills
+            if str(s).strip()
+        }
+        opp_map = {
+            self._canonical_skill(s): str(s).strip()
+            for s in opp_skills
+            if str(s).strip()
+        }
+        student_set = set(student_map)
+        opp_set = set(opp_map)
 
         if not student_set:
             return (0.0, [], list(opp_skills))
@@ -199,7 +240,7 @@ class JobMatcher:
 
         for opp_skill in remaining_opp:
             for stu_skill in student_set:
-                if opp_skill in stu_skill or stu_skill in opp_skill:
+                if self._skills_are_related(stu_skill, opp_skill):
                     fuzzy_matched_opp.add(opp_skill)
                     break
 
@@ -210,8 +251,8 @@ class JobMatcher:
 
         # Build matched/missing lists with original casing
         all_matched_lower = exact_matches | fuzzy_matched_opp
-        matched = [s for s in opp_skills if s.lower().strip() in all_matched_lower]
-        missing = [s for s in opp_skills if s.lower().strip() not in all_matched_lower]
+        matched = [opp_map[s] for s in opp_set if s in all_matched_lower]
+        missing = [opp_map[s] for s in opp_set if s not in all_matched_lower]
 
         return (score, matched, missing)
 
@@ -252,7 +293,9 @@ class JobMatcher:
         if opp_requirements:
             exp_text = " ".join(
                 f"{e.get('type', '')} {e.get('title', '')} "
-                f"{e.get('description', '')} {' '.join(e.get('skills_used', []))}"
+                f"{e.get('organization', e.get('company', ''))} "
+                f"{e.get('description', '')} {' '.join(e.get('skills_used', []))} "
+                f"{' '.join(e.get('skills', []))}"
                 for e in student_exp
             ).lower()
 
@@ -283,9 +326,9 @@ class JobMatcher:
         if not required_majors and not preferred_majors:
             score += 50.0  # No major requirement = neutral
         elif student_major:
-            if any(student_major in m or m in student_major for m in required_majors):
+            if any(self._major_matches(student_major, m) for m in required_majors):
                 score += 50.0
-            elif any(student_major in m or m in student_major for m in preferred_majors):
+            elif any(self._major_matches(student_major, m) for m in preferred_majors):
                 score += 35.0
             else:
                 # STEM major gets partial credit
@@ -335,7 +378,7 @@ class JobMatcher:
         opp_title = opp.get("title", "").lower()
         opp_category = opp.get("category", "").lower()
         opp_industry = opp.get("industry", "").lower()
-        opp_desc = opp.get("description", "").lower()[:300]
+        opp_desc = opp.get("description", "").lower()[:1000]
         opp_text = f"{opp_title} {opp_category} {opp_industry} {opp_desc}"
 
         best_score = 0.0
@@ -344,7 +387,10 @@ class JobMatcher:
             interest_lower = interest.lower()
 
             # Direct title match
-            if interest_lower in opp_title or opp_title in interest_lower:
+            if opp_title and interest_lower and (
+                self._contains_term(opp_title, interest_lower)
+                or self._contains_term(interest_lower, opp_title)
+            ):
                 best_score = max(best_score, 100.0)
                 break
 
@@ -357,7 +403,7 @@ class JobMatcher:
 
             # Keyword matching via career keywords map
             keywords = self.CAREER_KEYWORDS.get(interest_lower, set())
-            kw_matches = sum(1 for kw in keywords if kw in opp_text)
+            kw_matches = sum(1 for kw in keywords if self._contains_term(opp_text, kw))
             if keywords and kw_matches > 0:
                 kw_score = min((kw_matches / max(len(keywords), 1)) * 90, 90)
                 best_score = max(best_score, kw_score)
@@ -365,7 +411,7 @@ class JobMatcher:
 
             # Generic word overlap
             interest_words = set(interest_lower.split())
-            if interest_words and any(w in opp_text for w in interest_words if len(w) > 3):
+            if interest_words and any(self._contains_term(opp_text, w) for w in interest_words if len(w) > 3):
                 best_score = max(best_score, 50.0)
 
         if best_score == 0.0:
@@ -408,7 +454,7 @@ class JobMatcher:
             return 70.0
 
         # Student wants remote but job is on-site
-        if "remote" in prefs_lower:
+        if any("remote" in pref for pref in prefs_lower):
             return 30.0
 
         # Same-state matching (Texas-specific for UTSA)
@@ -437,7 +483,7 @@ class JobMatcher:
         if not student_goal or not opp_type:
             return 60.0  # Neutral when unspecified
 
-        goal_lower = student_goal.lower()
+        goal_lower = student_goal.lower().replace("-", "_").strip()
         type_lower = opp_type.lower()
 
         # "exploring" matches everything loosely
@@ -445,12 +491,19 @@ class JobMatcher:
             return 60.0
 
         # Direct match
-        if goal_lower == type_lower:
+        if goal_lower == type_lower.replace("-", "_").strip():
             return 100.0
 
         # Compatible types
         compatible = self.GOAL_TYPE_MAP.get(goal_lower, set())
-        if any(gt in type_lower for gt in compatible):
+        if any(self._contains_term(type_lower, gt) for gt in compatible):
+            return 85.0
+
+        if goal_lower == "internship" and self._contains_term(type_lower, "intern"):
+            return 100.0
+        if goal_lower == "full_time" and self._contains_term(type_lower, "job") and not any(
+            self._contains_term(type_lower, term) for term in ("intern", "internship")
+        ):
             return 85.0
 
         # Partial matches
@@ -484,6 +537,165 @@ class JobMatcher:
             results.append(scored)
         results.sort(key=lambda x: x["match_score"], reverse=True)
         return results
+
+    # --- Feature collection helpers ---
+
+    def _collect_student_skills(self, student: dict) -> list[str]:
+        skills: list[str] = []
+        for key in (
+            "skills", "technical_skills", "soft_skills",
+            "programming_languages", "frameworks", "tools",
+            "coursework", "certifications",
+        ):
+            skills.extend(self._as_list(student.get(key, [])))
+
+        for item in student.get("projects", []) or []:
+            if isinstance(item, dict):
+                skills.extend(self._as_list(item.get("skills", [])))
+                skills.extend(self._extract_known_skills(
+                    f"{item.get('title', '')} {item.get('description', '')}"
+                ))
+
+        resume_text = student.get("resume_text", "")
+        if resume_text:
+            skills.extend(self._extract_known_skills(resume_text))
+
+        return self._dedupe_preserve(skills)
+
+    def _collect_opportunity_skills(self, opportunity: dict) -> list[str]:
+        skills = []
+        for key in ("required_skills", "skills", "skill_tags", "tags"):
+            skills.extend(self._as_list(opportunity.get(key, [])))
+        skills.extend(self._extract_known_skills(self._opportunity_search_text(opportunity)))
+        return self._dedupe_preserve(skills)
+
+    def _collect_student_experience(self, student: dict) -> list[dict]:
+        experience = list(student.get("experience", []) or [])
+        for project in student.get("projects", []) or []:
+            if isinstance(project, dict):
+                experience.append({
+                    "type": "project",
+                    "title": project.get("title", ""),
+                    "organization": project.get("organization", ""),
+                    "description": project.get("description", ""),
+                    "skills_used": project.get("skills", []),
+                })
+        return experience
+
+    def _collect_opportunity_requirements(self, opportunity: dict) -> list[str]:
+        requirements = []
+        for key in (
+            "requirements", "required_qualifications", "qualifications",
+            "minimum_qualifications", "preferred_qualifications",
+        ):
+            requirements.extend(self._as_list(opportunity.get(key, [])))
+        if not requirements:
+            requirements.extend(self._extract_known_skills(self._opportunity_search_text(opportunity)))
+        return self._dedupe_preserve(requirements)
+
+    def _collect_location_preferences(self, student: dict) -> list[str]:
+        return self._dedupe_preserve(
+            self._as_list(student.get("location_preferences", []))
+            + self._as_list(student.get("preferred_locations", []))
+            + self._as_list(student.get("work_preferences", []))
+            + self._as_list(student.get("work_type_preference", []))
+        )
+
+    def _opportunity_search_text(self, opportunity: dict) -> str:
+        return " ".join(str(opportunity.get(key, "")) for key in (
+            "title", "description", "organization", "requirements",
+            "job_type", "employment_type", "category",
+        ))
+
+    def _opportunity_location_text(self, opportunity: dict) -> str:
+        return " ".join(str(opportunity.get(key, "")) for key in (
+            "location", "workplace", "workplace_type", "job_type", "employment_type",
+        ))
+
+    def _opportunity_goal_text(self, opportunity: dict) -> str:
+        classifications = " ".join(str(opportunity.get(key) or "") for key in (
+            "job_type", "employment_type",
+        )).strip()
+        if classifications:
+            return classifications
+        return " ".join(str(opportunity.get(key, "")) for key in (
+            "type", "title", "job_type", "employment_type", "category",
+        ))
+
+    def _contains_term(self, text: str, term: str) -> bool:
+        return bool(term and re.search(r"(?<!\w)" + re.escape(term) + r"(?!\w)", text))
+
+    def _extract_known_skills(self, text: str) -> list[str]:
+        if not text:
+            return []
+        haystack = f" {text.lower()} "
+        skills = list(SKILL_TAXONOMY) or [
+            "python", "java", "javascript", "typescript", "sql", "react",
+            "node.js", "aws", "docker", "kubernetes", "machine learning",
+            "data analysis", "excel", "communication", "leadership",
+        ]
+        found = []
+        for skill in skills:
+            canonical = self._canonical_skill(skill)
+            pattern = r"(?<![a-z0-9+#.])" + re.escape(canonical) + r"(?![a-z0-9+#.])"
+            if re.search(pattern, haystack):
+                found.append(skill)
+        return found
+
+    def _canonical_skill(self, skill: Any) -> str:
+        cleaned = str(skill).lower().strip()
+        cleaned = cleaned.replace("_", " ").replace("-", " ")
+        cleaned = re.sub(r"\s+", " ", cleaned)
+        return self.SKILL_ALIASES.get(cleaned, cleaned)
+
+    def _skills_are_related(self, student_skill: str, opp_skill: str) -> bool:
+        if len(student_skill) >= 4 and len(opp_skill) >= 4:
+            if student_skill in opp_skill or opp_skill in student_skill:
+                return True
+        student_tokens = {t for t in re.split(r"[^a-z0-9+#.]+", student_skill) if len(t) > 2}
+        opp_tokens = {t for t in re.split(r"[^a-z0-9+#.]+", opp_skill) if len(t) > 2}
+        return bool(student_tokens and opp_tokens and student_tokens == opp_tokens)
+
+    def _major_matches(self, student_major: str, required_major: str) -> bool:
+        student = self.MAJOR_ALIASES.get(student_major.lower().strip(), student_major.lower().strip())
+        required = self.MAJOR_ALIASES.get(required_major.lower().strip(), required_major.lower().strip())
+        return bool(student and required and (student in required or required in student))
+
+    def _student_graduation_year(self, student: dict) -> str:
+        explicit = student.get("graduation_year")
+        if explicit:
+            return str(explicit)
+        grad_date = str(student.get("graduation_date", ""))
+        match = re.search(r"\b(20[2-4]\d)\b", grad_date)
+        return match.group(1) if match else ""
+
+    def _as_list(self, value: Any) -> list[str]:
+        if value is None:
+            return []
+        if isinstance(value, list):
+            result = []
+            for item in value:
+                if isinstance(item, dict):
+                    result.extend(str(v) for v in item.values() if isinstance(v, (str, int, float)))
+                else:
+                    result.append(str(item))
+            return [v.strip() for v in result if v and v.strip()]
+        if isinstance(value, str):
+            return [v.strip() for v in re.split(r"[,;\n|]+", value) if v.strip()]
+        return [str(value).strip()] if str(value).strip() else []
+
+    def _dedupe_preserve(self, values: list[str]) -> list[str]:
+        seen = set()
+        result = []
+        for value in values:
+            cleaned = str(value).strip()
+            if not cleaned:
+                continue
+            key = cleaned.lower()
+            if key not in seen:
+                seen.add(key)
+                result.append(cleaned)
+        return result
 
     # --- Private helpers for reasoning and actions ---
 
@@ -596,6 +808,7 @@ class JobMatcher:
         missing_skills: list,
     ) -> str:
         """Determine qualification status from scores and hard requirements."""
+        missing_information = False
         # Check hard requirements
         required_majors = opportunity.get(
             "required_majors", opportunity.get("majors", [])
@@ -603,22 +816,43 @@ class JobMatcher:
         if required_majors:
             student_major = student.get("major", "").lower()
             if student_major and not any(
-                student_major in m.lower() or m.lower() in student_major
+                self._major_matches(student_major, m.lower())
                 for m in required_majors
             ):
                 return "NOT_ELIGIBLE"
+            missing_information |= not bool(student_major)
 
         required_years = opportunity.get("graduation_years", [])
         if required_years:
-            student_year = student.get("graduation_year", 0)
-            if student_year and student_year not in required_years:
+            student_year = self._student_graduation_year(student)
+            normalized_years = {str(y) for y in required_years}
+            if student_year and str(student_year) not in normalized_years:
                 return "NOT_ELIGIBLE"
+            missing_information |= not bool(student_year)
 
         min_gpa = opportunity.get("minimum_gpa", 0)
         if min_gpa:
-            student_gpa = student.get("gpa", 0)
-            if student_gpa and student_gpa < min_gpa - 0.2:
+            student_gpa = student.get("gpa")
+            if student_gpa is not None and student_gpa < min_gpa:
                 return "NOT_ELIGIBLE"
+            missing_information |= student_gpa is None
+
+        if opportunity.get("work_authorization_required"):
+            student_auth = str(student.get("work_authorization") or "").lower().strip()
+            allowed_auth = {
+                "us citizen", "u.s. citizen", "us_citizen",
+                "permanent resident", "green card", "authorized",
+                "opt", "cpt", "h1b",
+            }
+            if student_auth and student_auth not in allowed_auth:
+                return "NOT_ELIGIBLE"
+            missing_information |= not bool(student_auth)
+
+        if missing_information:
+            return "UNKNOWN"
+
+        if not matched_skills and not missing_skills:
+            return "UNKNOWN"
 
         # Skill-based determination
         if skill_score >= 70:

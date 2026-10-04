@@ -14,6 +14,7 @@ async def list_opportunities(
     type: Optional[str] = Query(None, description="Filter by type: job, event, research, organization, program"),
     skills: Optional[str] = Query(None, description="Comma-separated skills to filter by"),
     location: Optional[str] = Query(None, description="Location filter"),
+    source: Optional[str] = Query(None, description="Listing source, e.g. handshake or utsa"),
     skip: int = 0,
     limit: int = 50,
 ):
@@ -25,6 +26,8 @@ async def list_opportunities(
         filters["skills"] = [s.strip() for s in skills.split(",")]
     if location:
         filters["location"] = location
+    if source:
+        filters["source"] = source
 
     return store.list_opportunities(filters=filters, skip=skip, limit=limit)
 

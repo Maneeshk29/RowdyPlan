@@ -82,12 +82,40 @@ class InMemoryStore:
     # ── Opportunities ─────────────────────────────────────────────────────
 
     def add_opportunity(self, opp_data: dict) -> dict:
-        opp_id = opp_data.get("id", str(uuid.uuid4()))
+        opp_id = opp_data.get("id") or str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
         opp = {"id": opp_id, "created_at": now, "updated_at": now, **opp_data}
         opp["id"] = opp_id
         self.opportunities.append(opp)
         return opp
+
+    def upsert_opportunity(self, opp_data: dict) -> tuple[dict, bool]:
+        """Update an existing opportunity by source/url/title key or add it."""
+        key = self._opportunity_key(opp_data)
+        now = datetime.utcnow().isoformat()
+
+        for existing in self.opportunities:
+            if self._opportunity_key(existing) == key:
+                existing.update({
+                    k: v for k, v in opp_data.items()
+                    if v is not None and k not in {"id", "created_at"}
+                })
+                existing["updated_at"] = now
+                return existing, False
+
+        return self.add_opportunity(opp_data), True
+
+    def _opportunity_key(self, opp: dict) -> tuple:
+        source_id = str(opp.get("source_id") or "").lower().strip()
+        source = str(opp.get("source") or "").lower().strip()
+        url = str(opp.get("url") or "").lower().strip()
+        title = str(opp.get("title") or "").lower().strip()
+        org = str(opp.get("organization") or "").lower().strip()
+        if source_id:
+            return ("source_id", source, source_id)
+        if url:
+            return ("url", url)
+        return ("title_org", title, org)
 
     def get_opportunity(self, opp_id: str) -> dict | None:
         for opp in self.opportunities:
@@ -112,9 +140,11 @@ class InMemoryStore:
                 return True
         return False
 
-    def list_opportunities(self, filters: dict | None = None, skip: int = 0, limit: int = 50) -> list[dict]:
+    def list_opportunities(self, filters: dict | None = None, skip: int = 0, limit: int | None = 50) -> list[dict]:
         result = self.opportunities
         if filters:
+            if filters.get("source"):
+                result = [o for o in result if o.get("source") == filters["source"]]
             if filters.get("type"):
                 result = [o for o in result if o.get("type") == filters["type"]]
             if filters.get("skills"):
@@ -123,7 +153,7 @@ class InMemoryStore:
             if filters.get("location"):
                 loc = filters["location"].lower()
                 result = [o for o in result if loc in o.get("location", "").lower()]
-        return result[skip : skip + limit]
+        return result[skip:] if limit is None else result[skip : skip + limit]
 
     # ── Careers ───────────────────────────────────────────────────────────
 

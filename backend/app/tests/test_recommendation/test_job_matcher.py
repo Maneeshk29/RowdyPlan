@@ -105,3 +105,80 @@ def test_empty_opportunity_skills(matcher, sample_student_profile):
     opp = {"id": "test", "title": "Generic Job", "skills": [], "requirements": []}
     result = matcher.score_opportunity(sample_student_profile, opp)
     assert 0 <= result["match_score"] <= 100
+
+
+def test_student_ui_fields_affect_job_match(matcher):
+    student = {
+        "major": "Computer Science",
+        "graduation_date": "May 2027",
+        "current_goal": "full_time",
+        "skills": ["python"],
+        "technical_skills": ["react", "docker"],
+        "career_interests": ["Software Engineer"],
+        "preferred_locations": ["Austin, TX", "Remote"],
+        "work_preferences": ["hybrid"],
+    }
+    opp = {
+        "id": "handshake-1",
+        "type": "job",
+        "title": "Frontend Software Engineer",
+        "organization": "Test Corp",
+        "description": "Build React apps and deploy with Docker.",
+        "skills": ["react", "docker"],
+        "requirements": ["Computer Science major"],
+        "majors": ["Computer Science"],
+        "graduation_years": ["2027"],
+        "location": "Austin, TX",
+        "job_type": "Full-time",
+        "source": "handshake",
+    }
+
+    result = matcher.score_opportunity(student, opp)
+
+    assert result["score_breakdown"]["skill"] == 100.0
+    assert result["score_breakdown"]["location"] == 100.0
+    assert result["score_breakdown"]["goal"] >= 80.0
+    assert result["qualification_status"] in ("QUALIFIED", "LIKELY_QUALIFIED")
+
+
+@pytest.mark.parametrize("gpa, expected_status", [(None, "UNKNOWN"), (0.0, "NOT_ELIGIBLE"), (2.9, "NOT_ELIGIBLE"), (3.0, "QUALIFIED")])
+def test_gpa_requirement_handles_missing_and_zero(matcher, gpa, expected_status):
+    result = matcher.score_opportunity(
+        {"skills": ["python"], "gpa": gpa},
+        {"title": "Python Intern", "skills": ["python"], "minimum_gpa": 3.0},
+    )
+    assert result["qualification_status"] == expected_status
+
+
+def test_missing_job_skill_requirements_do_not_confirm_eligibility(matcher):
+    result = matcher.score_opportunity(
+        {"major": "Computer Science", "skills": ["python"], "current_goal": "internship"},
+        {"title": "Certified Medical Assistant - Internal Medicine", "employment_type": "Full Time",
+         "description": "Answering phones. CMA certification is required."},
+    )
+    assert result["qualification_status"] == "UNKNOWN"
+    assert result["score_breakdown"]["goal"] < 50
+
+
+def test_internship_goal_does_not_match_internal_medicine(matcher):
+    assert matcher._compute_goal_match("internship", "job Internal Medicine") < 50
+
+
+def test_employment_classification_takes_precedence_over_title(matcher):
+    goal_text = matcher._opportunity_goal_text({
+        "title": "Internal Communications", "type": "job", "employment_type": "full-time",
+    })
+    assert goal_text == "full-time"
+
+
+@pytest.mark.parametrize("interest, description", [
+    ("Software Engineer", "Answering phones and supporting patients."),
+    ("ML Engineer", "Paid painting assistant."),
+])
+def test_career_keywords_use_complete_words(matcher, interest, description):
+    score = matcher._compute_career_interest_match([interest], {"title": "Support Assistant", "description": description})
+    assert score == 30
+
+
+def test_missing_job_title_is_not_an_exact_career_match(matcher):
+    assert matcher._compute_career_interest_match(["Software Engineer"], {"description": "Support patients."}) < 50

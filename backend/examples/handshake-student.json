@@ -1,0 +1,26 @@
+{
+  "major": "Computer Science",
+  "year": "Junior",
+  "gpa": 3.6,
+  "graduation_date": "May 2028",
+  "university": "UTSA",
+  "current_goal": "internship",
+  "short_term_goal": "Land a software engineering internship",
+  "career_interests": ["Software Engineer"],
+  "skills": ["python", "sql", "git"],
+  "technical_skills": ["react", "javascript"],
+  "coursework": ["Data Structures", "Database Systems"],
+  "projects": [
+    {
+      "title": "Campus event finder",
+      "description": "Built a React application with a Python API and SQL database",
+      "skills": ["react", "python", "sql"]
+    }
+  ],
+  "preferred_locations": ["San Antonio, TX", "Austin, TX", "Remote"],
+  "work_preferences": ["hybrid", "remote"],
+  "work_authorization": "authorized",
+  "opportunity_source": "handshake",
+  "include_resume_analysis": false,
+  "max_job_matches": 10
+}

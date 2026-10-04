@@ -32,7 +32,7 @@ async def generate_rowdy_plan(body: dict):
     max_careers = body.get("max_career_matches", 5)
     max_jobs = body.get("max_job_matches", 20)
 
-    opportunities = store.list_opportunities()
+    opportunities = store.list_opportunities(limit=None)
 
     plan = plan_generator.generate(
         student=student,
@@ -40,6 +40,7 @@ async def generate_rowdy_plan(body: dict):
         include_resume_analysis=include_resume,
         max_career_matches=max_careers,
         max_job_matches=max_jobs,
+        opportunity_source=body.get("opportunity_source"),
     )
 
     return plan
@@ -52,7 +53,8 @@ async def generate_rowdy_plan_inline(body: dict):
     No need to create a student first — great for the onboarding flow.
     Also creates the student in the store and returns the student_id.
     """
-    profile_data = {k: v for k, v in body.items() if k != "max_career_matches" and k != "max_job_matches" and k != "include_resume_analysis"}
+    options = {"max_career_matches", "max_job_matches", "include_resume_analysis", "opportunity_source"}
+    profile_data = {k: v for k, v in body.items() if k not in options}
 
     student = store.add_student(profile_data)
     student_id = student["id"]
@@ -61,7 +63,7 @@ async def generate_rowdy_plan_inline(body: dict):
     max_jobs = body.get("max_job_matches", 20)
     include_resume = body.get("include_resume_analysis", True)
 
-    opportunities = store.list_opportunities()
+    opportunities = store.list_opportunities(limit=None)
 
     plan = plan_generator.generate(
         student=student,
@@ -69,6 +71,7 @@ async def generate_rowdy_plan_inline(body: dict):
         include_resume_analysis=include_resume,
         max_career_matches=max_careers,
         max_job_matches=max_jobs,
+        opportunity_source=body.get("opportunity_source"),
     )
 
     plan["student_id"] = student_id
@@ -112,13 +115,14 @@ async def generate_rowdy_plan_stream(body: dict):
             yield f"data: {json.dumps(event)}\n\n"
 
         # Generate the actual plan
-        opportunities = store.list_opportunities()
+        opportunities = store.list_opportunities(limit=None)
         plan = plan_generator.generate(
             student=student,
             opportunities=opportunities,
             include_resume_analysis=include_resume,
             max_career_matches=max_careers,
             max_job_matches=max_jobs,
+            opportunity_source=body.get("opportunity_source"),
         )
 
         # Send the complete result

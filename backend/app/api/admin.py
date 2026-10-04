@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.api.mock_store import store
 from app.schemas.opportunity import OpportunityCreate, OpportunityUpdate
+from app.ingestion.handshake_provider import HandshakeProvider
 from app.ingestion.utsa_provider import UTSAProvider
 
 router = APIRouter(tags=["admin"])
@@ -47,10 +48,24 @@ async def delete_opportunity(opportunity_id: str):
 @router.post("/admin/ingest")
 async def trigger_ingestion(body: dict):
     """Trigger data ingestion from a university provider."""
-    provider_name = body.get("provider", "utsa")
+    provider_name = str(body.get("provider", "utsa")).lower()
 
     if provider_name == "utsa":
         provider = UTSAProvider(use_live_data=False)
+    elif provider_name == "handshake":
+        use_latest_run = body.get("use_latest_run", False)
+        if not isinstance(use_latest_run, bool):
+            raise HTTPException(status_code=422, detail="use_latest_run must be a boolean")
+        dataset_id = body.get("dataset_id")
+        if dataset_id is not None and (not isinstance(dataset_id, str) or not dataset_id.strip()):
+            raise HTTPException(status_code=422, detail="dataset_id must be a non-empty string")
+        provider = HandshakeProvider(
+            actor_id=body.get("actor_id"),
+            task_id=body.get("task_id"),
+            actor_input=body.get("actor_input") or {},
+            dataset_id=dataset_id,
+            use_latest_run=use_latest_run,
+        )
     else:
         raise HTTPException(status_code=422, detail=f"Unknown provider: {provider_name}")
 
@@ -58,27 +73,37 @@ async def trigger_ingestion(body: dict):
 
     try:
         opportunities = await provider.fetch_all()
+        max_items = body.get("limit") or body.get("max_items")
+        if max_items:
+            opportunities = opportunities[: int(max_items)]
 
-        # Add to store (dedup against existing)
-        existing_titles = {o.get("title", "").lower() for o in store.opportunities}
         added = 0
+        updated = 0
         for opp in opportunities:
-            if opp.get("title", "").lower() not in existing_titles:
-                store.add_opportunity(opp)
-                existing_titles.add(opp.get("title", "").lower())
+            _, created = store.upsert_opportunity(opp)
+            if created:
                 added += 1
+            else:
+                updated += 1
 
         from datetime import datetime
         store.ingestion_status = {
             "status": "complete",
+            "provider": provider_name,
             "last_run": datetime.utcnow().isoformat(),
+            "fetched": len(opportunities),
             "count": added,
+            "added": added,
+            "updated": updated,
             "total_available": len(store.opportunities),
         }
         return store.ingestion_status
 
+    except ValueError as e:
+        store.ingestion_status = {"status": "error", "provider": provider_name, "error": str(e)}
+        raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
-        store.ingestion_status = {"status": "error", "error": str(e)}
+        store.ingestion_status = {"status": "error", "provider": provider_name, "error": str(e)}
         raise HTTPException(status_code=500, detail=f"Ingestion failed: {str(e)}")
 
 
@@ -98,7 +123,7 @@ async def seed_database():
     added = 0
     for opp in opportunities:
         if opp.get("title", "").lower() not in existing_titles:
-            store.add_opportunity(opp)
+            store.upsert_opportunity(opp)
             existing_titles.add(opp.get("title", "").lower())
             added += 1
 

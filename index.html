@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RowdyPlan | Your Opportunities. Your Path. One Plan.</title>
+  <link rel="icon" type="image/png" href="/assets/rowdy-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -47,7 +48,9 @@
 
     /* VIEW SWITCHING */
     .view-container { display: none; width: 100%; min-height: 100vh; }
+    .view-container:not(.active) { display: none; }
     .view-container.active { display: block; animation: fadeIn 0.3s ease; }
+    .view-container.active.landing, .view-container.active.onboarding { display: flex; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -57,7 +60,7 @@
        1. LANDING PAGE (MINIMALIST & CRISP)
        ======================================================== */
     .landing {
-      background: radial-gradient(circle at 50% 20%, #0d233e 0%, var(--navy-950) 80%);
+      background: #071626;
       color: #fff;
       min-height: 100vh;
       display: flex;
@@ -66,7 +69,7 @@
       overflow: hidden;
     }
     .landing-nav {
-      max-width: 1200px;
+      max-width: 1080px;
       margin: 0 auto;
       width: 100%;
       padding: 28px 24px;
@@ -76,14 +79,17 @@
       z-index: 10;
     }
     .landing-brand {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
-      letter-spacing: -0.5px;
+      letter-spacing: 0;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .landing-brand span { color: var(--orange-500); }
+    .brand-wordmark { display: inline-flex; gap: 5px; white-space: nowrap; }
+    .rowdy-logo { display: block; width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+    .landing-brand > .rowdy-logo { width: 42px; height: 42px; margin-right: 3px; }
     .landing-brand-badge {
       font-size: 10px;
       font-family: var(--font-mono);
@@ -91,22 +97,23 @@
       border: 1px solid rgba(241, 90, 36, 0.4);
       color: var(--orange-400);
       padding: 2px 8px;
-      border-radius: 6px;
-      letter-spacing: 1px;
+      border-radius: 4px;
+      letter-spacing: 0;
     }
     .landing-hero {
-      max-width: 860px;
-      margin: 40px auto 30px;
+      width: 100%;
+      max-width: 820px;
+      margin: 32px auto 40px;
       padding: 0 24px;
       text-align: center;
       z-index: 10;
     }
     .landing-tagline {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--orange-400);
-      letter-spacing: 1.5px;
+      letter-spacing: 0;
       text-transform: uppercase;
       margin-bottom: 16px;
       display: inline-block;
@@ -116,22 +123,23 @@
       border: 1px solid rgba(255,255,255,0.1);
     }
     .landing-title {
-      font-size: clamp(38px, 6vw, 62px);
+      font-size: 44px;
       font-weight: 900;
-      line-height: 1.1;
-      letter-spacing: -1.5px;
+      line-height: 1.18;
+      letter-spacing: 0;
+      color: #aab8ca;
       margin-bottom: 18px;
     }
     .landing-title span {
-      background: linear-gradient(135deg, #fff 40%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      display: block;
+      color: #f8fafc;
     }
     .landing-sub {
-      font-size: 18px;
-      color: #94a3b8;
-      max-width: 640px;
-      margin: 0 auto 32px;
+      font-size: 15px;
+      line-height: 1.75;
+      color: #a1aec0;
+      max-width: 560px;
+      margin: 0 auto 26px;
       font-weight: 400;
     }
     .landing-actions {
@@ -145,11 +153,12 @@
       background: var(--orange-500);
       color: white;
       border: 0;
-      padding: 16px 36px;
-      border-radius: 12px;
+      padding: 13px 28px;
+      border-radius: 8px;
       font-weight: 800;
-      font-size: 16px;
-      box-shadow: 0 10px 25px rgba(241, 90, 36, 0.4);
+      font-size: 14px;
+      min-height: 48px;
+      box-shadow: 0 6px 20px rgba(241, 90, 36, 0.24);
     }
     .btn-hero:hover {
       background: var(--orange-400);
@@ -160,10 +169,10 @@
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.15);
       color: #fff;
-      padding: 16px 28px;
-      border-radius: 12px;
+      padding: 13px 24px;
+      border-radius: 8px;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14px;
     }
     .btn-ghost:hover {
       background: rgba(255,255,255,0.12);
@@ -171,13 +180,11 @@
 
     /* LIVE DEMO TERMINAL BOX */
     .landing-demo {
-      max-width: 720px;
-      margin: 36px auto;
-      background: rgba(7, 24, 44, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-      backdrop-filter: blur(12px);
+      max-width: 600px;
+      margin: 32px auto 0;
+      background: #0a1b2d;
+      border: 1px solid #1c2c40;
+      border-radius: 8px;
       overflow: hidden;
       text-align: left;
     }
@@ -193,46 +200,48 @@
     .demo-dot.r { background: #ef4444; }
     .demo-dot.y { background: #f59e0b; }
     .demo-dot.g { background: #10b981; }
-    .demo-content { padding: 24px 28px; }
+    .demo-content { padding: 20px 22px; }
     .demo-query {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 15px;
+      font-size: 13px;
       color: #f8fafc;
       font-weight: 600;
       margin-bottom: 18px;
     }
     .demo-query .bird-icon {
-      font-size: 20px;
-      background: rgba(241, 90, 36, 0.2);
-      border: 1px solid rgba(241,90,36,0.4);
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      background: #17293d;
+      border: 1px solid #2c3b4d;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      border-radius: 8px;
       display: grid;
       place-items: center;
     }
     .demo-logs {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 11px;
       color: #94a3b8;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      background: rgba(0,0,0,0.3);
+      background: #05121f;
       padding: 16px 20px;
-      border-radius: 12px;
+      border-radius: 6px;
       border: 1px solid rgba(255,255,255,0.05);
     }
-    .log-item { display: flex; align-items: center; gap: 8px; }
+    .log-item { display: flex; align-items: baseline; gap: 8px; }
+    .log-item > span { flex-shrink: 0; }
     .log-item.success { color: #34d399; }
     .log-item.final { color: #ff9d75; font-weight: 700; margin-top: 4px; }
 
     /* 3 VALUE PROPS */
     .landing-values {
+      width: 100%;
       max-width: 980px;
-      margin: 10px auto 60px;
+      margin: auto auto 42px;
       padding: 0 24px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -240,10 +249,8 @@
       z-index: 10;
     }
     .val-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 24px;
+      border-top: 1px solid #243447;
+      padding: 20px 4px;
       text-align: left;
     }
     .val-card h3 {
@@ -255,6 +262,28 @@
       gap: 8px;
     }
     .val-card p { font-size: 14px; color: #94a3b8; line-height: 1.5; }
+    .val-card .rowdy-logo { width: 22px; height: 22px; }
+    .landing-demo .demo-label { margin-left: 8px; font: 10px var(--font-mono); color: #8f9fb2; }
+    .landing-demo .demo-sample { margin-left: auto; font: 10px var(--font-mono); color: #8f9fb2; }
+    .bird-badge .rowdy-logo { width: 48px; height: 48px; }
+    .reveal-bird .rowdy-logo { width: 72px; height: 72px; }
+    .fab-bird .rowdy-logo { width: 46px; height: 46px; }
+    .fab-bird { overflow: hidden; }
+    .sidebar-brand .rowdy-logo { width: 32px; height: 32px; }
+    .btn-ask-side .rowdy-logo { width: 28px; height: 28px; }
+    .wizard-profile-fields { margin-top: 20px; }
+    .source-label { font-size: 11px; color: var(--muted); margin: 10px 0 0; }
+    .source-label.handshake { color: #047857; }
+    .opp-card, .detail-card { overflow-wrap: anywhere; }
+    .opp-card:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--orange-400); outline-offset: 4px; }
+    .detail-heading { display: flex; gap: 18px; justify-content: space-between; align-items: flex-start; }
+    .detail-heading > div:first-child { min-width: 0; }
+    .detail-score { flex-shrink: 0; text-align: right; }
+    .detail-footer { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); }
+    .detail-footer p { flex: 1 1 240px; font-size: 14px; color: var(--muted); }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    a.btn-solid { display: inline-flex; align-items: center; text-decoration: none; }
+    .job-description { white-space: pre-line; font-size: 14px; color: var(--muted); margin-top: 16px; line-height: 1.7; }
 
     /* ========================================================
        2. ONBOARDING / DOSSIER CREATION WIZARD
@@ -300,7 +329,7 @@
       font-weight: 700;
       color: var(--orange-500);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0;
       display: block;
       margin-bottom: 6px;
     }
@@ -308,7 +337,7 @@
       font-size: 28px;
       font-weight: 900;
       color: var(--navy-900);
-      letter-spacing: -0.5px;
+      letter-spacing: 0;
     }
     .wizard-head p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 
@@ -460,10 +489,10 @@
       z-index: 30;
     }
     .sidebar-brand {
-      font-size: 21px;
+      font-size: 17px;
       font-weight: 900;
-      letter-spacing: -0.5px;
-      margin: 0 10px 28px;
+      letter-spacing: 0;
+      margin: 0 0 28px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -479,6 +508,7 @@
     }
     .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
     .nav-btn {
+      position: relative;
       border: 0;
       background: transparent;
       color: #94a3b8;
@@ -491,6 +521,7 @@
       align-items: center;
       gap: 12px;
       width: 100%;
+      transition: background-color 0.2s, color 0.2s;
     }
     .nav-btn:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
     .nav-btn.active {
@@ -500,6 +531,38 @@
       border-left: 3px solid var(--orange-500);
     }
     .nav-btn .icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-btn .rowdy-logo { width: 24px; height: 24px; }
+    .nav-label { min-width: 0; line-height: 1.4; }
+    .nav-tooltip {
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: max-content;
+      max-width: min(260px, calc(100vw - 90px));
+      padding: 8px 12px;
+      border: 1px solid var(--navy-700);
+      border-radius: 6px;
+      background: var(--navy-900);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .nav-btn:hover .nav-tooltip, .nav-btn:focus-visible .nav-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+    .nav-btn:focus-visible { outline: 2px solid var(--orange-400); outline-offset: 2px; }
+    .tool-icon { width: 20px; height: 20px; flex-shrink: 0; }
+    .nav-btn .tool-icon { filter: invert(1); opacity: 0.65; }
+    .nav-btn:hover .tool-icon, .nav-btn.active .tool-icon { opacity: 1; }
     .nav-badge {
       margin-left: auto;
       font-size: 10px;
@@ -541,6 +604,63 @@
       max-width: 1250px;
     }
 
+    .resume-page-title { font-size: 24px; line-height: 1.35; overflow-wrap: anywhere; }
+    .resume-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 32px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+    .resume-workspace > * { min-width: 0; }
+    .resume-field { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .resume-input, .resume-editor {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+    .resume-editor { min-height: 360px; resize: vertical; line-height: 1.65; }
+    .resume-input:focus, .resume-editor:focus { outline: 2px solid var(--orange-500); outline-offset: 2px; }
+    .resume-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .resume-actions button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      min-width: 160px;
+      border-radius: 6px;
+      font-size: 13px;
+      padding: 10px 12px;
+    }
+    .resume-actions .btn-solid .tool-icon { filter: invert(1); }
+    .resume-actions button:disabled { opacity: 0.6; cursor: wait; }
+    #resume-tool-status { min-height: 24px; margin-top: 12px; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+    #resume-tool-status[data-state="error"] { color: var(--red); }
+    .resume-results h2 { font-size: 18px; margin-bottom: 4px; }
+    #resume-results-target { min-height: 20px; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+    .resume-scores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .resume-scores dt { font-size: 12px; color: var(--muted); }
+    .resume-scores dd { font-size: 28px; font-weight: 800; color: var(--navy-900); }
+    .resume-result-section { padding: 18px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+    .resume-result-section h3 { font-size: 14px; margin-bottom: 10px; }
+    .resume-empty { color: var(--muted); font-size: 13px; }
+    .resume-keywords { display: flex; flex-wrap: wrap; gap: 6px; }
+    .resume-keyword { padding: 4px 8px; border-radius: 4px; background: var(--orange-100); color: #a33813; font-size: 12px; overflow-wrap: anywhere; max-width: 100%; }
+    .resume-rewrite + .resume-rewrite { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .resume-rewrite p { font-size: 13px; margin: 4px 0 8px; }
+    .resume-line-label { font-size: 11px; font-weight: 700; color: var(--muted); }
+    .resume-rewrite .resume-suggestion { color: #047857; }
+    .resume-result-list { padding-left: 18px; font-size: 13px; }
+    .resume-result-list li + li { margin-top: 8px; }
+
     /* HEADER & STATS BAR */
     .top-bar {
       display: flex;
@@ -548,11 +668,16 @@
       align-items: center;
       margin-bottom: 22px;
     }
+    .top-bar > div:first-child { min-width: 0; }
+    .dashboard-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    #handshake-sync-button { min-height: 40px; min-width: 145px; padding: 8px 14px; }
+    #handshake-sync-button:disabled { opacity: 0.6; cursor: wait; }
+    #handshake-sync-status { min-height: 20px; margin: -10px 0 16px; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
     .eyebrow {
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0;
       color: var(--orange-500);
       text-transform: uppercase;
     }
@@ -560,7 +685,7 @@
       font-size: 32px;
       font-weight: 900;
       color: var(--navy-900);
-      letter-spacing: -0.8px;
+      letter-spacing: 0;
     }
     .sub { color: var(--muted); font-size: 15px; }
 
@@ -677,7 +802,7 @@
       color: var(--orange-500);
       padding: 4px 9px;
       border-radius: 12px;
-      letter-spacing: 0.5px;
+      letter-spacing: 0;
     }
     .opp-score {
       font-size: 30px;
@@ -691,7 +816,7 @@
       font-size: 10px;
       color: var(--muted);
       font-weight: 700;
-      letter-spacing: 0.8px;
+      letter-spacing: 0;
     }
     .opp-title {
       font-size: 17px;
@@ -968,48 +1093,22 @@
     }
 
     /* ========================================================
-       9. INTERVIEW ROOM (DISTRACTION FREE)
+       9. AI INTERVIEW VIDEO
        ======================================================== */
-    .interview-view {
-      background: var(--navy-950);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 24px;
-      text-align: center;
-    }
-    .interview-box {
-      max-width: 680px;
+    .interview-title { font-size: 24px; line-height: 1.35; margin-bottom: 20px; }
+    .interview-video {
+      display: block;
       width: 100%;
-      background: var(--navy-900);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 24px;
-      padding: 48px 36px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: #000;
     }
-    .live-pulse-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #ef4444;
-      animation: blink 1.2s infinite;
-      margin-right: 6px;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-    .timer-display {
-      font-family: var(--font-mono);
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--orange-400);
-      margin: 20px 0;
-    }
+    .interview-video:focus-visible { outline: 2px solid var(--orange-500); outline-offset: 4px; }
+    #interview-video-error { margin-top: 16px; font-size: 14px; color: var(--red); }
+    #interview-video-error a { color: var(--orange-600); }
+    .mission-interview-button { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .mission-interview-button .rowdy-logo { width: 24px; height: 24px; }
 
     /* ========================================================
        10. ASK ROWDY (GLOBAL SIDE DRAWER)
@@ -1101,18 +1200,60 @@
     /* RESPONSIVE */
     @media(max-width: 960px) {
       .sidebar { width: 70px; padding: 20px 8px; }
-      .sidebar-brand { font-size: 0; margin-bottom: 20px; justify-content: center; }
-      .sidebar-brand b { font-size: 20px; }
+      .sidebar-brand { font-size: 0; margin: 0 0 20px; justify-content: center; }
+      .sidebar-brand b { display: none; }
       .sidebar-brand .tag { display: none; }
       .nav-btn { font-size: 0; justify-content: center; padding: 12px; }
+      .nav-label { display: none; }
       .nav-btn .icon { font-size: 20px; }
       .nav-badge { display: none; }
       .sidebar-footer { display: none; }
       .main-canvas { margin-left: 70px; width: calc(100% - 70px); padding: 20px; }
+      .resume-workspace { grid-template-columns: minmax(0, 1fr); gap: 24px; }
       .opp-grid, .dash-metrics, .w-form-grid, .w-cards-grid, .landing-values, .mission-grid {
         grid-template-columns: 1fr;
       }
       .chat-drawer { width: 90vw; right: -95vw; }
+    }
+    @media(max-width: 600px) {
+      .landing-nav { padding: 20px 18px; gap: 10px; }
+      .landing-brand { font-size: 16px; gap: 5px; }
+      .landing-brand > .rowdy-logo { width: 32px; height: 32px; margin-right: 0; }
+      .landing-brand-badge { display: none; }
+      .landing-nav .btn-ghost { padding: 9px 12px !important; font-size: 11px !important; }
+      .landing-hero { margin: 24px auto 36px; padding: 0 20px; }
+      .landing-title { font-size: 30px; }
+      .landing-sub { font-size: 14px; }
+      .landing-actions { gap: 10px; }
+      .landing-actions button { width: 100%; }
+      .demo-content { padding: 16px 14px; }
+      .demo-bar { padding: 12px 14px; gap: 7px; }
+      .demo-query { align-items: flex-start; font-size: 12px; }
+      .demo-logs { padding: 14px 12px; font-size: 10px; }
+      .landing-values { padding: 0 20px; gap: 0; margin-bottom: 60px; }
+      .wizard-card { padding: 24px 20px; border-radius: 8px; }
+      .w-field.full { grid-column: 1; }
+      .w-form-grid, .w-cards-grid { min-width: 0; }
+      .w-field input, .w-field select, .w-field textarea { min-width: 0; width: 100%; }
+      .main-canvas { padding: 18px 14px; }
+      .top-bar { gap: 12px; flex-wrap: wrap; }
+      .top-bar h1 { font-size: 23px; }
+      .ask-box-dash { padding: 16px; flex-wrap: wrap; }
+      .ask-input-wrap { min-width: 0; width: 100%; }
+      .ask-field-row { flex-wrap: wrap; }
+      .ask-field-row input { min-width: 0; width: 100%; }
+      .section-head { flex-wrap: wrap; gap: 10px; }
+      .detail-heading { flex-wrap: wrap; }
+      .detail-heading h1 { font-size: 23px !important; }
+      .detail-actions { width: 100%; }
+      .detail-card { padding: 18px; }
+      .fab-bird { width: 50px; height: 50px; right: 16px; bottom: 16px; }
+      .fab-bird .rowdy-logo { width: 40px; height: 40px; }
+      .chat-drawer { padding: 18px; }
+      .chat-drawer input { min-width: 0; }
+    }
+    @media(prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
   </style>
 </head>
@@ -1124,7 +1265,8 @@
   <div id="view-landing" class="view-container active landing">
     <header class="landing-nav">
       <div class="landing-brand">
-        ROWDY<span>PLAN</span>
+        <img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="Rowdy mascot" width="42" height="42">
+        <b class="brand-wordmark">ROWDY<span>PLAN</span></b>
         <span class="landing-brand-badge">UTSA INTEL</span>
       </div>
       <div style="display:flex; gap:12px; align-items:center;">
@@ -1140,7 +1282,7 @@
         Every heist starts with a plan. <span>So does your career.</span>
       </h1>
       <p class="landing-sub">
-        Rowdy scrapes live opportunities from Handshake and across UTSA, matches them to your exact profile, and builds a tactical career plan — with an AI agent who preps you for every interview.
+        Find your next opportunity on Handshake and across UTSA. Match your skills, experience, and goals to a role, then build a career plan with Rowdy by your side.
       </p>
 
       <div class="landing-actions">
@@ -1158,11 +1300,12 @@
           <span class="demo-dot r"></span>
           <span class="demo-dot y"></span>
           <span class="demo-dot g"></span>
-          <span style="font-family:var(--font-mono); font-size:11px; color:#94a3b8; margin-left:8px;">ask-rowdy-agent.sh</span>
+          <span class="demo-label">ask-rowdy-agent.sh</span>
+          <span class="demo-sample">DEMO</span>
         </div>
         <div class="demo-content">
           <div class="demo-query">
-            <div class="bird-icon">🐦</div>
+            <div class="bird-icon"><img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="36" height="36"></div>
             <span>"I'm a sophomore CS major with no experience. Help me land an AI internship."</span>
           </div>
           <div class="demo-logs">
@@ -1180,15 +1323,15 @@
     <section class="landing-values">
       <div class="val-card">
         <h3><span>◎</span> Scrape</h3>
-        <p>Rowdy pulls live jobs, internships, research, and events from Handshake and across UTSA — no more manual searching.</p>
+        <p>Jobs and internships from Handshake. Campus opportunities from across UTSA.</p>
       </div>
       <div class="val-card">
         <h3><span>🎯</span> Match</h3>
-        <p>Zero generic job spam. Every opportunity is deterministically scored against your GPA, skills, coursework, and career goals.</p>
+        <p>Find roles that fit your skills, experience, academic background, and career goals.</p>
       </div>
       <div class="val-card">
-        <h3><span>🐦</span> Prep</h3>
-        <p>Rowdy is your AI interview coach. He asks real questions, grades your answers, and tells you exactly what to fix before the real thing.</p>
+        <h3><img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="22" height="22"> Prep</h3>
+        <p>Close skill gaps, build your career plan, and prepare for your next interview with Rowdy.</p>
       </div>
     </section>
   </div>
@@ -1238,7 +1381,7 @@
           </div>
           <div class="w-field full">
             <label>Current Cumulative GPA</label>
-            <input type="text" id="ob-gpa" value="3.70">
+            <input type="number" id="ob-gpa" min="0" max="4" step="0.01" value="3.70">
           </div>
         </div>
       </div>
@@ -1307,19 +1450,23 @@
           <label>Or describe in your own words:</label>
           <input type="text" id="ob-target-text" value="Land an AI internship by Summer 2027">
         </div>
+        <div class="w-field wizard-profile-fields">
+          <label for="ob-interests">Career interests</label>
+          <input type="text" id="ob-interests" placeholder="e.g. Software Engineer, ML Engineer">
+        </div>
       </div>
 
       <!-- STEP 4: UPLOAD RÉSUMÉ & SKILLS SCAN -->
       <div id="w-content-4" style="display:none;">
         <div class="wizard-head">
           <span class="badge">STEP 4 OF 5 · AUTOMATED PARSING</span>
-          <h2>Upload your résumé</h2>
-          <p>Rowdy extracts verified competencies and builds your evidence profile.</p>
+          <h2>Your skills & experience</h2>
+          <p>What do you bring to your next opportunity?</p>
         </div>
         <div class="dropzone" onclick="triggerResumeScan()">
           <div style="font-size:36px; margin-bottom:8px;">📄</div>
-          <b style="color:var(--navy-900); font-size:15px; display:block;">Drop your résumé here (PDF or DOCX)</b>
-          <span style="color:var(--muted); font-size:13px;">Or click to simulate instant upload</span>
+          <b style="color:var(--navy-900); font-size:15px; display:block;">Choose your résumé (PDF or DOCX)</b>
+          <span style="color:var(--muted); font-size:13px;">Optional</span>
         </div>
         <div class="skills-preview-box" id="scan-preview-box" style="display:none;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -1332,16 +1479,55 @@
           <div class="skill-scan-row"><span>Leadership</span><b style="color:var(--green)">✓ Intermediate</b></div>
           <div class="skill-scan-row"><span>AWS / Cloud</span><b style="color:var(--yellow)">⚠ Beginner (Identified Gap)</b></div>
         </div>
+        <div class="w-form-grid wizard-profile-fields">
+          <div class="w-field full">
+            <label for="ob-skills">Skills</label>
+            <input id="ob-skills" placeholder="e.g. Python, SQL, React, communication">
+          </div>
+          <div class="w-field full">
+            <label for="ob-coursework">Relevant coursework</label>
+            <input id="ob-coursework" placeholder="e.g. Data Structures, Database Systems">
+          </div>
+          <div class="w-field full">
+            <label for="ob-experience">Projects & experience</label>
+            <textarea id="ob-experience" rows="3" placeholder="e.g. Built a Python dashboard using pandas and SQL"></textarea>
+          </div>
+          <div class="w-field">
+            <label for="ob-locations">Preferred locations</label>
+            <input id="ob-locations" placeholder="e.g. San Antonio, Austin">
+          </div>
+          <div class="w-field">
+            <label for="ob-work-mode">Work arrangement</label>
+            <select id="ob-work-mode">
+              <option value="">No preference</option>
+              <option value="remote">Remote</option>
+              <option value="hybrid">Hybrid</option>
+              <option value="on-site">On-site</option>
+            </select>
+          </div>
+          <div class="w-field full">
+            <label for="ob-work-auth">Work authorization</label>
+            <select id="ob-work-auth">
+              <option value="">Prefer not to say</option>
+              <option value="us_citizen">US citizen</option>
+              <option value="permanent resident">Permanent resident</option>
+              <option value="authorized">Authorized to work in the US</option>
+              <option value="cpt">CPT</option>
+              <option value="opt">OPT</option>
+              <option value="requires sponsorship">Requires sponsorship</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <!-- STEP 5: BIG REVEAL -->
       <div id="w-content-5" style="display:none;">
         <div class="reveal-box">
-          <div class="reveal-bird">🐦</div>
+          <div class="reveal-bird"><img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="Rowdy" width="72" height="72"></div>
           <div class="eyebrow" style="margin-bottom:8px;">DOSSIER VERIFIED & READY</div>
-          <h2 style="font-size:32px; font-weight:900; color:var(--navy-900);">We found 12 high-priority matches.</h2>
+          <h2 style="font-size:26px; font-weight:900; color:var(--navy-900);">Your next chapter starts here.</h2>
           <p style="color:var(--muted); font-size:15px; max-width:480px; margin:8px auto 24px;">
-            Rowdy sequenced opportunities across UTSA Computer Science, research labs, and partner employers ready for your application.
+            Your profile is ready to match with opportunities.
           </p>
           <button class="btn-solid" style="padding:16px 36px; font-size:16px;" onclick="finishOnboardingToDashboard()">
             See My Matches →
@@ -1366,35 +1552,46 @@
       <!-- SIDEBAR -->
       <aside class="sidebar">
         <div class="sidebar-brand">
+          <img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="Rowdy" width="32" height="32">
           ROWDY<b>PLAN</b>
           <span class="tag">UTSA</span>
         </div>
 
-        <nav class="sidebar-nav">
-          <button class="nav-btn active" onclick="showAppTab('tab-foryou', this)">
-            <span class="icon">⌂</span> For You
+        <nav class="sidebar-nav" aria-label="Main navigation">
+          <button class="nav-btn active" aria-label="For You" aria-current="page" aria-controls="tab-foryou" data-tab="tab-foryou" onclick="showAppTab('tab-foryou', this)">
+            <span class="icon" aria-hidden="true">⌂</span><span class="nav-label">For You</span>
+            <span class="nav-tooltip" role="tooltip">For You</span>
           </button>
-          <button class="nav-btn" onclick="showAppTab('tab-explore', this)">
-            <span class="icon">◎</span> Explore
+          <button class="nav-btn" aria-label="Explore" aria-controls="tab-explore" data-tab="tab-explore" onclick="showAppTab('tab-explore', this)">
+            <span class="icon" aria-hidden="true">◎</span><span class="nav-label">Explore</span>
+            <span class="nav-tooltip" role="tooltip">Explore</span>
           </button>
-          <button class="nav-btn" onclick="showAppTab('tab-plan', this)">
-            <span class="icon">⌁</span> My Plan
+          <button class="nav-btn" aria-label="My Plan" aria-controls="tab-plan" data-tab="tab-plan" onclick="showAppTab('tab-plan', this)">
+            <span class="icon" aria-hidden="true">⌁</span><span class="nav-label">My Plan</span>
+            <span class="nav-tooltip" role="tooltip">My Plan</span>
           </button>
-          <button class="nav-btn" onclick="showAppTab('tab-missions', this)">
-            <span class="icon">✓</span> Missions
+          <button class="nav-btn" aria-label="Resume Optimization Tool" aria-controls="tab-resume" data-tab="tab-resume" onclick="showAppTab('tab-resume', this)">
+            <img class="tool-icon" src="/assets/icons/file-search.svg" alt="" width="20" height="20"><span class="nav-label">Resume Optimization Tool</span>
+            <span class="nav-tooltip" role="tooltip">Resume Optimization Tool</span>
+          </button>
+          <button class="nav-btn" aria-label="Missions" aria-controls="tab-missions" data-tab="tab-missions" onclick="showAppTab('tab-missions', this)">
+            <span class="icon" aria-hidden="true">✓</span><span class="nav-label">Missions</span>
             <span class="nav-badge">2</span>
+            <span class="nav-tooltip" role="tooltip">Missions</span>
           </button>
-          <button class="nav-btn" onclick="enterDistractionFreeInterview()">
-            <span class="icon">🎙</span> Practice
+          <button class="nav-btn" aria-label="AI Interview" aria-controls="tab-interview" data-tab="tab-interview" onclick="enterDistractionFreeInterview()">
+            <img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="24" height="24"><span class="nav-label">AI Interview</span>
+            <span class="nav-tooltip" role="tooltip">AI Interview</span>
           </button>
-          <button class="nav-btn" onclick="showAppTab('tab-dossier', this)">
-            <span class="icon">▣</span> My Dossier
+          <button class="nav-btn" aria-label="My Dossier" aria-controls="tab-dossier" data-tab="tab-dossier" onclick="showAppTab('tab-dossier', this)">
+            <span class="icon" aria-hidden="true">▣</span><span class="nav-label">My Dossier</span>
+            <span class="nav-tooltip" role="tooltip">My Dossier</span>
           </button>
         </nav>
 
         <div class="sidebar-footer">
           <button class="btn-ask-side" onclick="toggleChatDrawer()">
-            <span>🐦</span> Ask Rowdy
+            <img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="28" height="28"> Ask Rowdy
           </button>
         </div>
       </aside>
@@ -1408,21 +1605,23 @@
             <div>
               <div class="eyebrow">YOUR OPPORTUNITY INTELLIGENCE</div>
               <h1 id="userGreeting">Good afternoon, Ranya.</h1>
-              <p class="sub">Rowdy found 4 new verified opportunities aligned with your targets.</p>
+              <p class="sub" id="dashboard-source-summary">Your career opportunities, matched to your profile.</p>
             </div>
-            <div style="width:42px; height:42px; border-radius:50%; background:var(--navy-900); color:#fff; display:grid; place-items:center; font-weight:800;">
-              RB
+            <div class="dashboard-actions">
+              <button class="btn-outline" id="handshake-sync-button" onclick="syncHandshakeJobs()" title="Load the latest completed Handshake run">Sync Handshake</button>
+              <div style="width:42px; height:42px; border-radius:50%; background:var(--navy-900); color:#fff; display:grid; place-items:center; font-weight:800; flex-shrink:0;">RB</div>
             </div>
           </div>
+          <p id="handshake-sync-status" role="status" aria-live="polite"></p>
 
           <!-- ASK ROWDY BAR -->
           <div class="ask-box-dash">
-            <div class="bird-badge">🐦</div>
+            <div class="bird-badge"><img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="Rowdy" width="48" height="48"></div>
             <div class="ask-input-wrap">
               <b>What are you working toward today?</b>
               <div class="ask-field-row">
                 <input id="dash-ask-input" placeholder="e.g. Find me paid AI opportunities I'm eligible for...">
-                <button onclick="askFromDash()">Ask Rowdy 🐦</button>
+                <button onclick="askFromDash()">Ask Rowdy</button>
               </div>
             </div>
           </div>
@@ -1450,7 +1649,7 @@
           <!-- TOP TARGETS -->
           <div class="section-head">
             <h2>🎯 Top Targets For You</h2>
-            <button class="btn-outline" style="padding:6px 14px; font-size:13px;" onclick="showAppTab('tab-explore')">View all (8) →</button>
+            <button class="btn-outline" id="view-all-matches" style="padding:6px 14px; font-size:13px;" onclick="showAppTab('tab-explore')">View all →</button>
           </div>
           <div class="opp-grid" id="top-targets-container"></div>
 
@@ -1465,7 +1664,7 @@
         <section id="tab-explore" class="app-tab" style="display:none;">
           <div class="eyebrow">CENTRALIZED REPOSITORY</div>
           <h1>Every opportunity. One place.</h1>
-          <p class="sub" style="margin-bottom:20px;">Browse every internship, lab fellowship, hackathon, and award across UTSA.</p>
+          <p class="sub" id="explore-source-summary" style="margin-bottom:20px;">Your matched opportunities.</p>
 
           <div class="filter-chips">
             <button class="f-chip active" onclick="setFilterCategory('All', this)">All Opportunities</button>
@@ -1527,9 +1726,9 @@
               <div class="checklist-row"><span style="color:var(--green)">✓</span> Application submitted</div>
               <div class="checklist-row"><span style="color:var(--muted)">○</span> Technical Assessment</div>
               <div class="checklist-row"><span style="color:var(--muted)">○</span> Final Round Interview</div>
-              <div style="margin-top:20px; padding-top:14px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
+              <div style="margin-top:20px; padding-top:14px; border-top:1px solid #f1f5f9; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;">
                 <span style="font-size:12px; font-weight:700; color:var(--orange-500);">NEXT: Practice behavioral & SQL with Rowdy</span>
-                <button class="btn-solid" style="padding:8px 16px; font-size:13px;" onclick="enterDistractionFreeInterview()">Practice 🎙</button>
+                <button class="btn-solid mission-interview-button" style="padding:8px 16px; font-size:13px;" onclick="enterDistractionFreeInterview()"><img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="24" height="24">AI Interview</button>
               </div>
             </div>
 
@@ -1550,7 +1749,68 @@
           </div>
         </section>
 
-        <!-- TAB 6: MY DOSSIER -->
+        <section id="tab-resume" class="app-tab" style="display:none;" aria-labelledby="resume-page-title">
+          <h1 id="resume-page-title" class="resume-page-title">Resume Optimization Tool</h1>
+          <div class="resume-workspace">
+            <form id="resume-tool-form" onsubmit="event.preventDefault(); analyzeResumeTool();">
+              <label class="resume-field" for="resume-target">Target Role</label>
+              <input id="resume-target" class="resume-input" type="text" required maxlength="160" oninput="markResumeAnalysisStale()">
+              <label class="resume-field" for="resume-editor">Resume Content</label>
+              <textarea id="resume-editor" class="resume-editor" rows="16" required maxlength="60000" oninput="markResumeAnalysisStale()"></textarea>
+              <input id="resume-tool-upload" type="file" accept=".pdf,.docx" hidden onchange="uploadResumeForTool(this)">
+              <div class="resume-actions">
+                <button id="resume-upload-button" class="btn-outline" type="button" onclick="document.getElementById('resume-tool-upload').click()">
+                  <img class="tool-icon" src="/assets/icons/upload.svg" alt="" width="20" height="20">Upload Resume
+                </button>
+                <button id="resume-analyze-button" class="btn-solid" type="submit">
+                  <img class="tool-icon" src="/assets/icons/file-search.svg" alt="" width="20" height="20"><span id="resume-analyze-label">Analyze Resume</span>
+                </button>
+              </div>
+              <p id="resume-tool-status" role="status" aria-live="polite"></p>
+            </form>
+            <div class="resume-results" aria-label="Resume analysis results">
+              <h2>Resume Analysis</h2>
+              <p id="resume-results-target"></p>
+              <dl class="resume-scores">
+                <div><dt>Resume Score</dt><dd id="resume-score">--</dd></div>
+                <div><dt>ATS Check</dt><dd id="resume-ats-score">--</dd></div>
+              </dl>
+              <section class="resume-result-section">
+                <h3>Missing Keywords</h3>
+                <div id="resume-keywords" class="resume-keywords"><p class="resume-empty">No analysis yet.</p></div>
+              </section>
+              <section class="resume-result-section">
+                <h3>Recommended Rewrites</h3>
+                <div id="resume-rewrites"><p class="resume-empty">No analysis yet.</p></div>
+              </section>
+              <section class="resume-result-section">
+                <h3>Skill Gaps</h3>
+                <div id="resume-skill-gaps" class="resume-keywords"><p class="resume-empty">No analysis yet.</p></div>
+              </section>
+              <section class="resume-result-section">
+                <h3>Unquantified Impact</h3>
+                <div id="resume-impact"><p class="resume-empty">No analysis yet.</p></div>
+              </section>
+              <section class="resume-result-section">
+                <h3>Strong Bullets</h3>
+                <div id="resume-strong-bullets"><p class="resume-empty">No analysis yet.</p></div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-interview" class="app-tab" style="display:none;" aria-labelledby="interview-title">
+          <h1 id="interview-title" class="interview-title">AI Interview</h1>
+          <video id="rowdy-interview-video" class="interview-video" width="1920" height="1080" controls playsinline preload="metadata"
+            src="/media/rowdy-ai-interview.mp4" poster="/media/rowdy-ai-interview-poster.jpg" aria-label="Rowdy AI interview video"
+            onerror="document.getElementById('interview-video-error').hidden = false"
+            onloadeddata="document.getElementById('interview-video-error').hidden = true">
+            <a href="/media/rowdy-ai-interview.mp4">Open interview video</a>
+          </video>
+          <p id="interview-video-error" role="alert" hidden>The interview video could not be loaded. <a href="/media/rowdy-ai-interview.mp4">Open video</a></p>
+        </section>
+
+        <!-- MY DOSSIER -->
         <section id="tab-dossier" class="app-tab" style="display:none;">
           <div class="eyebrow">STUDENT CREDENTIAL PROFILE</div>
           <h1>My Dossier</h1>
@@ -1605,66 +1865,6 @@
   </div>
 
   <!-- ========================================================
-       SCREEN 4: DISTRACTION-FREE INTERVIEW ROOM
-       ======================================================== -->
-  <div id="view-interview" class="view-container interview-view">
-    <div class="interview-box">
-      <div style="font-size:42px; margin-bottom:10px;">🐦</div>
-      <div class="eyebrow" style="color:var(--orange-400);">ROWDY INTERVIEW SIMULATOR</div>
-      <h2 style="font-size:24px; font-weight:900; margin:6px 0 2px;">Data Analyst Internship</h2>
-      <p style="color:#94a3b8; font-size:14px;">Behavioral Practice #1</p>
-
-      <div style="margin:28px 0;">
-        <span class="live-pulse-dot"></span>
-        <span style="font-family:var(--font-mono); font-size:14px; color:#f8fafc; font-weight:700;">Rowdy is listening...</span>
-      </div>
-
-      <h3 style="font-size:22px; font-weight:700; max-width:540px; margin:0 auto; line-height:1.45; color:#ffffff;">
-        "Tell me about a project where you used data to solve a difficult problem."
-      </h3>
-
-      <div class="timer-display" id="interview-timer">01:34</div>
-
-      <div style="display:flex; gap:12px; justify-content:center;">
-        <button class="btn-solid" onclick="finishInterviewAnswer()" style="padding:14px 28px;">
-          End Answer & View Debrief →
-        </button>
-        <button class="btn-ghost" onclick="switchMasterView('dashboard')">
-          Exit Room
-        </button>
-      </div>
-    </div>
-
-    <!-- INTERVIEW DEBRIEF SCORECARD MODAL -->
-    <div id="interview-debrief" style="display:none; max-width:680px; width:100%; margin-top:24px; background:#fff; color:var(--ink); border-radius:20px; padding:32px; text-align:left;">
-      <div class="eyebrow" style="color:var(--orange-500);">INTERVIEW DEBRIEF</div>
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin:8px 0 16px;">
-        <h2 style="font-size:26px; font-weight:900; color:var(--navy-900);">Performance: 7.8 / 10</h2>
-        <span style="font-weight:700; color:var(--green)">Strong Baseline</span>
-      </div>
-
-      <div style="margin-bottom:18px;">
-        <div class="match-breakdown-row"><span class="label">Communication</span><div class="bar"><span style="width:82%"></span></div><span class="val">8.2</span></div>
-        <div class="match-breakdown-row"><span class="label">STAR Structure</span><div class="bar"><span style="width:64%"></span></div><span class="val">6.4</span></div>
-        <div class="match-breakdown-row"><span class="label">Specificity</span><div class="bar"><span style="width:71%"></span></div><span class="val">7.1</span></div>
-        <div class="match-breakdown-row"><span class="label">Technical Depth</span><div class="bar"><span style="width:80%"></span></div><span class="val">8.0</span></div>
-      </div>
-
-      <div style="background:var(--orange-100); border:1px solid #ffccb8; border-radius:12px; padding:16px; margin:16px 0;">
-        <b style="color:var(--orange-600); font-size:13px; display:block; margin-bottom:4px;">🐦 Rowdy's Tactical Feedback:</b>
-        <p style="font-size:14px; color:#7c2d12;">
-          "Your technical explanations are strong, but you described team accomplishments more often than your individual contribution. When asked 'what did you do?', lead directly with your specific Python scripts and data metrics."
-        </p>
-      </div>
-
-      <div style="display:flex; gap:12px; margin-top:20px;">
-        <button class="btn-solid" onclick="switchMasterView('dashboard')">Return to Dashboard</button>
-        <button class="btn-outline" onclick="showAppTab('tab-plan'); switchMasterView('dashboard');">Add STAR Workshop to Plan</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================
        KILLER MODAL: WHY NOT ME? & AGENT RUNNER
        ======================================================== -->
   <div class="modal-backdrop" id="whyNotMeModal">
@@ -1712,18 +1912,18 @@
   <div class="chat-drawer" id="globalChatDrawer">
     <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid var(--line);">
       <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size:22px;">🐦</span>
+        <img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="36" height="36">
         <div>
           <b style="font-size:15px; color:var(--navy-900);">Ask Rowdy</b>
           <div style="font-size:11px; color:var(--muted);">Your Opportunity Agent</div>
         </div>
       </div>
-      <button onclick="toggleChatDrawer()" style="border:0; background:none; font-size:20px; color:var(--muted);">✕</button>
+      <button onclick="toggleChatDrawer()" aria-label="Close chat" title="Close chat" style="border:0; background:none; font-size:20px; color:var(--muted);">✕</button>
     </div>
 
     <div class="chat-body" id="chatMsgsArea">
       <div class="chat-bubble ai">
-        Hey! I'm Rowdy 🐦 Your personal opportunity intelligence agent. I've indexed 48 live UTSA opportunities. Complete onboarding or ask me anything!
+        Hey! I'm Rowdy, your career companion. Let's find your next opportunity and plan your next step.
       </div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
         <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('What are my top career paths?')">Top career paths</button>
@@ -1739,8 +1939,8 @@
   </div>
 
   <!-- FLOATING BIRD AGENT BUTTON -->
-  <button class="fab-bird" onclick="toggleChatDrawer()" title="Ask Rowdy Copilot">
-    🐦
+  <button class="fab-bird" onclick="toggleChatDrawer()" title="Ask Rowdy" aria-label="Ask Rowdy" aria-expanded="false" aria-controls="globalChatDrawer">
+    <img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="46" height="46">
   </button>
 
   <script>
@@ -1748,6 +1948,7 @@
        API CLIENT
        ======================================================== */
     const API = '/api';
+    const ROWDY_AVATAR = '<img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="Rowdy" width="72" height="72">';
 
     async function apiPost(path, body) {
       const res = await fetch(API + path, {
@@ -1799,19 +2000,26 @@
           category: mapCategory(jm.title),
           title: jm.title || 'Untitled',
           org: jm.organization || '',
-          match: jm.match_score || 0,
+          match: Math.max(0, Math.min(100, Number(jm.match_score) || 0)),
           eligible: jm.qualification_status === 'QUALIFIED' || jm.qualification_status === 'LIKELY_QUALIFIED',
+          qualificationStatus: jm.qualification_status,
           money: jm.compensation || '',
           deadline: jm.deadline || '',
+          opportunityId: jm.opportunity_id,
+          source: jm.source || '',
+          url: safeJobURL(jm.url),
+          location: jm.location || '',
+          description: jm.description || '',
           skills: allSkills.slice(0, 4).map(function(s) { return s.charAt(0).toUpperCase() + s.slice(1); }),
           breakdown: {
             skills: Math.round(bd.skill || 0),
             interests: Math.round(bd.career_interest || 0),
             experience: Math.round(bd.experience || 0),
             major: Math.round(bd.education || 0),
-            classification: Math.round(bd.goal || 0)
+            classification: Math.round(bd.goal || 0),
+            location: Math.round(bd.location || 0)
           },
-          strengths: (jm.matched_skills || []).map(function(s) { return 'Verified: ' + s; }),
+          strengths: (jm.matched_skills || []).map(function(s) { return 'Matched skill: ' + s; }),
           gaps: (jm.missing_skills || []).map(function(s) { return 'Missing: ' + s; }),
           why: (jm.reasoning || [''])[0]
         };
@@ -1822,6 +2030,8 @@
        VIEW SWITCHING LOGIC
        ======================================================== */
     function switchMasterView(viewId) {
+      var interviewVideo = document.getElementById('rowdy-interview-video');
+      if (interviewVideo && viewId !== 'dashboard') interviewVideo.pause();
       document.querySelectorAll('.view-container').forEach(function(v) { v.classList.remove('active'); });
       var target = document.getElementById('view-' + viewId);
       if (target) target.classList.add('active');
@@ -1834,6 +2044,12 @@
       showWizardStep(1);
     }
 
+    function profileList(id) {
+      return document.getElementById(id).value.split(',').map(function(value) {
+        return value.trim();
+      }).filter(Boolean);
+    }
+
     /* ========================================================
        ONBOARDING → BACKEND INTEGRATION
        ======================================================== */
@@ -1841,7 +2057,7 @@
       var revealBox = document.querySelector('#w-content-5 .reveal-box');
       if (revealBox) {
         revealBox.innerHTML =
-          '<div class="reveal-bird">🐦</div>' +
+          '<div class="reveal-bird">' + ROWDY_AVATAR + '</div>' +
           '<div class="eyebrow" style="margin-bottom:8px;">ANALYZING YOUR PROFILE...</div>' +
           '<h2 style="font-size:24px; font-weight:900; color:var(--navy-900);">Rowdy is generating your plan...</h2>' +
           '<div id="gen-steps" style="text-align:left; max-width:420px; margin:16px auto 0; font-family:var(--font-mono); font-size:13px; color:var(--muted);"></div>';
@@ -1851,7 +2067,8 @@
       var minor = (document.getElementById('ob-minor') || {}).value || '';
       var year = (document.getElementById('ob-class') || {}).value || 'Senior';
       var gradDate = (document.getElementById('ob-grad') || {}).value || 'May 2027';
-      var gpa = parseFloat((document.getElementById('ob-gpa') || {}).value) || 3.5;
+      var gpaValue = document.getElementById('ob-gpa').value;
+      var gpa = gpaValue === '' ? null : Number(gpaValue);
       var target = (document.getElementById('ob-target-text') || {}).value || '';
 
       var currentGoal = 'exploring';
@@ -1861,10 +2078,12 @@
       else if (tLow.includes('full-time') || tLow.includes('full time') || tLow.includes('job')) currentGoal = 'full_time';
       else if (tLow.includes('grad')) currentGoal = 'graduate_school';
 
-      var careerInterests = [];
-      document.querySelectorAll('#w-content-2 .w-card-choice.selected').forEach(function(el) {
-        careerInterests.push(el.textContent.trim().replace(/^[^\s]+\s/, ''));
-      });
+      var careerInterests = profileList('ob-interests');
+      if (!careerInterests.length && (tLow.includes('ai') || tLow.includes('machine learning'))) {
+        careerInterests = ['ML Engineer'];
+      }
+      var experienceText = document.getElementById('ob-experience').value.trim();
+      var workMode = document.getElementById('ob-work-mode').value;
 
       var profileData = {
         major: major,
@@ -1877,23 +2096,35 @@
         short_term_goal: target,
         long_term_goal: '',
         career_interests: careerInterests,
-        skills: window._resumeSkills || ['python', 'sql'],
+        opportunity_source: 'handshake',
+        skills: Array.from(new Set((window._resumeSkills || []).concat(profileList('ob-skills')))),
         technical_skills: [],
-        soft_skills: ['communication', 'teamwork'],
-        coursework: ['Data Structures', 'Algorithms'],
+        soft_skills: [],
+        coursework: profileList('ob-coursework'),
         certifications: [],
-        experience: [],
+        experience: experienceText ? [{ type: 'experience', description: experienceText }] : [],
         projects: [],
         organizations: [],
         hackathons: [],
-        industries: ['Technology'],
-        preferred_locations: ['San Antonio, TX', 'Austin, TX', 'Remote'],
-        work_preferences: ['hybrid', 'remote'],
+        industries: [],
+        preferred_locations: profileList('ob-locations'),
+        work_preferences: workMode ? [workMode] : [],
+        work_authorization: document.getElementById('ob-work-auth').value,
         preferred_companies: [],
         resume_text: window._resumeText || ''
       };
 
       try {
+        try {
+          var existingJobs = await apiGet('/opportunities?source=handshake&limit=1');
+          if (!existingJobs.length) {
+            addGenStep('Loading the latest Handshake listings...');
+            var imported = await apiPost('/admin/ingest', { provider: 'handshake', use_latest_run: true });
+            addGenStep(imported.fetched + ' Handshake listings loaded');
+          }
+        } catch (syncError) {
+          addGenStep('Handshake listings are currently unavailable.');
+        }
         addGenStep('Creating your student profile...');
         var plan = await apiPost('/rowdy-plan/generate-inline', profileData);
         currentPlan = plan;
@@ -1922,8 +2153,7 @@
           revealBox.innerHTML =
             '<div class="reveal-bird" style="background:var(--red);">!</div>' +
             '<h2 style="font-size:22px; font-weight:900; color:var(--red);">Connection Error</h2>' +
-            '<p style="color:var(--muted); font-size:14px; margin:8px auto 16px;">Make sure the backend is running at localhost:8000</p>' +
-            '<pre style="font-size:11px; color:var(--muted); text-align:left; max-width:400px; margin:0 auto; overflow:auto;">' + (e.message || e) + '</pre>' +
+            '<p style="color:var(--muted); font-size:14px; margin:8px auto 16px;">We couldn\'t generate your plan. Please try again.</p>' +
             '<button class="btn-solid" style="margin-top:16px;" onclick="finishOnboardingToDashboard()">Retry</button>';
         }
       }
@@ -1947,6 +2177,55 @@
       if (labels[1]) labels[1].innerHTML = '✓ Qualified For';
       if (labels[2]) labels[2].innerHTML = '🔥 Career Paths';
       if (labels[3]) labels[3].innerHTML = '📋 Skill Gaps';
+      var matches = plan.job_matches || [];
+      var isDemo = plan.opportunity_source === 'utsa';
+      document.getElementById('dashboard-source-summary').textContent = isDemo
+        ? 'Demo profile with sample UTSA opportunities.'
+        : matches.length + ' Handshake opportunities matched to your profile.';
+      document.getElementById('explore-source-summary').textContent = isDemo
+        ? 'Sample UTSA opportunities.'
+        : 'Handshake listings matched to your profile.';
+      document.getElementById('handshake-sync-button').hidden = isDemo;
+      document.getElementById('handshake-sync-status').textContent = '';
+      document.getElementById('view-all-matches').textContent = 'View all (' + matches.length + ') →';
+    }
+
+    async function syncHandshakeJobs() {
+      var button = document.getElementById('handshake-sync-button');
+      var status = document.getElementById('handshake-sync-status');
+      if (button.disabled) return;
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      status.textContent = 'Loading the latest Handshake run...';
+      try {
+        var imported = await apiPost('/admin/ingest', { provider: 'handshake', use_latest_run: true });
+        if (!imported.fetched) {
+          status.textContent = 'The latest completed run has no usable jobs. Existing listings are unchanged.';
+          return;
+        }
+        if (currentStudentId) {
+          var plan = await apiPost('/rowdy-plan/generate', {
+            student_id: currentStudentId,
+            opportunity_source: 'handshake'
+          });
+          plan.student_id = currentStudentId;
+          currentPlan = plan;
+          transformJobMatches(plan);
+          updateDashMetrics(plan);
+          initDashboardCards();
+        }
+        status.textContent = imported.fetched + ' Handshake jobs loaded. Matches refreshed.';
+      } catch (error) {
+        var message = error.message;
+        try {
+          var detail = JSON.parse(message).detail;
+          if (typeof detail === 'string') message = detail;
+        } catch (parseError) {}
+        status.textContent = 'Handshake sync failed: ' + message;
+      } finally {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+      }
     }
 
     function updateDossierTab(profile, plan) {
@@ -1957,13 +2236,23 @@
         dossierRow('University', profile.university) +
         dossierRow('Major', profile.major) +
         dossierRow('Classification', profile.year) +
-        dossierRow('GPA', (profile.gpa || 0).toFixed(2) + ' / 4.00') +
+        dossierRow('GPA', profile.gpa == null ? 'Not provided' : Number(profile.gpa).toFixed(2) + ' / 4.00') +
         dossierRow('Graduation', profile.graduation_date);
+      var careerProfile = document.querySelectorAll('#tab-dossier .detail-card')[1];
+      if (careerProfile) {
+        var skills = Array.from(new Set((profile.skills || []).concat(profile.technical_skills || [], profile.soft_skills || [])));
+        careerProfile.innerHTML = '<h3 style="font-size:18px; margin-bottom:14px; color:var(--navy-900);">Career Profile</h3>' +
+          dossierRow('Career interests', (profile.career_interests || []).join(', ')) +
+          dossierRow('Skills', skills.join(', ') || 'Not provided') +
+          dossierRow('Coursework', (profile.coursework || []).join(', ')) +
+          dossierRow('Preferred locations', (profile.preferred_locations || []).join(', '));
+      }
+      initializeResumeTool(profile, plan);
     }
 
     function dossierRow(label, val) {
       return '<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px;">' +
-        '<span style="color:var(--muted)">' + label + '</span><b>' + (val || '-') + '</b></div>';
+        '<span style="color:var(--muted); flex-shrink:0; margin-right:12px;">' + escapeHTML(label) + '</span><b style="text-align:right;">' + escapeHTML(val || '-') + '</b></div>';
     }
 
     /* ========================================================
@@ -1971,6 +2260,7 @@
        ======================================================== */
     async function loadDemoDashboard() {
       var demoProfile = {
+        opportunity_source: 'utsa',
         major: 'Computer Science',
         year: 'Senior',
         gpa: 3.7,
@@ -2046,6 +2336,10 @@
     }
 
     function wizardNext() {
+      var inputs = document.querySelectorAll('#w-content-' + currentWStep + ' input');
+      for (var input of inputs) {
+        if (!input.reportValidity()) return;
+      }
       if (currentWStep < 5) {
         currentWStep++;
         showWizardStep(currentWStep);
@@ -2090,7 +2384,7 @@
 
         var box = document.getElementById('scan-preview-box');
         box.style.display = 'block';
-        box.innerHTML = '<div style="text-align:center; padding:20px; color:var(--muted);">Parsing ' + file.name + '...</div>';
+        box.innerHTML = '<div style="text-align:center; padding:20px; color:var(--muted);">Parsing ' + escapeHTML(file.name) + '...</div>';
         box.scrollIntoView({ behavior: 'smooth' });
 
         var formData = new FormData();
@@ -2105,7 +2399,7 @@
           window._resumeText = data.resume_text || '';
 
           var skillsHtml = (data.extracted_skills || []).slice(0, 8).map(function(s) {
-            return '<div class="skill-scan-row"><span>' + s + '</span><b style="color:var(--green)">✓ Detected</b></div>';
+            return '<div class="skill-scan-row"><span>' + escapeHTML(s) + '</span><b style="color:var(--green)">✓ Detected</b></div>';
           }).join('');
 
           box.innerHTML =
@@ -2113,34 +2407,162 @@
             '<b style="font-size:13px; color:var(--navy-900);">🐦 Rowdy Parsed Competencies:</b>' +
             '<span style="font-size:11px; color:var(--green); font-weight:700;">Extraction Complete</span></div>' +
             skillsHtml +
-            '<div style="margin-top:12px; font-size:12px; color:var(--muted);">Parsed ' + (data.resume_text || '').length + ' characters from ' + file.name + '</div>';
+            '<div style="margin-top:12px; font-size:12px; color:var(--muted);">Parsed ' + (data.resume_text || '').length + ' characters from ' + escapeHTML(file.name) + '</div>';
         } catch (err) {
-          box.innerHTML =
-            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
-            '<b style="font-size:13px; color:var(--navy-900);">🐦 Rowdy Parsed Competencies:</b>' +
-            '<span style="font-size:11px; color:var(--green); font-weight:700;">Simulated Scan</span></div>' +
-            '<div class="skill-scan-row"><span>Python</span><b style="color:var(--green)">✓ Advanced</b></div>' +
-            '<div class="skill-scan-row"><span>SQL</span><b style="color:var(--green)">✓ Advanced</b></div>' +
-            '<div class="skill-scan-row"><span>Data Analysis</span><b style="color:var(--green)">✓ Proficient</b></div>' +
-            '<div class="skill-scan-row"><span>Leadership</span><b style="color:var(--green)">✓ Intermediate</b></div>' +
-            '<div class="skill-scan-row"><span>AWS / Cloud</span><b style="color:var(--yellow)">⚠ Beginner (Gap)</b></div>';
-          window._resumeSkills = ['python', 'sql', 'data analysis', 'leadership'];
+          box.innerHTML = '<p role="alert" style="color:var(--red); font-size:14px;">Your résumé could not be read. Try another file or enter your skills below.</p>';
         }
       };
       fileInput.click();
+    }
+
+    var resumeToolBusy = false;
+
+    function initializeResumeTool(profile, plan) {
+      document.getElementById('resume-editor').value = profile.resume_text || '';
+      var role = (profile.career_interests || [])[0] || (plan.career_matches || [])[0]?.career_name || '';
+      document.getElementById('resume-target').value = role;
+      renderResumeToolAnalysis(plan.resume_analysis, role);
+      setResumeToolStatus('', false);
+    }
+
+    function setResumeToolStatus(message, isError) {
+      var status = document.getElementById('resume-tool-status');
+      status.textContent = message;
+      status.dataset.state = isError ? 'error' : 'ready';
+      status.setAttribute('role', isError ? 'alert' : 'status');
+      status.setAttribute('aria-live', isError ? 'assertive' : 'polite');
+    }
+
+    function setResumeToolBusy(busy) {
+      resumeToolBusy = busy;
+      document.getElementById('resume-tool-form').setAttribute('aria-busy', String(busy));
+      ['resume-target', 'resume-editor', 'resume-upload-button', 'resume-analyze-button'].forEach(function(id) {
+        document.getElementById(id).disabled = busy;
+      });
+    }
+
+    function markResumeAnalysisStale() {
+      setResumeToolStatus('Analysis pending.', false);
+    }
+
+    function showResumeToolError(error) {
+      var message = error.message;
+      try {
+        var detail = JSON.parse(message).detail;
+        if (typeof detail === 'string') message = detail;
+      } catch (parseError) {}
+      setResumeToolStatus(message || 'Resume analysis is unavailable.', true);
+    }
+
+    function renderResumeToolAnalysis(analysis, role) {
+      document.getElementById('resume-score').textContent = analysis ? Math.round(Number(analysis.resume_score) || 0) + '/100' : '--';
+      document.getElementById('resume-ats-score').textContent = analysis ? Math.round(Number(analysis.ats_compatibility) || 0) + '/100' : '--';
+      document.getElementById('resume-results-target').textContent = analysis ? role : '';
+      ['resume-keywords', 'resume-skill-gaps', 'resume-impact', 'resume-strong-bullets', 'resume-rewrites'].forEach(function(id) {
+        document.getElementById(id).innerHTML = '<p class="resume-empty">' + (analysis ? 'None detected.' : 'No analysis yet.') + '</p>';
+      });
+      if (!analysis) return;
+
+      [['resume-keywords', 'missing_keywords'], ['resume-skill-gaps', 'missing_technical_skills']].forEach(function(entry) {
+        var items = analysis[entry[1]] || [];
+        if (items.length) document.getElementById(entry[0]).innerHTML = items.map(function(item) {
+          return '<span class="resume-keyword">' + escapeHTML(item) + '</span>';
+        }).join('');
+      });
+      [['resume-impact', 'missing_measurable_impact'], ['resume-strong-bullets', 'strong_bullets']].forEach(function(entry) {
+        var items = analysis[entry[1]] || [];
+        if (items.length) document.getElementById(entry[0]).innerHTML = '<ul class="resume-result-list">' + items.map(function(item) {
+          return '<li>' + escapeHTML(item) + '</li>';
+        }).join('') + '</ul>';
+      });
+      var rewrites = analysis.recommended_rewrites || [];
+      if (rewrites.length) document.getElementById('resume-rewrites').innerHTML = rewrites.map(function(item) {
+        return '<div class="resume-rewrite"><span class="resume-line-label">Original</span><p>' + escapeHTML(item.original) +
+          '</p><span class="resume-line-label">Suggested</span><p class="resume-suggestion">' + escapeHTML(item.rewrite) +
+          '</p><p class="resume-empty">' + escapeHTML(item.reason) + '</p></div>';
+      }).join('');
+    }
+
+    async function uploadResumeForTool(input) {
+      var file = input.files[0];
+      if (!file || resumeToolBusy) return;
+      if (!/\.(pdf|docx)$/i.test(file.name) || file.size > 10 * 1024 * 1024) {
+        setResumeToolStatus('Choose a PDF or DOCX file under 10 MB.', true);
+        input.value = '';
+        return;
+      }
+      var studentId = currentStudentId;
+      var form = new FormData();
+      form.append('file', file);
+      setResumeToolBusy(true);
+      setResumeToolStatus('Reading ' + file.name + '...', false);
+      try {
+        var response = await fetch(API + '/resume/upload', { method: 'POST', body: form });
+        if (!response.ok) throw new Error(await response.text());
+        var data = await response.json();
+        if (currentStudentId !== studentId) return;
+        document.getElementById('resume-editor').value = data.resume_text || '';
+        renderResumeToolAnalysis(null, '');
+        setResumeToolStatus(file.name + ' loaded. Analysis pending.', false);
+      } catch (error) {
+        if (currentStudentId === studentId) showResumeToolError(error);
+      } finally {
+        input.value = '';
+        setResumeToolBusy(false);
+      }
+    }
+
+    async function analyzeResumeTool() {
+      if (resumeToolBusy) return;
+      var resumeText = document.getElementById('resume-editor').value.trim();
+      var role = document.getElementById('resume-target').value.trim();
+      var studentId = currentStudentId;
+      if (!studentId || !resumeText || !role) {
+        setResumeToolStatus(!studentId ? 'Student profile is unavailable.' : 'Resume content and a target role are required.', true);
+        return;
+      }
+      setResumeToolBusy(true);
+      document.getElementById('resume-analyze-label').textContent = 'Analyzing...';
+      setResumeToolStatus('Analyzing resume...', false);
+      try {
+        var response = await fetch(API + '/students/' + encodeURIComponent(studentId) + '/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resume_text: resumeText })
+        });
+        if (!response.ok) throw new Error(await response.text());
+        var analysis = await apiPost('/resume/analyze', { student_id: studentId, target_career: role });
+        if (currentStudentId !== studentId) return;
+        if (currentPlan) currentPlan.resume_analysis = analysis;
+        renderResumeToolAnalysis(analysis, role);
+        setResumeToolStatus('Analysis complete.', false);
+      } catch (error) {
+        if (currentStudentId === studentId) showResumeToolError(error);
+      } finally {
+        document.getElementById('resume-analyze-label').textContent = 'Analyze Resume';
+        setResumeToolBusy(false);
+      }
     }
 
     /* ========================================================
        DASHBOARD TAB SWITCHING
        ======================================================== */
     function showAppTab(tabId, btn) {
-      document.querySelectorAll('.app-tab').forEach(function(t) { t.style.display = 'none'; });
       var target = document.getElementById(tabId);
-      if (target) target.style.display = 'block';
+      if (!target) return;
+      var interviewVideo = document.getElementById('rowdy-interview-video');
+      if (interviewVideo && tabId !== 'tab-interview') interviewVideo.pause();
+      document.querySelectorAll('.app-tab').forEach(function(t) { t.style.display = 'none'; });
+      target.style.display = 'block';
 
+      btn = btn || document.querySelector('.sidebar-nav [data-tab="' + tabId + '"]');
       if (btn) {
-        document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.nav-btn').forEach(function(b) {
+          b.classList.remove('active');
+          b.removeAttribute('aria-current');
+        });
         btn.classList.add('active');
+        btn.setAttribute('aria-current', 'page');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2149,16 +2571,19 @@
        RENDER OPPORTUNITY CARDS (from backend data)
        ======================================================== */
     function renderCardHTML(o) {
-      return '<div class="opp-card" onclick="openOppDetail(' + o.id + ')">' +
+      var sourceLabel = o.source === 'handshake' ? 'Handshake' : o.source === 'utsa' ? 'UTSA demo' : o.source;
+      return '<div class="opp-card" role="button" tabindex="0" onclick="openOppDetail(' + o.id + ')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openOppDetail(' + o.id + ')}">' +
         '<div style="display:flex; justify-content:space-between; align-items:center;">' +
         '<span class="opp-pill">' + o.type + '</span>' +
         '<span style="font-size:11px; font-weight:700; color:' + (o.eligible ? 'var(--green)' : 'var(--muted)') + ';">' +
-        (o.eligible ? '✓ Eligible' : 'Gap to bridge') + '</span></div>' +
+        (o.eligible ? '✓ Eligible' : o.qualificationStatus === 'UNKNOWN' ? 'Check eligibility' : 'Gap to bridge') + '</span></div>' +
         '<div class="opp-score ' + (o.match >= 60 ? 'high' : '') + '">' + o.match + '%</div>' +
         '<div class="opp-score-sub">MATCH SCORE</div>' +
-        '<h3 class="opp-title">' + o.title + '</h3>' +
-        '<div class="opp-meta">' + o.org + (o.money ? ' · <b style="color:var(--navy-900)">' + o.money + '</b>' : '') + '</div>' +
-        '<div class="opp-tags">' + o.skills.map(function(s) { return '<span class="opp-tag">' + s + '</span>'; }).join('') + '</div>' +
+        '<h3 class="opp-title">' + escapeHTML(o.title) + '</h3>' +
+        '<div class="opp-meta">' + escapeHTML(o.org) + (o.money ? ' · <b style="color:var(--navy-900)">' + escapeHTML(o.money) + '</b>' : '') + '</div>' +
+        '<div class="opp-meta">' + escapeHTML(o.location) + '</div>' +
+        '<div class="source-label ' + (o.source === 'handshake' ? 'handshake' : '') + '">' + escapeHTML(sourceLabel) + '</div>' +
+        '<div class="opp-tags">' + o.skills.map(function(s) { return '<span class="opp-tag">' + escapeHTML(s) + '</span>'; }).join('') + '</div>' +
         '<div class="progress-bar"><i style="width:' + o.match + '%;"></i></div></div>';
     }
 
@@ -2169,7 +2594,10 @@
 
       document.getElementById('top-targets-container').innerHTML = topTargets.length
         ? topTargets.map(renderCardHTML).join('')
-        : '<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--muted);">No strong matches yet. Complete onboarding to see personalized results.</p>';
+        : '<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--muted);">' +
+          (!sorted.length && currentPlan && currentPlan.opportunity_source === 'handshake'
+            ? 'No Handshake listings are available yet. Your career plan is ready below.'
+            : 'No strong matches yet. Explore your opportunities and skill gaps.') + '</p>';
 
       document.getElementById('stretch-targets-container').innerHTML = stretchTargets.length
         ? stretchTargets.map(renderCardHTML).join('')
@@ -2225,36 +2653,41 @@
       selectedOppForWNM = o;
 
       var isHighMatch = o.match >= 60;
-      var ctaLabel = isHighMatch ? '🐦 HOW DO I WIN THIS?' : '🐦 WHY NOT ME?';
+      var ctaLabel = isHighMatch ? 'Prepare for this role' : 'Close my skill gaps';
+      var sourceLabel = o.source === 'handshake' ? 'Handshake' : o.source === 'utsa' ? 'UTSA demo' : o.source;
 
       document.getElementById('detail-render-area').innerHTML =
         '<div class="detail-card">' +
-        '<div style="display:flex; justify-content:space-between; align-items:flex-start;"><div>' +
+        '<div class="detail-heading"><div>' +
         '<span class="opp-pill">' + o.type + '</span>' +
-        '<h1 style="font-size:28px; margin:8px 0 4px;">' + o.title + '</h1>' +
-        '<p class="sub">' + o.org + (o.money ? ' · <b style="color:var(--navy-900)">' + o.money + '</b>' : '') + '</p></div>' +
-        '<div style="text-align:right;"><div class="opp-score ' + (isHighMatch ? 'high' : '') + '" style="margin:0;">' + o.match + '%</div>' +
+        '<h1 style="font-size:28px; margin:8px 0 4px;">' + escapeHTML(o.title) + '</h1>' +
+        '<p class="sub">' + escapeHTML(o.org) + (o.money ? ' · <b style="color:var(--navy-900)">' + escapeHTML(o.money) + '</b>' : '') + '</p>' +
+        '<p class="sub">' + escapeHTML(o.location) + '</p>' +
+        '<p class="source-label">' + escapeHTML(sourceLabel) + (o.deadline ? ' · Apply by ' + escapeHTML(new Date(o.deadline).toLocaleDateString()) : '') + '</p></div>' +
+        '<div class="detail-score"><div class="opp-score ' + (isHighMatch ? 'high' : '') + '" style="margin:0;">' + o.match + '%</div>' +
         '<div class="opp-score-sub">MATCH SCORE</div></div></div>' +
+        (o.description ? '<p class="job-description">' + escapeHTML(o.description) + '</p>' : '') +
 
-        '<div style="margin:24px 0 16px;"><b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Your Match Breakdown</b>' +
+        '<div style="margin:24px 0 16px;"><b style="font-size:14px; text-transform:uppercase; letter-spacing:0; color:var(--navy-900);">Your Match Breakdown</b>' +
         '<div style="margin-top:10px;">' +
         breakdownRow('Skills', o.breakdown.skills) +
         breakdownRow('Career Interest', o.breakdown.interests) +
         breakdownRow('Experience', o.breakdown.experience) +
         breakdownRow('Education', o.breakdown.major) +
         breakdownRow('Goal Fit', o.breakdown.classification) +
+        breakdownRow('Location', o.breakdown.location) +
         '</div></div>' +
 
-        '<div class="checklist-section"><b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Why Rowdy matched you</b>' +
-        '<div style="margin-top:8px;"><div style="font-size:13px; font-weight:700; color:var(--green); margin:8px 0 4px;">🟢 Verified strengths:</div>' +
-        o.strengths.map(function(s) { return '<div class="cl-item"><span class="cl-icon good">✓</span> <span>' + s + '</span></div>'; }).join('') +
+        '<div class="checklist-section"><b style="font-size:14px; text-transform:uppercase; letter-spacing:0; color:var(--navy-900);">Why Rowdy matched you</b>' +
+        '<div style="margin-top:8px;"><div style="font-size:13px; font-weight:700; color:var(--green); margin:8px 0 4px;">Matched skills:</div>' +
+        o.strengths.map(function(s) { return '<div class="cl-item"><span class="cl-icon good">✓</span> <span>' + escapeHTML(s) + '</span></div>'; }).join('') +
         '<div style="font-size:13px; font-weight:700; color:var(--red); margin:16px 0 4px;">🔴 Gaps to close:</div>' +
-        o.gaps.map(function(g) { return '<div class="cl-item"><span class="cl-icon bad">✕</span> <span>' + g + '</span></div>'; }).join('') +
+        o.gaps.map(function(g) { return '<div class="cl-item"><span class="cl-icon bad">✕</span> <span>' + escapeHTML(g) + '</span></div>'; }).join('') +
         '</div></div>' +
 
-        '<div style="margin-top:28px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">' +
-        '<p style="font-size:14px; color:var(--muted); max-width:480px;">' + o.why + '</p>' +
-        '<button class="btn-solid" style="padding:14px 28px; font-size:15px;" onclick="openWhyNotMeModal()">' + ctaLabel + '</button></div></div>';
+        '<div class="detail-footer"><p>' + escapeHTML(o.why) + '</p><div class="detail-actions">' +
+        (o.url ? '<a class="btn-solid" href="' + escapeHTML(o.url) + '" target="_blank" rel="noopener noreferrer">' + (o.source === 'handshake' ? 'Open on Handshake' : 'Open listing') + ' ↗</a>' : '') +
+        '<button class="btn-outline" onclick="openWhyNotMeModal()">' + ctaLabel + '</button></div></div></div>';
 
       showAppTab('tab-detail');
     }
@@ -2263,6 +2696,15 @@
       return '<div class="match-breakdown-row"><span class="label">' + label + '</span>' +
         '<div class="bar"><span style="width:' + val + '%"></span></div>' +
         '<span class="val">' + val + '%</span></div>';
+    }
+
+    function safeJobURL(value) {
+      try {
+        var url = new URL(value);
+        return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+      } catch (_) {
+        return '';
+      }
     }
 
     function openWhyNotMeModal() {
@@ -2372,34 +2814,19 @@
     }
 
     /* ========================================================
-       INTERVIEW ROOM SIMULATION
+       AI INTERVIEW TAB
        ======================================================== */
     function enterDistractionFreeInterview() {
-      switchMasterView('interview');
-      document.getElementById('interview-debrief').style.display = 'none';
-      var sec = 94;
-      var timer = document.getElementById('interview-timer');
-      clearInterval(window.itvInterval);
-      window.itvInterval = setInterval(function() {
-        sec++;
-        var m = String(Math.floor(sec / 60)).padStart(2, '0');
-        var s = String(sec % 60).padStart(2, '0');
-        timer.textContent = m + ':' + s;
-      }, 1000);
-    }
-
-    function finishInterviewAnswer() {
-      clearInterval(window.itvInterval);
-      var debrief = document.getElementById('interview-debrief');
-      debrief.style.display = 'block';
-      debrief.scrollIntoView({ behavior: 'smooth' });
+      showAppTab('tab-interview');
     }
 
     /* ========================================================
        GLOBAL CHAT — ASK ROWDY 🐦 (uses live plan data)
        ======================================================== */
     function toggleChatDrawer() {
-      document.getElementById('globalChatDrawer').classList.toggle('open');
+      var isOpen = document.getElementById('globalChatDrawer').classList.toggle('open');
+      document.querySelector('.fab-bird').setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) document.getElementById('chatInputText').focus();
     }
 
     function askFromDash() {
@@ -2437,7 +2864,7 @@
           cardHTML = '<div class="chat-card-attachment">' +
             '<div style="font-size:12px; font-weight:800; color:var(--navy-900);">🎯 Rowdy Priority Sequence:</div>';
           topJobs.forEach(function(j, i) {
-            cardHTML += '<div style="font-size:12px; margin-top:4px;">' + (i + 1) + '. <b>' + j.match_score + '%</b> ' + j.title + ' at ' + j.organization + '</div>';
+            cardHTML += '<div style="font-size:12px; margin-top:4px;">' + (i + 1) + '. <b>' + j.match_score + '%</b> ' + escapeHTML(j.title) + ' at ' + escapeHTML(j.organization) + '</div>';
           });
           cardHTML += '<button class="btn-solid" style="width:100%; margin-top:8px; padding:6px; font-size:11px;" onclick="showAppTab(\'tab-plan\'); toggleChatDrawer();">View full plan →</button></div>';
         } else if (currentPlan && (qLow.includes('gap') || qLow.includes('skill') || qLow.includes('missing'))) {
@@ -2454,9 +2881,9 @@
         } else if (opportunities.length > 0) {
           var sorted = opportunities.slice().sort(function(a, b) { return b.match - a.match; });
           var best = sorted[0];
-          reply = 'Based on your profile, your strongest match is <b>' + best.title + '</b> at ' + best.org + ' (' + best.match + '% match). ';
+          reply = 'Based on your profile, your strongest match is <b>' + escapeHTML(best.title) + '</b> at ' + escapeHTML(best.org) + ' (' + best.match + '% match). ';
           if (best.gaps.length > 0) {
-            reply += 'Key gap: ' + best.gaps[0] + '.';
+            reply += 'Key gap: ' + escapeHTML(best.gaps[0]) + '.';
           }
         } else {
           reply = 'Complete the onboarding wizard first so I can analyze your profile against UTSA opportunities!';

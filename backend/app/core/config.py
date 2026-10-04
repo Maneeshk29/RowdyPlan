@@ -1,7 +1,8 @@
 """Application configuration using pydantic-settings."""
 
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -46,6 +47,13 @@ class Settings(BaseSettings):
     # --- LLM (optional, for explanation generation) ---
     LLM_API_URL: Optional[str] = None
     LLM_API_KEY: Optional[str] = None
+
+    # --- Apify / Handshake ingestion ---
+    APIFY_API_TOKEN: Optional[str] = None
+    APIFY_HANDSHAKE_ACTOR_ID: Optional[str] = None
+    APIFY_HANDSHAKE_TASK_ID: Optional[str] = None
+    APIFY_HANDSHAKE_INPUT: Dict[str, Any] = Field(default_factory=dict)
+    APIFY_TIMEOUT_SECONDS: int = 300
 
 
 # Singleton – import this wherever settings are needed.

@@ -1,0 +1,16 @@
+# Lean Vercel runtime; optional ML and development packages stay in backend/.
+fastapi==0.115.0
+uvicorn==0.30.6
+sqlalchemy==2.0.35
+asyncpg==0.29.0
+pydantic==2.9.2
+pydantic-settings==2.5.2
+python-multipart==0.0.9
+httpx==0.27.2
+baize==0.23.1
+numpy==1.26.4
+python-docx==1.1.2
+PyPDF2==3.0.1
+pdfplumber==0.11.4
+beautifulsoup4==4.12.3
+aiohttp==3.10.5

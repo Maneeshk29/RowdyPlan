@@ -13,7 +13,6 @@ from app.recommendation.career_matcher import CareerMatcher
 from app.recommendation.experience_matcher import ExperienceMatcher
 from app.recommendation.resume_analyzer import ResumeAnalyzer
 from app.recommendation.gap_analysis import GapAnalyzer
-from app.recommendation.ranking import RankingEngine
 
 
 class PlanGenerator:
@@ -27,7 +26,6 @@ class PlanGenerator:
         self.experience_matcher = ExperienceMatcher()
         self.resume_analyzer = ResumeAnalyzer()
         self.gap_analyzer = GapAnalyzer()
-        self.ranking_engine = RankingEngine()
 
     def generate(
         self,
@@ -42,6 +40,7 @@ class PlanGenerator:
         include_resume_analysis: bool = True,
         max_career_matches: int = 5,
         max_job_matches: int = 20,
+        opportunity_source: str | None = None,
     ) -> dict:
         """
         Generate a complete Rowdy Plan for a student.
@@ -54,6 +53,11 @@ class PlanGenerator:
         skill gaps, next steps, and timeline.
         """
         processing_steps = []
+        if opportunity_source:
+            opportunities = [
+                opp for opp in (opportunities or [])
+                if opp.get("source") == opportunity_source
+            ]
 
         # Step 1: Build/validate profile
         processing_steps.append({"step": "Analyzing your background", "status": "complete"})
@@ -97,18 +101,7 @@ class PlanGenerator:
             job_matches = []
             if opportunities:
                 job_opps = [o for o in opportunities if o.get("type") in ("job", "internship", "research", "campus")]
-                if not job_opps:
-                    job_opps = opportunities  # Use all if no job-type filter match
                 raw_matches = self.job_matcher.rank_opportunities(student, job_opps, features)
-
-                # Apply qualification filter
-                for match in raw_matches:
-                    opp = next((o for o in opportunities if str(o.get("id", "")) == match["opportunity_id"]), None)
-                    if opp:
-                        match["qualification_status"] = self.ranking_engine.apply_qualification_filter(student, opp)
-                    else:
-                        match["qualification_status"] = "UNKNOWN"
-
                 job_matches = raw_matches[:max_job_matches]
 
         # Step 7: Calculate matches
@@ -156,6 +149,7 @@ class PlanGenerator:
             "next_steps": next_steps,
             "timeline": timeline,
             "processing_steps": processing_steps,
+            "opportunity_source": opportunity_source,
         }
 
     def _generate_next_steps(

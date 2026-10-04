@@ -12,6 +12,7 @@ passlib[bcrypt]==1.7.4
 redis==5.1.0
 celery==5.4.0
 httpx==0.27.2
+baize==0.23.1
 numpy==1.26.4
 scikit-learn==1.5.2
 sentence-transformers==3.1.1

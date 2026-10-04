@@ -4,11 +4,13 @@ import os
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
+from app.core.staticfiles import MediaStaticFiles
 from app.database.session import create_tables
 
 
@@ -88,12 +90,20 @@ for _module_path in _ROUTER_MODULES:
 # Root / health endpoints
 # ---------------------------------------------------------------------------
 FRONTEND_HTML = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "index.html")
+FRONTEND_ASSETS = os.path.join(os.path.dirname(FRONTEND_HTML), "assets")
+FRONTEND_MEDIA = os.path.join(os.path.dirname(FRONTEND_HTML), "public", "media")
+if os.path.isdir(FRONTEND_ASSETS):
+    app.mount("/assets", StaticFiles(directory=FRONTEND_ASSETS), name="assets")
+if os.path.isdir(FRONTEND_MEDIA) and not os.environ.get("VERCEL"):
+    # Vercel serves public/ directly; this mount is for local Uvicorn only.
+    app.mount("/media", MediaStaticFiles(directory=FRONTEND_MEDIA), name="media")
 
 
 @app.get("/")
-async def serve_frontend():
+async def serve_frontend(request: Request):
     """Serve the frontend single-page app."""
-    if os.path.exists(FRONTEND_HTML):
+    accept = request.headers.get("accept", "")
+    if os.path.exists(FRONTEND_HTML) and "text/html" in accept:
         return FileResponse(FRONTEND_HTML, media_type="text/html")
     return {"service": "Rowdy Plan", "version": "1.0.0", "note": "index.html not found — API-only mode"}
 

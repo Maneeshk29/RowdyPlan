@@ -1,6 +1,8 @@
 """Job recommendation endpoints."""
 from __future__ import annotations
 
+from typing import Optional
+
 from fastapi import APIRouter, HTTPException, Query
 
 from app.api.mock_store import store
@@ -15,13 +17,14 @@ job_matcher = JobMatcher()
 async def get_job_recommendations(
     student_id: str = Query(..., description="Student profile ID"),
     limit: int = Query(20, ge=1, le=100),
+    source: Optional[str] = Query(None, description="Filter by listing source, e.g. handshake"),
 ):
     """Get personalized job/opportunity recommendations for a student."""
     student = store.get_student(student_id)
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
-    opportunities = store.list_opportunities()
+    opportunities = store.list_opportunities(filters={"source": source}, limit=None)
     if not opportunities:
         return {"student_id": student_id, "job_matches": [], "message": "No opportunities available. Seed the database first."}
 

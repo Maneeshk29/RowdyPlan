@@ -365,6 +365,8 @@ class FeatureExtractor:
         """
         # Combine all skill sources
         all_skills = list(profile.get("skills", []))
+        all_skills.extend(profile.get("technical_skills", []))
+        all_skills.extend(profile.get("soft_skills", []))
         all_skills.extend(profile.get("programming_languages", []))
         all_skills.extend(profile.get("frameworks", []))
         all_skills.extend(profile.get("tools", []))
@@ -394,7 +396,13 @@ class FeatureExtractor:
                 industries=profile.get("industries", []),
             ),
             "location_vector": self.extract_location_vector(
-                locations=profile.get("location_preferences", []),
-                preferences=[profile.get("work_type_preference", "")],
+                locations=(
+                    profile.get("location_preferences", [])
+                    or profile.get("preferred_locations", [])
+                ),
+                preferences=(
+                    profile.get("work_preferences", [])
+                    or [profile.get("work_type_preference", "")]
+                ),
             ),
         }

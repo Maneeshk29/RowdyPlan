@@ -4,6 +4,7 @@ Ranking Engine for Rowdy Plan Recommendation Engine.
 Sorts, diversifies, and filters recommendation results.
 """
 
+import re
 from typing import Optional
 
 
@@ -98,12 +99,12 @@ class RankingEngine:
         checks_performed = 0
 
         # Check major requirement
-        required_majors = opportunity.get("required_majors", [])
+        required_majors = opportunity.get("required_majors", opportunity.get("majors", []))
         if required_majors:
             checks_performed += 1
             student_major = student.get("major", "").lower()
             major_match = any(
-                m.lower() in student_major or student_major in m.lower()
+                self._major_matches(student_major, m.lower())
                 for m in required_majors
             )
             if not major_match:
@@ -111,7 +112,7 @@ class RankingEngine:
                 preferred_majors = opportunity.get("preferred_majors", [])
                 if preferred_majors:
                     related_match = any(
-                        m.lower() in student_major or student_major in m.lower()
+                        self._major_matches(student_major, m.lower())
                         for m in preferred_majors
                     )
                     if not related_match:
@@ -125,8 +126,9 @@ class RankingEngine:
         required_grad_years = opportunity.get("graduation_years", [])
         if required_grad_years:
             checks_performed += 1
-            student_year = student.get("graduation_year", 0)
-            if student_year and student_year not in required_grad_years:
+            student_year = self._student_graduation_year(student)
+            normalized_years = {str(y) for y in required_grad_years}
+            if student_year and str(student_year) not in normalized_years:
                 disqualifiers += 1
 
         # Check minimum GPA
@@ -141,18 +143,21 @@ class RankingEngine:
                     disqualifiers += 1
 
         # Check required skills (percentage match)
-        required_skills = opportunity.get("required_skills", [])
+        required_skills = opportunity.get("required_skills", opportunity.get("skills", []))
         if required_skills:
             checks_performed += 1
             student_skills = set(s.lower() for s in student.get("skills", []))
+            student_technical = set(
+                s.lower() for s in student.get("technical_skills", [])
+            )
             student_langs = set(
                 s.lower() for s in student.get("programming_languages", [])
             )
-            student_all_skills = student_skills | student_langs
+            student_all_skills = student_skills | student_technical | student_langs
             matched = sum(
                 1
                 for skill in required_skills
-                if skill.lower() in student_all_skills
+                if self._skill_matches(skill.lower(), student_all_skills)
             )
             match_pct = matched / len(required_skills) if required_skills else 0
             if match_pct < 0.3:
@@ -164,9 +169,19 @@ class RankingEngine:
         required_auth = opportunity.get("work_authorization_required", "")
         if required_auth:
             checks_performed += 1
-            student_auth = student.get("work_authorization", "").lower()
+            student_auth = str(student.get("work_authorization", "")).lower()
             if student_auth:
-                req_auth_lower = required_auth.lower()
+                req_auth_lower = str(required_auth).lower()
+                valid_auths = {
+                    "us citizen",
+                    "us_citizen",
+                    "permanent resident",
+                    "green card",
+                    "authorized",
+                    "opt",
+                    "cpt",
+                    "h1b",
+                }
                 if req_auth_lower in ("us citizen", "us_citizen"):
                     if student_auth not in (
                         "us citizen",
@@ -175,19 +190,11 @@ class RankingEngine:
                         "green card",
                     ):
                         disqualifiers += 1
-                elif req_auth_lower == "authorized":
-                    valid_auths = {
-                        "us citizen",
-                        "us_citizen",
-                        "permanent resident",
-                        "green card",
-                        "authorized",
-                        "opt",
-                        "cpt",
-                        "h1b",
-                    }
+                elif req_auth_lower in ("authorized", "true", "required", "yes"):
                     if student_auth not in valid_auths:
                         disqualifiers += 1
+            else:
+                soft_gaps += 1
 
         # Determine status
         if checks_performed == 0:
@@ -202,3 +209,33 @@ class RankingEngine:
             return "LIKELY_QUALIFIED"
 
         return "QUALIFIED"
+
+    def _major_matches(self, student_major: str, required_major: str) -> bool:
+        aliases = {
+            "cs": "computer science",
+            "comp sci": "computer science",
+            "se": "software engineering",
+            "is": "information systems",
+            "it": "information technology",
+            "ds": "data science",
+            "cyber": "cybersecurity",
+        }
+        student = aliases.get(student_major.lower().strip(), student_major.lower().strip())
+        required = aliases.get(required_major.lower().strip(), required_major.lower().strip())
+        return bool(student and required and (student in required or required in student))
+
+    def _student_graduation_year(self, student: dict) -> str:
+        explicit = student.get("graduation_year")
+        if explicit:
+            return str(explicit)
+        grad_date = str(student.get("graduation_date", ""))
+        match = re.search(r"\b(20[2-4]\d)\b", grad_date)
+        return match.group(1) if match else ""
+
+    def _skill_matches(self, required_skill: str, student_skills: set[str]) -> bool:
+        return any(
+            required_skill == skill
+            or (len(required_skill) >= 4 and required_skill in skill)
+            or (len(skill) >= 4 and skill in required_skill)
+            for skill in student_skills
+        )

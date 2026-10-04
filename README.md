@@ -1,4 +1,7 @@
 # RowdyPlan
+For live job ingestion and matching setup, see the [Handshake and predictive model guide](docs/HANDSHAKE_SETUP.md).
+For Vercel project connection and deployment settings, see the [Vercel guide](docs/VERCEL_SETUP.md).
+
 ### Your career. All in one place.
 
 > *“Every heist starts with a plan. So does your career.”*
@@ -435,7 +438,7 @@ Rowdy is the AI personality at the center of RowdyPlan — a career coach who kn
 | `POST` | `/api/opportunities/search` | Search with filters |
 | `POST` | `/api/feedback` | Log a feedback event |
 | `POST` | `/api/admin/seed` | Seed mock UTSA data |
-| `POST` | `/api/admin/ingest` | Trigger live Handshake scrape |
+| `POST` | `/api/admin/ingest` | Import completed Apify output or trigger a Handshake scrape |
 | `GET` | `/health` | Health check |
 
 ---

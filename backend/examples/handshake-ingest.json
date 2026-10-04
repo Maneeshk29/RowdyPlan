@@ -1,0 +1,25 @@
+{
+  "provider": "handshake",
+  "actor_id": "maximedupre~handshake-jobs-scraper",
+  "actor_input": {
+    "keywords": [],
+    "locations": [],
+    "startUrls": [
+      {"url": "https://joinhandshake.com/find-jobs/san-antonio-tx/"},
+      {"url": "https://joinhandshake.com/find-jobs/austin-tx/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/software-engineering/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/data-analytics/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/accounting/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/marketing/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/human-resources/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/mechanical-engineering/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/public-health/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/teaching/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/graphic-design/"},
+      {"url": "https://joinhandshake.com/find-jobs/role/supply-chain/"}
+    ],
+    "employmentTypes": [],
+    "workplace": "any",
+    "maxDiscoveryItems": 200
+  }
+}
