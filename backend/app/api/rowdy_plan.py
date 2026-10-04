@@ -45,6 +45,36 @@ async def generate_rowdy_plan(body: dict):
     return plan
 
 
+@router.post("/rowdy-plan/generate-inline")
+async def generate_rowdy_plan_inline(body: dict):
+    """
+    Generate a Rowdy Plan directly from inline profile data.
+    No need to create a student first — great for the onboarding flow.
+    Also creates the student in the store and returns the student_id.
+    """
+    profile_data = {k: v for k, v in body.items() if k != "max_career_matches" and k != "max_job_matches" and k != "include_resume_analysis"}
+
+    student = store.add_student(profile_data)
+    student_id = student["id"]
+
+    max_careers = body.get("max_career_matches", 5)
+    max_jobs = body.get("max_job_matches", 20)
+    include_resume = body.get("include_resume_analysis", True)
+
+    opportunities = store.list_opportunities()
+
+    plan = plan_generator.generate(
+        student=student,
+        opportunities=opportunities,
+        include_resume_analysis=include_resume,
+        max_career_matches=max_careers,
+        max_job_matches=max_jobs,
+    )
+
+    plan["student_id"] = student_id
+    return plan
+
+
 @router.post("/rowdy-plan/generate-stream")
 async def generate_rowdy_plan_stream(body: dict):
     """

@@ -1,10 +1,12 @@
 """Rowdy Plan – FastAPI application entry point."""
 
+import os
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from app.core.config import settings
 from app.database.session import create_tables
@@ -15,8 +17,22 @@ from app.database.session import create_tables
 # ---------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """Create database tables on startup."""
+    """Create database tables and seed data on startup."""
     await create_tables()
+
+    # Auto-seed UTSA opportunities so the demo works immediately
+    from app.api.mock_store import store
+    if not store.opportunities:
+        try:
+            from app.ingestion.utsa_provider import UTSAProvider
+            provider = UTSAProvider(use_live_data=False)
+            opps = await provider.fetch_all()
+            for opp in opps:
+                store.add_opportunity(opp)
+            print(f"[startup] Seeded {len(opps)} UTSA opportunities")
+        except Exception as e:
+            print(f"[startup] Seed warning: {e}")
+
     yield
 
 
@@ -34,7 +50,7 @@ app = FastAPI(
 # ---------------------------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,10 +87,15 @@ for _module_path in _ROUTER_MODULES:
 # ---------------------------------------------------------------------------
 # Root / health endpoints
 # ---------------------------------------------------------------------------
+FRONTEND_HTML = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "index.html")
+
+
 @app.get("/")
-async def root():
-    """Service identity."""
-    return {"service": "Rowdy Plan", "version": "1.0.0"}
+async def serve_frontend():
+    """Serve the frontend single-page app."""
+    if os.path.exists(FRONTEND_HTML):
+        return FileResponse(FRONTEND_HTML, media_type="text/html")
+    return {"service": "Rowdy Plan", "version": "1.0.0", "note": "index.html not found — API-only mode"}
 
 
 @app.get("/health")

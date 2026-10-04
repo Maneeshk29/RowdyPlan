@@ -1128,7 +1128,7 @@
         <span class="landing-brand-badge">UTSA INTEL</span>
       </div>
       <div style="display:flex; gap:12px; align-items:center;">
-        <button class="btn-ghost" style="padding:10px 18px; font-size:13px;" onclick="switchMasterView('dashboard')">
+        <button class="btn-ghost" style="padding:10px 18px; font-size:13px;" onclick="loadDemoDashboard().then(function(){ switchMasterView('dashboard'); showAppTab('tab-foryou'); })">
           Demo Dashboard →
         </button>
       </div>
@@ -1147,8 +1147,8 @@
         <button class="btn-hero" onclick="startOnboardingFlow()">
           Build My Plan →
         </button>
-        <button class="btn-ghost" onclick="switchMasterView('dashboard')">
-          Explore as Ranya (Senior CS)
+        <button class="btn-ghost" onclick="loadDemoDashboard().then(function(){ switchMasterView('dashboard'); showAppTab('tab-foryou'); })">
+          Explore Demo (Senior CS)
         </button>
       </div>
 
@@ -1723,12 +1723,12 @@
 
     <div class="chat-body" id="chatMsgsArea">
       <div class="chat-bubble ai">
-        Hey! I'm Rowdy. I've indexed your dossier (Senior CS, 3.70 GPA) and 47 active UTSA opportunities. What are we working toward?
+        Hey! I'm Rowdy 🐦 Your personal opportunity intelligence agent. I've indexed 48 live UTSA opportunities. Complete onboarding or ask me anything!
       </div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
-        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('Find paid AI opportunities')">Find paid AI opps</button>
-        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('Why did AI Research match me?')">Explain my 94% match</button>
-        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('How do I close my AWS gap?')">Close my AWS gap</button>
+        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('What are my top career paths?')">Top career paths</button>
+        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('What skill gaps should I close?')">My skill gaps</button>
+        <button class="f-chip" style="font-size:11px; padding:4px 9px;" onclick="quickPrompt('What should I prioritize next?')">Next steps</button>
       </div>
     </div>
 
@@ -1745,117 +1745,85 @@
 
   <script>
     /* ========================================================
-       MASTER DATA STORE
+       API CLIENT
        ======================================================== */
-    const opportunities = [
-      {
-        id: 1,
-        type: 'RESEARCH',
-        category: 'RESEARCH',
-        title: 'AI Undergraduate Research Fellowship',
-        org: 'UTSA AI Consortium',
-        match: 94,
-        eligible: true,
-        money: '$3,000 Stipend',
-        deadline: 'Oct 19 (12 days left)',
-        skills: ['Python', 'PyTorch', 'Data Analysis'],
-        breakdown: { skills: 92, interests: 100, experience: 82, major: 100, classification: 100 },
-        strengths: ['Python experience', 'SQL proficiency', 'Required 3.70 GPA', 'Senior CS classification'],
-        gaps: ['Requires faculty mentor endorsement', 'Formal academic literature review sample'],
-        why: 'Your data analysis coursework and Python foundations directly mirror the lab\'s NLP dataset project.'
-      },
-      {
-        id: 2,
-        type: 'CAREER',
-        category: 'INTERNSHIP',
-        title: 'Data & AI Career Accelerator',
-        org: 'UTSA Career Center',
-        match: 89,
-        eligible: true,
-        money: 'Paid Cohort',
-        deadline: 'Nov 02 (18 days left)',
-        skills: ['SQL', 'Analytics', 'Leadership'],
-        breakdown: { skills: 88, interests: 95, experience: 85, major: 100, classification: 100 },
-        strengths: ['Demonstrated SQL fluency', 'Verified high academic standing'],
-        gaps: ['Needs an end-to-end portfolio case study'],
-        why: 'Fast-tracks direct employer interviews with HEB Digital, USAA, and Dell.'
-      },
-      {
-        id: 3,
-        type: 'COMPETITION',
-        category: 'COMPETITION',
-        title: 'RowdyHacks Innovation Challenge',
-        org: 'ACM UTSA',
-        match: 87,
-        eligible: true,
-        money: '$10,000 Prizes',
-        deadline: 'Nov 15 (25 days left)',
-        skills: ['Python', 'Teamwork', 'AI APIs'],
-        breakdown: { skills: 86, interests: 90, experience: 80, major: 100, classification: 100 },
-        strengths: ['Strong programming baseline', 'Hackathon eligibility'],
-        gaps: ['Needs production deployment proof on AWS/Vercel'],
-        why: 'Building an ML project here creates the exact missing proof on your résumé for summer internships.'
-      },
-      {
-        id: 4,
-        type: 'INTERNSHIP',
-        category: 'INTERNSHIP',
-        title: 'AI Engineering Internship',
-        org: 'Partner Employer Network',
-        match: 58,
-        eligible: false,
-        money: '$35 / hr Paid',
-        deadline: 'Dec 01 (31 days left)',
-        skills: ['Python', 'Machine Learning', 'Cloud Infra'],
-        breakdown: { skills: 55, interests: 100, experience: 50, major: 100, classification: 100 },
-        strengths: ['Strong core Python', 'Computer Science major'],
-        gaps: ['Missing AWS cloud certification', 'No Docker containerization proof', 'Needs production ML model in portfolio'],
-        why: 'You meet the academic bar, but cloud deployment gaps hold your readiness back to 58%.'
-      },
-      {
-        id: 5,
-        type: 'EVENT',
-        category: 'EVENT',
-        title: 'STEM Career Expo',
-        org: 'UTSA University Career Center',
-        match: 82,
-        eligible: true,
-        money: 'Free Admission',
-        deadline: 'Oct 15 (8 days left)',
-        skills: ['Networking', 'Pitching'],
-        breakdown: { skills: 80, interests: 85, experience: 80, major: 100, classification: 100 },
-        strengths: ['Current student status', 'Senior standing for immediate hire'],
-        gaps: ['30-second elevator pitch needs calibration in The Forge'],
-        why: 'Direct hiring managers for USAA and Austin AI startups recruit on-site.'
-      },
-      {
-        id: 6,
-        type: 'SCHOLARSHIP',
-        category: 'SCHOLARSHIP',
-        title: 'Cyber & AI Merit Scholar Award',
-        org: 'UTSA Foundation',
-        match: 91,
-        eligible: true,
-        money: '$5,000 Award',
-        deadline: 'Nov 20 (30 days left)',
-        skills: ['Academic Merit', 'CS Coursework'],
-        breakdown: { skills: 90, interests: 90, experience: 90, major: 100, classification: 100 },
-        strengths: ['Exceeds 3.50 GPA cutoff (3.70)', 'Full-time CS enrollment'],
-        gaps: ['One faculty reference letter needed'],
-        why: 'Direct match for computer science seniors targeting research careers.'
-      }
-    ];
+    const API = '/api';
 
+    async function apiPost(path, body) {
+      const res = await fetch(API + path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+      }
+      return res.json();
+    }
+
+    async function apiGet(path) {
+      const res = await fetch(API + path);
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    }
+
+    /* ========================================================
+       DATA STORE (populated from backend)
+       ======================================================== */
+    let opportunities = [];
     let currentFilter = 'All';
     let onlyEligible = true;
     let selectedOppForWNM = null;
+    let currentStudentId = null;
+    let currentPlan = null;
+
+    function mapCategory(title) {
+      if (!title) return 'INTERNSHIP';
+      const t = (title + '').toLowerCase();
+      if (t.includes('research')) return 'RESEARCH';
+      if (t.includes('workshop') || t.includes('expo') || t.includes('club') || t.includes('event')) return 'EVENT';
+      if (t.includes('scholarship') || t.includes('award')) return 'SCHOLARSHIP';
+      if (t.includes('hackathon') || t.includes('competition') || t.includes('challenge')) return 'COMPETITION';
+      if (t.includes('organization') || t.includes('society') || t.includes('chapter')) return 'EVENT';
+      return 'INTERNSHIP';
+    }
+
+    function transformJobMatches(plan) {
+      opportunities = (plan.job_matches || []).map(function(jm, i) {
+        var bd = jm.score_breakdown || {};
+        var allSkills = (jm.matched_skills || []).concat(jm.missing_skills || []);
+        return {
+          id: i + 1,
+          type: mapCategory(jm.title).replace('INTERNSHIP', 'JOB'),
+          category: mapCategory(jm.title),
+          title: jm.title || 'Untitled',
+          org: jm.organization || '',
+          match: jm.match_score || 0,
+          eligible: jm.qualification_status === 'QUALIFIED' || jm.qualification_status === 'LIKELY_QUALIFIED',
+          money: jm.compensation || '',
+          deadline: jm.deadline || '',
+          skills: allSkills.slice(0, 4).map(function(s) { return s.charAt(0).toUpperCase() + s.slice(1); }),
+          breakdown: {
+            skills: Math.round(bd.skill || 0),
+            interests: Math.round(bd.career_interest || 0),
+            experience: Math.round(bd.experience || 0),
+            major: Math.round(bd.education || 0),
+            classification: Math.round(bd.goal || 0)
+          },
+          strengths: (jm.matched_skills || []).map(function(s) { return 'Verified: ' + s; }),
+          gaps: (jm.missing_skills || []).map(function(s) { return 'Missing: ' + s; }),
+          why: (jm.reasoning || [''])[0]
+        };
+      });
+    }
 
     /* ========================================================
        VIEW SWITCHING LOGIC
        ======================================================== */
     function switchMasterView(viewId) {
-      document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
-      const target = document.getElementById(`view-${viewId}`);
+      document.querySelectorAll('.view-container').forEach(function(v) { v.classList.remove('active'); });
+      var target = document.getElementById('view-' + viewId);
       if (target) target.classList.add('active');
       window.scrollTo(0, 0);
     }
@@ -1866,21 +1834,197 @@
       showWizardStep(1);
     }
 
-    function finishOnboardingToDashboard() {
-      const name = "Ranya";
-      document.getElementById('userGreeting').textContent = `Good afternoon, ${name}.`;
-      switchMasterView('dashboard');
-      showAppTab('tab-foryou');
+    /* ========================================================
+       ONBOARDING → BACKEND INTEGRATION
+       ======================================================== */
+    async function finishOnboardingToDashboard() {
+      var revealBox = document.querySelector('#w-content-5 .reveal-box');
+      if (revealBox) {
+        revealBox.innerHTML =
+          '<div class="reveal-bird">🐦</div>' +
+          '<div class="eyebrow" style="margin-bottom:8px;">ANALYZING YOUR PROFILE...</div>' +
+          '<h2 style="font-size:24px; font-weight:900; color:var(--navy-900);">Rowdy is generating your plan...</h2>' +
+          '<div id="gen-steps" style="text-align:left; max-width:420px; margin:16px auto 0; font-family:var(--font-mono); font-size:13px; color:var(--muted);"></div>';
+      }
+
+      var major = (document.getElementById('ob-major') || {}).value || 'Computer Science';
+      var minor = (document.getElementById('ob-minor') || {}).value || '';
+      var year = (document.getElementById('ob-class') || {}).value || 'Senior';
+      var gradDate = (document.getElementById('ob-grad') || {}).value || 'May 2027';
+      var gpa = parseFloat((document.getElementById('ob-gpa') || {}).value) || 3.5;
+      var target = (document.getElementById('ob-target-text') || {}).value || '';
+
+      var currentGoal = 'exploring';
+      var tLow = target.toLowerCase();
+      if (tLow.includes('internship')) currentGoal = 'internship';
+      else if (tLow.includes('research')) currentGoal = 'research';
+      else if (tLow.includes('full-time') || tLow.includes('full time') || tLow.includes('job')) currentGoal = 'full_time';
+      else if (tLow.includes('grad')) currentGoal = 'graduate_school';
+
+      var careerInterests = [];
+      document.querySelectorAll('#w-content-2 .w-card-choice.selected').forEach(function(el) {
+        careerInterests.push(el.textContent.trim().replace(/^[^\s]+\s/, ''));
+      });
+
+      var profileData = {
+        major: major,
+        minor: minor || null,
+        year: year,
+        graduation_date: gradDate,
+        gpa: gpa,
+        university: 'UTSA',
+        current_goal: currentGoal,
+        short_term_goal: target,
+        long_term_goal: '',
+        career_interests: careerInterests,
+        skills: window._resumeSkills || ['python', 'sql'],
+        technical_skills: [],
+        soft_skills: ['communication', 'teamwork'],
+        coursework: ['Data Structures', 'Algorithms'],
+        certifications: [],
+        experience: [],
+        projects: [],
+        organizations: [],
+        hackathons: [],
+        industries: ['Technology'],
+        preferred_locations: ['San Antonio, TX', 'Austin, TX', 'Remote'],
+        work_preferences: ['hybrid', 'remote'],
+        preferred_companies: [],
+        resume_text: window._resumeText || ''
+      };
+
+      try {
+        addGenStep('Creating your student profile...');
+        var plan = await apiPost('/rowdy-plan/generate-inline', profileData);
+        currentPlan = plan;
+        currentStudentId = plan.student_id;
+        addGenStep('✓ Profile created');
+        addGenStep('✓ Prediction engine complete');
+        addGenStep('✓ ' + (plan.job_matches || []).length + ' opportunities matched');
+        addGenStep('✓ ' + (plan.career_matches || []).length + ' career paths identified');
+
+        transformJobMatches(plan);
+
+        var h = new Date().getHours();
+        var greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+        document.getElementById('userGreeting').textContent = greeting + ', ' + year + ' ' + major + ' student.';
+        updateDashMetrics(plan);
+        updateDossierTab(profileData, plan);
+
+        await new Promise(function(r) { setTimeout(r, 600); });
+
+        switchMasterView('dashboard');
+        showAppTab('tab-foryou');
+        initDashboardCards();
+      } catch (e) {
+        console.error('Plan generation failed:', e);
+        if (revealBox) {
+          revealBox.innerHTML =
+            '<div class="reveal-bird" style="background:var(--red);">!</div>' +
+            '<h2 style="font-size:22px; font-weight:900; color:var(--red);">Connection Error</h2>' +
+            '<p style="color:var(--muted); font-size:14px; margin:8px auto 16px;">Make sure the backend is running at localhost:8000</p>' +
+            '<pre style="font-size:11px; color:var(--muted); text-align:left; max-width:400px; margin:0 auto; overflow:auto;">' + (e.message || e) + '</pre>' +
+            '<button class="btn-solid" style="margin-top:16px;" onclick="finishOnboardingToDashboard()">Retry</button>';
+        }
+      }
+    }
+
+    function addGenStep(text) {
+      var c = document.getElementById('gen-steps');
+      if (c) c.innerHTML += '<div style="margin:4px 0;">› ' + text + '</div>';
+    }
+
+    function updateDashMetrics(plan) {
+      var strong = (plan.job_matches || []).filter(function(j) { return j.match_score >= 55; }).length;
+      var qualified = (plan.job_matches || []).filter(function(j) { return j.qualification_status === 'QUALIFIED'; }).length;
+      var tiles = document.querySelectorAll('.metric-tile strong');
+      var labels = document.querySelectorAll('.metric-tile span');
+      if (tiles[0]) tiles[0].textContent = strong;
+      if (tiles[1]) tiles[1].textContent = qualified;
+      if (tiles[2]) tiles[2].textContent = (plan.career_matches || []).length;
+      if (tiles[3]) tiles[3].textContent = (plan.skill_gaps || []).length;
+      if (labels[0]) labels[0].innerHTML = '🎯 Strong Matches';
+      if (labels[1]) labels[1].innerHTML = '✓ Qualified For';
+      if (labels[2]) labels[2].innerHTML = '🔥 Career Paths';
+      if (labels[3]) labels[3].innerHTML = '📋 Skill Gaps';
+    }
+
+    function updateDossierTab(profile, plan) {
+      var academic = document.querySelector('#tab-dossier .detail-card');
+      if (!academic) return;
+      academic.innerHTML =
+        '<h3 style="font-size:18px; margin-bottom:14px; color:var(--navy-900);">Academic Record</h3>' +
+        dossierRow('University', profile.university) +
+        dossierRow('Major', profile.major) +
+        dossierRow('Classification', profile.year) +
+        dossierRow('GPA', (profile.gpa || 0).toFixed(2) + ' / 4.00') +
+        dossierRow('Graduation', profile.graduation_date);
+    }
+
+    function dossierRow(label, val) {
+      return '<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:14px;">' +
+        '<span style="color:var(--muted)">' + label + '</span><b>' + (val || '-') + '</b></div>';
+    }
+
+    /* ========================================================
+       DEMO MODE (skip onboarding, use pre-built profile)
+       ======================================================== */
+    async function loadDemoDashboard() {
+      var demoProfile = {
+        major: 'Computer Science',
+        year: 'Senior',
+        gpa: 3.7,
+        graduation_date: 'May 2027',
+        university: 'UTSA',
+        current_goal: 'internship',
+        short_term_goal: 'Land an AI internship by Summer 2027',
+        skills: ['python', 'sql', 'java', 'javascript', 'git'],
+        technical_skills: ['react', 'node.js', 'data analysis'],
+        soft_skills: ['communication', 'teamwork', 'leadership'],
+        coursework: ['Data Structures', 'Algorithms', 'Software Engineering', 'Database Systems'],
+        certifications: [],
+        experience: [
+          { type: 'internship', title: 'Data Analyst Intern', organization: 'USAA', description: 'SQL queries, dashboards, risk analysis' }
+        ],
+        projects: [
+          { title: 'ML Classifier', description: 'Built a Python ML pipeline for text classification' }
+        ],
+        organizations: ['ACM UTSA'],
+        hackathons: ['RowdyHacks 2025'],
+        career_interests: ['Data Scientist', 'Software Engineer'],
+        industries: ['Technology', 'Finance'],
+        preferred_locations: ['San Antonio, TX', 'Austin, TX', 'Remote'],
+        work_preferences: ['hybrid', 'remote'],
+        preferred_companies: ['USAA', 'Google'],
+        resume_text: 'EDUCATION\nUTSA - BS Computer Science\nGPA: 3.70\n\nEXPERIENCE\nData Analyst Intern, USAA\n- Built SQL dashboards for risk analysis\n- Processed datasets with Python and pandas\n\nSKILLS\nPython, SQL, Java, JavaScript, React, Git, Data Analysis\n\nPROJECTS\nML Text Classifier - Built classification pipeline with scikit-learn'
+      };
+
+      try {
+        var plan = await apiPost('/rowdy-plan/generate-inline', demoProfile);
+        currentPlan = plan;
+        currentStudentId = plan.student_id;
+        transformJobMatches(plan);
+        updateDashMetrics(plan);
+        updateDossierTab(demoProfile, plan);
+        document.getElementById('userGreeting').textContent = 'Good afternoon, Senior CS student.';
+        initDashboardCards();
+      } catch (e) {
+        console.error('Demo load failed (backend may not be running):', e);
+        document.getElementById('userGreeting').textContent = 'Welcome! Start onboarding to see live predictions.';
+        document.getElementById('top-targets-container').innerHTML =
+          '<p style="grid-column:1/-1; text-align:center; padding:40px; color:var(--muted);">' +
+          'Backend not connected. <b>Run the backend server</b> at localhost:8000, then click "Build My Plan" to see live predictions.</p>';
+      }
     }
 
     /* ========================================================
        ONBOARDING WIZARD STEPS
        ======================================================== */
-    let currentWStep = 1;
+    var currentWStep = 1;
     function showWizardStep(step) {
-      for (let i = 1; i <= 5; i++) {
-        const content = document.getElementById(`w-content-${i}`);
-        const bar = document.getElementById(`ws-${i}`);
+      for (var i = 1; i <= 5; i++) {
+        var content = document.getElementById('w-content-' + i);
+        var bar = document.getElementById('ws-' + i);
         if (content) content.style.display = (i === step) ? 'block' : 'none';
         if (bar) {
           bar.className = 'w-step';
@@ -1888,9 +2032,9 @@
           if (i === step) bar.classList.add('active');
         }
       }
-      const btnBack = document.getElementById('w-btn-back');
-      const btnNext = document.getElementById('w-btn-next');
-      const footer = document.getElementById('wizard-nav-footer');
+      var btnBack = document.getElementById('w-btn-back');
+      var btnNext = document.getElementById('w-btn-next');
+      var footer = document.getElementById('wizard-nav-footer');
 
       btnBack.style.display = (step > 1 && step < 5) ? 'block' : 'none';
       if (step === 5) {
@@ -1905,6 +2049,9 @@
       if (currentWStep < 5) {
         currentWStep++;
         showWizardStep(currentWStep);
+        if (currentWStep === 5) {
+          finishOnboardingToDashboard();
+        }
       }
     }
 
@@ -1915,12 +2062,10 @@
       }
     }
 
-    function toggleChoice(el) {
-      el.classList.toggle('selected');
-    }
+    function toggleChoice(el) { el.classList.toggle('selected'); }
 
     function pickTarget(el, txt) {
-      document.querySelectorAll('.target-pill').forEach(p => {
+      document.querySelectorAll('.target-pill').forEach(function(p) {
         p.classList.remove('selected');
         p.querySelector('span:last-child').textContent = '';
       });
@@ -1929,164 +2074,203 @@
       document.getElementById('ob-target-text').value = txt;
     }
 
+    /* ========================================================
+       RESUME UPLOAD (real file picker + backend)
+       ======================================================== */
+    window._resumeSkills = [];
+    window._resumeText = '';
+
     function triggerResumeScan() {
-      const box = document.getElementById('scan-preview-box');
-      box.style.display = 'block';
-      box.scrollIntoView({ behavior: 'smooth' });
+      var fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.pdf,.docx';
+      fileInput.onchange = async function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+
+        var box = document.getElementById('scan-preview-box');
+        box.style.display = 'block';
+        box.innerHTML = '<div style="text-align:center; padding:20px; color:var(--muted);">Parsing ' + file.name + '...</div>';
+        box.scrollIntoView({ behavior: 'smooth' });
+
+        var formData = new FormData();
+        formData.append('file', file);
+
+        try {
+          var res = await fetch(API + '/resume/upload', { method: 'POST', body: formData });
+          if (!res.ok) throw new Error(await res.text());
+          var data = await res.json();
+
+          window._resumeSkills = data.extracted_skills || [];
+          window._resumeText = data.resume_text || '';
+
+          var skillsHtml = (data.extracted_skills || []).slice(0, 8).map(function(s) {
+            return '<div class="skill-scan-row"><span>' + s + '</span><b style="color:var(--green)">✓ Detected</b></div>';
+          }).join('');
+
+          box.innerHTML =
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
+            '<b style="font-size:13px; color:var(--navy-900);">🐦 Rowdy Parsed Competencies:</b>' +
+            '<span style="font-size:11px; color:var(--green); font-weight:700;">Extraction Complete</span></div>' +
+            skillsHtml +
+            '<div style="margin-top:12px; font-size:12px; color:var(--muted);">Parsed ' + (data.resume_text || '').length + ' characters from ' + file.name + '</div>';
+        } catch (err) {
+          box.innerHTML =
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
+            '<b style="font-size:13px; color:var(--navy-900);">🐦 Rowdy Parsed Competencies:</b>' +
+            '<span style="font-size:11px; color:var(--green); font-weight:700;">Simulated Scan</span></div>' +
+            '<div class="skill-scan-row"><span>Python</span><b style="color:var(--green)">✓ Advanced</b></div>' +
+            '<div class="skill-scan-row"><span>SQL</span><b style="color:var(--green)">✓ Advanced</b></div>' +
+            '<div class="skill-scan-row"><span>Data Analysis</span><b style="color:var(--green)">✓ Proficient</b></div>' +
+            '<div class="skill-scan-row"><span>Leadership</span><b style="color:var(--green)">✓ Intermediate</b></div>' +
+            '<div class="skill-scan-row"><span>AWS / Cloud</span><b style="color:var(--yellow)">⚠ Beginner (Gap)</b></div>';
+          window._resumeSkills = ['python', 'sql', 'data analysis', 'leadership'];
+        }
+      };
+      fileInput.click();
     }
 
     /* ========================================================
        DASHBOARD TAB SWITCHING
        ======================================================== */
     function showAppTab(tabId, btn) {
-      document.querySelectorAll('.app-tab').forEach(t => t.style.display = 'none');
-      const target = document.getElementById(tabId);
+      document.querySelectorAll('.app-tab').forEach(function(t) { t.style.display = 'none'; });
+      var target = document.getElementById(tabId);
       if (target) target.style.display = 'block';
 
       if (btn) {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     /* ========================================================
-       RENDER OPPORTUNITY CARDS
+       RENDER OPPORTUNITY CARDS (from backend data)
        ======================================================== */
     function renderCardHTML(o) {
-      return `
-        <div class="opp-card" onclick="openOppDetail(${o.id})">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span class="opp-pill">${o.type}</span>
-            <span style="font-size:11px; font-weight:700; color:${o.eligible ? 'var(--green)' : 'var(--muted)'};">
-              ${o.eligible ? '✓ Eligible' : 'Gap to bridge'}
-            </span>
-          </div>
-          <div class="opp-score ${o.match >= 85 ? 'high' : ''}">${o.match}%</div>
-          <div class="opp-score-sub">MATCH READINESS</div>
-          <h3 class="opp-title">${o.title}</h3>
-          <div class="opp-meta">${o.org} · <b style="color:var(--navy-900)">${o.money}</b></div>
-          <div class="opp-meta" style="margin-top:2px;">⏱ ${o.deadline}</div>
-          <div class="opp-tags">
-            ${o.skills.map(s => `<span class="opp-tag">${s}</span>`).join('')}
-          </div>
-          <div class="progress-bar"><i style="width:${o.match}%;"></i></div>
-        </div>
-      `;
+      return '<div class="opp-card" onclick="openOppDetail(' + o.id + ')">' +
+        '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+        '<span class="opp-pill">' + o.type + '</span>' +
+        '<span style="font-size:11px; font-weight:700; color:' + (o.eligible ? 'var(--green)' : 'var(--muted)') + ';">' +
+        (o.eligible ? '✓ Eligible' : 'Gap to bridge') + '</span></div>' +
+        '<div class="opp-score ' + (o.match >= 60 ? 'high' : '') + '">' + o.match + '%</div>' +
+        '<div class="opp-score-sub">MATCH SCORE</div>' +
+        '<h3 class="opp-title">' + o.title + '</h3>' +
+        '<div class="opp-meta">' + o.org + (o.money ? ' · <b style="color:var(--navy-900)">' + o.money + '</b>' : '') + '</div>' +
+        '<div class="opp-tags">' + o.skills.map(function(s) { return '<span class="opp-tag">' + s + '</span>'; }).join('') + '</div>' +
+        '<div class="progress-bar"><i style="width:' + o.match + '%;"></i></div></div>';
     }
 
     function initDashboardCards() {
-      // Top targets
-      document.getElementById('top-targets-container').innerHTML = opportunities.slice(0, 3).map(renderCardHTML).join('');
-      // Stretch targets (58% match etc)
-      document.getElementById('stretch-targets-container').innerHTML = opportunities.slice(3, 6).map(renderCardHTML).join('');
-      // Render Explore
+      var sorted = opportunities.slice().sort(function(a, b) { return b.match - a.match; });
+      var topTargets = sorted.filter(function(o) { return o.match >= 50; }).slice(0, 3);
+      var stretchTargets = sorted.filter(function(o) { return o.match < 50; }).slice(0, 3);
+
+      document.getElementById('top-targets-container').innerHTML = topTargets.length
+        ? topTargets.map(renderCardHTML).join('')
+        : '<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--muted);">No strong matches yet. Complete onboarding to see personalized results.</p>';
+
+      document.getElementById('stretch-targets-container').innerHTML = stretchTargets.length
+        ? stretchTargets.map(renderCardHTML).join('')
+        : '';
+
       renderExploreCards();
-      // Render Roadmap
       renderRoadmap();
     }
 
     function renderExploreCards() {
-      let filtered = opportunities;
+      var filtered = opportunities;
       if (currentFilter !== 'All') {
-        filtered = filtered.filter(o => o.category === currentFilter);
+        filtered = filtered.filter(function(o) { return o.category === currentFilter; });
       }
       if (onlyEligible) {
-        filtered = filtered.filter(o => o.eligible);
+        filtered = filtered.filter(function(o) { return o.eligible; });
       }
-      document.getElementById('all-explore-container').innerHTML = filtered.length
-        ? filtered.map(renderCardHTML).join('')
-        : `<p style="grid-column:1/-1; text-align:center; padding:40px; color:var(--muted)">No opportunities match your current filter.</p>`;
+      var sorted = filtered.slice().sort(function(a, b) { return b.match - a.match; });
+      document.getElementById('all-explore-container').innerHTML = sorted.length
+        ? sorted.map(renderCardHTML).join('')
+        : '<p style="grid-column:1/-1; text-align:center; padding:40px; color:var(--muted)">No opportunities match your current filter.</p>';
     }
 
     function setFilterCategory(cat, btn) {
       currentFilter = cat;
-      document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.f-chip').forEach(function(c) { c.classList.remove('active'); });
       btn.classList.add('active');
       renderExploreCards();
     }
 
     function toggleEligibilityFilter() {
       onlyEligible = !onlyEligible;
-      const toggle = document.getElementById('eligibility-toggle');
-      const label = document.getElementById('toggle-label');
+      var toggle = document.getElementById('eligibility-toggle');
+      var label = document.getElementById('toggle-label');
       if (onlyEligible) {
         toggle.classList.add('on');
         label.textContent = "● Only show opportunities I'm eligible for";
-        label.style.color = "var(--green)";
+        label.style.color = 'var(--green)';
       } else {
         toggle.classList.remove('on');
-        label.textContent = "○ Showing all opportunities (including stretch & missing qualifications)";
-        label.style.color = "var(--muted)";
+        label.textContent = '○ Showing all opportunities (including stretch & gaps)';
+        label.style.color = 'var(--muted)';
       }
       renderExploreCards();
     }
 
     /* ========================================================
-       OPPORTUNITY DETAIL & WHY NOT ME? TRIGGER
+       OPPORTUNITY DETAIL & WHY NOT ME?
        ======================================================== */
     function openOppDetail(id) {
-      const o = opportunities.find(x => x.id === id);
+      var o = opportunities.find(function(x) { return x.id === id; });
       if (!o) return;
       selectedOppForWNM = o;
 
-      const isHighMatch = o.match >= 85;
-      const ctaLabel = isHighMatch ? '🐦 HOW DO I WIN THIS?' : '🐦 WHY NOT ME?';
+      var isHighMatch = o.match >= 60;
+      var ctaLabel = isHighMatch ? '🐦 HOW DO I WIN THIS?' : '🐦 WHY NOT ME?';
 
-      document.getElementById('detail-render-area').innerHTML = `
-        <div class="detail-card">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div>
-              <span class="opp-pill">${o.type}</span>
-              <h1 style="font-size:28px; margin:8px 0 4px;">${o.title}</h1>
-              <p class="sub">${o.org} · <b style="color:var(--navy-900)">${o.money}</b> · ${o.deadline}</p>
-            </div>
-            <div style="text-align:right;">
-              <div class="opp-score ${isHighMatch ? 'high' : ''}" style="margin:0;">${o.match}%</div>
-              <div class="opp-score-sub">COMPETITIVE MATCH</div>
-            </div>
-          </div>
+      document.getElementById('detail-render-area').innerHTML =
+        '<div class="detail-card">' +
+        '<div style="display:flex; justify-content:space-between; align-items:flex-start;"><div>' +
+        '<span class="opp-pill">' + o.type + '</span>' +
+        '<h1 style="font-size:28px; margin:8px 0 4px;">' + o.title + '</h1>' +
+        '<p class="sub">' + o.org + (o.money ? ' · <b style="color:var(--navy-900)">' + o.money + '</b>' : '') + '</p></div>' +
+        '<div style="text-align:right;"><div class="opp-score ' + (isHighMatch ? 'high' : '') + '" style="margin:0;">' + o.match + '%</div>' +
+        '<div class="opp-score-sub">MATCH SCORE</div></div></div>' +
 
-          <div style="margin:24px 0 16px;">
-            <b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Your Match Breakdown</b>
-            <div style="margin-top:10px;">
-              <div class="match-breakdown-row"><span class="label">Skills</span><div class="bar"><span style="width:${o.breakdown.skills}%"></span></div><span class="val">${o.breakdown.skills}%</span></div>
-              <div class="match-breakdown-row"><span class="label">Interests</span><div class="bar"><span style="width:${o.breakdown.interests}%"></span></div><span class="val">${o.breakdown.interests}%</span></div>
-              <div class="match-breakdown-row"><span class="label">Experience</span><div class="bar"><span style="width:${o.breakdown.experience}%"></span></div><span class="val">${o.breakdown.experience}%</span></div>
-              <div class="match-breakdown-row"><span class="label">Major</span><div class="bar"><span style="width:${o.breakdown.major}%"></span></div><span class="val">${o.breakdown.major}%</span></div>
-              <div class="match-breakdown-row"><span class="label">Classification</span><div class="bar"><span style="width:${o.breakdown.classification}%"></span></div><span class="val">${o.breakdown.classification}%</span></div>
-            </div>
-          </div>
+        '<div style="margin:24px 0 16px;"><b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Your Match Breakdown</b>' +
+        '<div style="margin-top:10px;">' +
+        breakdownRow('Skills', o.breakdown.skills) +
+        breakdownRow('Career Interest', o.breakdown.interests) +
+        breakdownRow('Experience', o.breakdown.experience) +
+        breakdownRow('Education', o.breakdown.major) +
+        breakdownRow('Goal Fit', o.breakdown.classification) +
+        '</div></div>' +
 
-          <div class="checklist-section">
-            <b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Why Rowdy matched you</b>
-            <div style="margin-top:8px;">
-              <div style="font-size:13px; font-weight:700; color:var(--green); margin:8px 0 4px;">🟢 You have verified evidence:</div>
-              ${o.strengths.map(s => `<div class="cl-item"><span class="cl-icon good">✓</span> <span>${s}</span></div>`).join('')}
+        '<div class="checklist-section"><b style="font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--navy-900);">Why Rowdy matched you</b>' +
+        '<div style="margin-top:8px;"><div style="font-size:13px; font-weight:700; color:var(--green); margin:8px 0 4px;">🟢 Verified strengths:</div>' +
+        o.strengths.map(function(s) { return '<div class="cl-item"><span class="cl-icon good">✓</span> <span>' + s + '</span></div>'; }).join('') +
+        '<div style="font-size:13px; font-weight:700; color:var(--red); margin:16px 0 4px;">🔴 Gaps to close:</div>' +
+        o.gaps.map(function(g) { return '<div class="cl-item"><span class="cl-icon bad">✕</span> <span>' + g + '</span></div>'; }).join('') +
+        '</div></div>' +
 
-              <div style="font-size:13px; font-weight:700; color:var(--red); margin:16px 0 4px;">🔴 Gaps holding score back:</div>
-              ${o.gaps.map(g => `<div class="cl-item"><span class="cl-icon bad">✕</span> <span>${g}</span></div>`).join('')}
-            </div>
-          </div>
-
-          <div style="margin-top:28px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
-            <p style="font-size:14px; color:var(--muted); max-width:480px;">${o.why}</p>
-            <button class="btn-solid" style="padding:14px 28px; font-size:15px;" onclick="openWhyNotMeModal()">
-              ${ctaLabel}
-            </button>
-          </div>
-        </div>
-      `;
+        '<div style="margin-top:28px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">' +
+        '<p style="font-size:14px; color:var(--muted); max-width:480px;">' + o.why + '</p>' +
+        '<button class="btn-solid" style="padding:14px 28px; font-size:15px;" onclick="openWhyNotMeModal()">' + ctaLabel + '</button></div></div>';
 
       showAppTab('tab-detail');
     }
 
+    function breakdownRow(label, val) {
+      return '<div class="match-breakdown-row"><span class="label">' + label + '</span>' +
+        '<div class="bar"><span style="width:' + val + '%"></span></div>' +
+        '<span class="val">' + val + '%</span></div>';
+    }
+
     function openWhyNotMeModal() {
       if (!selectedOppForWNM) return;
-      const modal = document.getElementById('whyNotMeModal');
+      var modal = document.getElementById('whyNotMeModal');
       document.getElementById('wnm-title').textContent = selectedOppForWNM.title;
-      document.getElementById('wnm-score').textContent = `${selectedOppForWNM.match}%`;
-      document.getElementById('wnm-bar').style.width = `${selectedOppForWNM.match}%`;
+      document.getElementById('wnm-score').textContent = selectedOppForWNM.match + '%';
+      document.getElementById('wnm-bar').style.width = selectedOppForWNM.match + '%';
       document.getElementById('agentLogsArea').style.display = 'none';
       document.getElementById('btnMakeCompetitive').style.display = 'block';
       modal.classList.add('open');
@@ -2097,64 +2281,94 @@
     }
 
     function runMakeMeCompetitiveAgent() {
-      const logs = document.getElementById('agentLogsArea');
-      const btn = document.getElementById('btnMakeCompetitive');
+      var logs = document.getElementById('agentLogsArea');
+      var btn = document.getElementById('btnMakeCompetitive');
       btn.style.display = 'none';
       logs.style.display = 'flex';
       logs.innerHTML = '';
 
-      const steps = [
-        "🐦 Building your plan...",
-        "✓ Analyzing employer requirements & ATS filters",
-        "✓ Comparing your dossier experience against applicant pool",
-        "✓ Searching UTSA campus opportunities & workshops",
-        "✓ Finding skill-building interventions for AWS & Docker",
-        "✓ Sequencing your optimal 6-month pathway"
+      var opp = selectedOppForWNM;
+      var steps = [
+        '🐦 Building your plan...',
+        '✓ Analyzing ' + (opp ? opp.title : 'opportunity') + ' requirements',
+        '✓ Comparing your skills against required qualifications',
+        '✓ Searching UTSA campus workshops & opportunities',
+        '✓ Finding skill-building paths for: ' + (opp ? opp.gaps.slice(0, 2).join(', ') : 'gaps'),
+        '✓ Sequencing your optimal qualification pathway'
       ];
 
-      steps.forEach((text, idx) => {
-        setTimeout(() => {
-          logs.innerHTML += `<div class="agent-step"><span>›</span> ${text}</div>`;
+      steps.forEach(function(text, idx) {
+        setTimeout(function() {
+          logs.innerHTML += '<div class="agent-step"><span>›</span> ' + text + '</div>';
         }, (idx + 1) * 350);
       });
 
-      setTimeout(() => {
+      setTimeout(function() {
         closeWhyNotMe();
         showAppTab('tab-plan');
-        const planTabBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.textContent.includes('My Plan'));
+        var planTabBtn = Array.from(document.querySelectorAll('.nav-btn')).find(function(b) { return b.textContent.includes('My Plan'); });
         if (planTabBtn) {
-          document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
           planTabBtn.classList.add('active');
         }
       }, (steps.length + 1) * 350 + 400);
     }
 
     /* ========================================================
-       RENDER ROADMAP IN MY PLAN
+       RENDER ROADMAP (from backend plan timeline)
        ======================================================== */
     function renderRoadmap() {
-      const nodes = [
-        { month: 'OCTOBER', title: 'UTSA AI & Cloud Fundamentals Workshop', status: '✓ Enrolled', desc: 'Closes AWS deployment gap identified in target internships.' },
-        { month: 'NOVEMBER', title: 'RowdyHacks Innovation Challenge', status: '87% Match', desc: 'Build and ship full-stack containerized ML application.' },
-        { month: 'DECEMBER', title: 'AI Undergraduate Research Fellowship', status: 'Apply (94% Match)', desc: 'Adds formal faculty mentorship and $3,000 research credentials.' },
-        { month: 'JANUARY', title: 'Polish Résumé & Calibrate STAR Answers in The Forge', status: 'Practice Room', desc: 'Converts finished projects into crisp interview evidence.' },
-        { month: 'FEBRUARY', title: 'UTSA STEM Career Expo with Rowdy Dossier', status: 'Direct Hiring', desc: 'Meet partner employer recruiting managers with 88%+ verified readiness.' },
-        { month: 'TARGET', title: 'AI Engineering Internship Offer — Summer 2027', status: '🎯 TARGET REACHED', desc: 'Projected candidate standing: Top 5%.' }
-      ];
+      var nodes;
+      if (currentPlan && currentPlan.timeline && currentPlan.timeline.length > 0) {
+        nodes = currentPlan.timeline.map(function(t) {
+          return {
+            month: (t.period || '').toUpperCase(),
+            title: t.title || '',
+            status: t.actions ? t.actions[0] : '',
+            desc: (t.actions || []).slice(1).join(' ')
+          };
+        });
+        if (currentPlan.next_steps && currentPlan.next_steps.length > 0) {
+          nodes.push({
+            month: 'TARGET',
+            title: currentPlan.next_steps[currentPlan.next_steps.length - 1],
+            status: '🎯 GOAL',
+            desc: 'Follow your Rowdy Plan to reach this milestone.'
+          });
+        }
+      } else {
+        nodes = [
+          { month: 'NOW', title: 'Complete your Rowdy Plan onboarding', status: 'Start here', desc: 'Fill out the wizard to get personalized recommendations.' },
+          { month: 'TARGET', title: 'Your personalized roadmap will appear here', status: '🎯', desc: 'After onboarding, Rowdy sequences your optimal path.' }
+        ];
+      }
 
-      document.getElementById('roadmap-itemsArea' || 'roadmap-items-area').innerHTML = nodes.map((n, i) => `
-        <div class="roadmap-node ${i === 0 ? 'active' : ''}">
-          <div class="node-pin">${i === nodes.length - 1 ? '🎯' : (i + 1)}</div>
-          <div class="node-body">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span class="node-tag">${n.month}</span>
-              <span style="font-size:11px; font-weight:800; color:${n.status.includes('✓') ? 'var(--green)' : 'var(--orange-500)'}">${n.status}</span>
-            </div>
-            <div class="node-title">${n.title}</div>
-            <div class="node-desc">${n.desc}</div>
-          </div>
-        </div>
-      `).join('');
+      var area = document.getElementById('roadmap-items-area');
+      if (!area) return;
+      area.innerHTML = nodes.map(function(n, i) {
+        return '<div class="roadmap-node ' + (i === 0 ? 'active' : '') + '">' +
+          '<div class="node-pin">' + (i === nodes.length - 1 ? '🎯' : (i + 1)) + '</div>' +
+          '<div class="node-body">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+          '<span class="node-tag">' + n.month + '</span>' +
+          '<span style="font-size:11px; font-weight:800; color:' + (n.status.includes('✓') || n.status.includes('🎯') ? 'var(--green)' : 'var(--orange-500)') + '">' + n.status + '</span></div>' +
+          '<div class="node-title">' + n.title + '</div>' +
+          '<div class="node-desc">' + n.desc + '</div></div></div>';
+      }).join('');
+
+      if (currentPlan) {
+        var hero = document.querySelector('.plan-target-hero');
+        if (hero) {
+          var targetGoal = currentPlan.next_steps ? currentPlan.next_steps[0] : 'Complete your plan';
+          var readiness = currentPlan.profile_strength || 0;
+          hero.innerHTML =
+            '<div><div class="eyebrow" style="color:var(--orange-400);">YOUR PERSONALIZED CAREER PLAN</div>' +
+            '<h1 style="color:white; margin:4px 0 6px;">Your Rowdy Plan</h1>' +
+            '<p style="color:#cbd5e1; font-size:14px; max-width:400px;">🎯 ' + targetGoal + '</p></div>' +
+            '<div style="text-align:right;"><span style="font-size:12px; color:#94a3b8; font-weight:700;">PROFILE STRENGTH</span>' +
+            '<div style="font-size:38px; font-weight:900; color:var(--orange-400);">' + readiness + '%</div></div>';
+        }
+      }
     }
 
     /* ========================================================
@@ -2163,33 +2377,33 @@
     function enterDistractionFreeInterview() {
       switchMasterView('interview');
       document.getElementById('interview-debrief').style.display = 'none';
-      let sec = 94;
-      const timer = document.getElementById('interview-timer');
+      var sec = 94;
+      var timer = document.getElementById('interview-timer');
       clearInterval(window.itvInterval);
-      window.itvInterval = setInterval(() => {
+      window.itvInterval = setInterval(function() {
         sec++;
-        const m = String(Math.floor(sec / 60)).padStart(2, '0');
-        const s = String(sec % 60).padStart(2, '0');
-        timer.textContent = `${m}:${s}`;
+        var m = String(Math.floor(sec / 60)).padStart(2, '0');
+        var s = String(sec % 60).padStart(2, '0');
+        timer.textContent = m + ':' + s;
       }, 1000);
     }
 
     function finishInterviewAnswer() {
       clearInterval(window.itvInterval);
-      const debrief = document.getElementById('interview-debrief');
+      var debrief = document.getElementById('interview-debrief');
       debrief.style.display = 'block';
       debrief.scrollIntoView({ behavior: 'smooth' });
     }
 
     /* ========================================================
-       GLOBAL CHAT DRAWER: ASK ROWDY 🐦
+       GLOBAL CHAT — ASK ROWDY 🐦 (uses live plan data)
        ======================================================== */
     function toggleChatDrawer() {
       document.getElementById('globalChatDrawer').classList.toggle('open');
     }
 
     function askFromDash() {
-      const txt = document.getElementById('dash-ask-input').value.trim();
+      var txt = document.getElementById('dash-ask-input').value.trim();
       toggleChatDrawer();
       if (txt) {
         document.getElementById('chatInputText').value = txt;
@@ -2203,51 +2417,67 @@
     }
 
     function sendGlobalChat() {
-      const input = document.getElementById('chatInputText');
-      const val = input.value.trim();
+      var input = document.getElementById('chatInputText');
+      var val = input.value.trim();
       if (!val) return;
 
-      const area = document.getElementById('chatMsgsArea');
-      area.innerHTML += `<div class="chat-bubble user">${val}</div>`;
+      var area = document.getElementById('chatMsgsArea');
+      area.innerHTML += '<div class="chat-bubble user">' + escapeHTML(val) + '</div>';
       input.value = '';
       area.scrollTop = area.scrollHeight;
 
-      setTimeout(() => {
-        let reply = "I analyzed your dossier and active opportunities.";
-        let cardHTML = "";
+      setTimeout(function() {
+        var reply = '';
+        var cardHTML = '';
+        var qLow = val.toLowerCase();
 
-        if (val.toLowerCase().includes('plan') || val.toLowerCase().includes('prioritize')) {
-          reply = "I prioritized the top 3 high-impact actions for your graduation timeline:";
-          cardHTML = `
-            <div class="chat-card-attachment">
-              <div style="font-size:12px; font-weight:800; color:var(--navy-900);">🎯 Rowdy Priority Sequence:</div>
-              <div style="font-size:12px; margin-top:4px;">1. <b>94%</b> AI Research Assistant Fellowship</div>
-              <div style="font-size:12px;">2. <b>89%</b> Data & AI Career Accelerator</div>
-              <div style="font-size:12px;">3. <b>87%</b> RowdyHacks ML Innovation Challenge</div>
-              <button class="btn-solid" style="width:100%; margin-top:8px; padding:6px; font-size:11px;" onclick="showAppTab('tab-plan'); toggleChatDrawer();">
-                Add all to my plan →
-              </button>
-            </div>
-          `;
-        } else if (val.toLowerCase().includes('aws') || val.toLowerCase().includes('gap')) {
-          reply = "Your biggest bottleneck for $35/hr AI Engineering roles is AWS cloud deployment and containerization. Attending the October UTSA Cloud Workshop closes 80% of that gap!";
+        if (currentPlan && (qLow.includes('plan') || qLow.includes('prioritize') || qLow.includes('next'))) {
+          reply = 'Based on your Rowdy Plan, here are your top priorities:';
+          var topJobs = (currentPlan.job_matches || []).slice(0, 3);
+          cardHTML = '<div class="chat-card-attachment">' +
+            '<div style="font-size:12px; font-weight:800; color:var(--navy-900);">🎯 Rowdy Priority Sequence:</div>';
+          topJobs.forEach(function(j, i) {
+            cardHTML += '<div style="font-size:12px; margin-top:4px;">' + (i + 1) + '. <b>' + j.match_score + '%</b> ' + j.title + ' at ' + j.organization + '</div>';
+          });
+          cardHTML += '<button class="btn-solid" style="width:100%; margin-top:8px; padding:6px; font-size:11px;" onclick="showAppTab(\'tab-plan\'); toggleChatDrawer();">View full plan →</button></div>';
+        } else if (currentPlan && (qLow.includes('gap') || qLow.includes('skill') || qLow.includes('missing'))) {
+          var gaps = (currentPlan.skill_gaps || []).slice(0, 4);
+          reply = 'Your top skill gaps to close:';
+          gaps.forEach(function(g) {
+            reply += '<br>• <b>' + g.skill + '</b> (' + g.priority + '): ' + g.current_level + ' → ' + g.required_level;
+          });
+        } else if (currentPlan && (qLow.includes('career') || qLow.includes('path'))) {
+          reply = 'Your top career matches:';
+          (currentPlan.career_matches || []).slice(0, 3).forEach(function(c) {
+            reply += '<br>• <b>' + c.career_name + '</b>: ' + c.career_match_score + '% match';
+          });
+        } else if (opportunities.length > 0) {
+          var sorted = opportunities.slice().sort(function(a, b) { return b.match - a.match; });
+          var best = sorted[0];
+          reply = 'Based on your profile, your strongest match is <b>' + best.title + '</b> at ' + best.org + ' (' + best.match + '% match). ';
+          if (best.gaps.length > 0) {
+            reply += 'Key gap: ' + best.gaps[0] + '.';
+          }
         } else {
-          reply = "I found 3 strong opportunities matching that. Your 3.70 GPA and CS coursework make you an immediate top-tier candidate for the AI Undergraduate Research Fellowship (94%).";
+          reply = 'Complete the onboarding wizard first so I can analyze your profile against UTSA opportunities!';
         }
 
-        area.innerHTML += `
-          <div class="chat-bubble ai">
-            ${reply}
-            ${cardHTML}
-          </div>
-        `;
+        area.innerHTML += '<div class="chat-bubble ai">' + reply + cardHTML + '</div>';
         area.scrollTop = area.scrollHeight;
-      }, 500);
+      }, 400);
     }
 
-    // Initialize on load
-    window.addEventListener('DOMContentLoaded', () => {
-      initDashboardCards();
+    function escapeHTML(str) {
+      var div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    /* ========================================================
+       INITIALIZATION
+       ======================================================== */
+    window.addEventListener('DOMContentLoaded', function() {
+      loadDemoDashboard();
     });
   </script>
 </body>

@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     ]
 
     # --- CORS ---
-    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000", "http://127.0.0.1:8000"]
 
     # --- LLM (optional, for explanation generation) ---
     LLM_API_URL: Optional[str] = None
