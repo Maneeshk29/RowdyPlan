@@ -71,6 +71,19 @@ to its source. ACM UTSA's Instagram is an official resource link until
 `APIFY_ACM_INSTAGRAM_DATASET_ID` is configured. See the campus-source section
 in [HANDSHAKE_SETUP.md](HANDSHAKE_SETUP.md).
 
+## Career Center Console Variables
+
+| Name | Value |
+| --- | --- |
+| `STAFF_ACCESS_KEY` | A long random string shared only with career center staff |
+| `DEMO_COHORT_ENABLED` | `true` (default) to let visitors without a key see the synthetic demo cohort |
+
+Without `STAFF_ACCESS_KEY`, `/?view=career-center` shows only the 240-student
+synthetic demo cohort, and real student records are never returned. With the
+key set, staff paste it into the console header to see live records. Set
+`DEMO_COHORT_ENABLED=false` on a real pilot so the console always requires
+the key. Redeploy after changing either value.
+
 ## Current Prototype Limitations
 
 Use a protected test deployment before inviting real students:
@@ -84,6 +97,11 @@ Use a protected test deployment before inviting real students:
   visit only; reloading resets them. Merely adding `DATABASE_URL` does not fix
   this: the API still calls the
   in-memory store and must be migrated to persistent database access.
+- Outcomes, activity, event check-ins and created events also live in memory
+  and can reset on a cold start. The demo cohort is regenerated identically on
+  every instance.
+- The staff key protects only the Career Center console. Student and admin
+  routes still have no user authentication.
 - The API has no user/admin authentication. Admin routes can edit jobs or
   start paid scraper runs, and student routes can expose profile data. Do not
   use real student data or expose a token-equipped deployment publicly until

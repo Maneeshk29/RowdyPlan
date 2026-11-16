@@ -71,6 +71,8 @@ _ROUTER_MODULES = [
     "app.api.feedback",
     "app.api.opportunities",
     "app.api.admin",
+    "app.api.engagement",
+    "app.api.career_center",
 ]
 
 for _module_path in _ROUTER_MODULES:

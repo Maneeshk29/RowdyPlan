@@ -31,6 +31,12 @@ class InMemoryStore:
         self.careers: list[dict] = []
         self.feedback: list[dict] = []
         self.ingestion_status: dict = {"last_run": None, "status": "idle", "count": 0}
+        # Career Center data: engagement, outcomes, campus events and plan summaries
+        self.activities: list[dict] = []
+        self.outcomes: dict[str, dict] = {}
+        self.campus_events: dict[str, dict] = {}
+        self.checkins: list[dict] = []
+        self.plan_summaries: dict[str, dict] = {}
         self._load_careers()
 
     def _load_careers(self):
@@ -184,6 +190,57 @@ class InMemoryStore:
         if event_type:
             result = [f for f in result if f.get("event_type") == event_type]
         return result
+
+    # ── Career Center: engagement & outcomes ─────────────────────────────
+
+    def add_activity(self, student_id: str, kind: str, detail: str = "",
+                     timestamp: str | None = None, is_demo: bool = False) -> dict:
+        activity = {
+            "id": str(uuid.uuid4()),
+            "student_id": student_id,
+            "kind": kind,
+            "detail": detail,
+            "timestamp": timestamp or datetime.utcnow().isoformat(),
+            "is_demo": is_demo,
+        }
+        self.activities.append(activity)
+        return activity
+
+    def list_activities(self, student_id: str | None = None) -> list[dict]:
+        if student_id is None:
+            return self.activities
+        return [a for a in self.activities if a["student_id"] == student_id]
+
+    def set_outcome(self, student_id: str, outcome: dict) -> dict:
+        """Store the latest self-reported outcome for a student (one per student)."""
+        record = {"student_id": student_id, "reported_at": datetime.utcnow().isoformat(), **outcome}
+        self.outcomes[student_id] = record
+        return record
+
+    def save_plan_summary(self, student_id: str, summary: dict) -> None:
+        self.plan_summaries[student_id] = summary
+
+    def add_campus_event(self, event: dict) -> dict:
+        self.campus_events[event["id"]] = event
+        return event
+
+    def get_campus_event(self, event_id: str) -> dict | None:
+        return self.campus_events.get(event_id)
+
+    def add_checkin(self, event_id: str, student_id: str, timestamp: str | None = None,
+                    is_demo: bool = False) -> tuple[dict, bool]:
+        """Record attendance once per student per event. Returns (checkin, created)."""
+        for checkin in self.checkins:
+            if checkin["event_id"] == event_id and checkin["student_id"] == student_id:
+                return checkin, False
+        checkin = {
+            "event_id": event_id,
+            "student_id": student_id,
+            "timestamp": timestamp or datetime.utcnow().isoformat(),
+            "is_demo": is_demo,
+        }
+        self.checkins.append(checkin)
+        return checkin, True
 
 
 # Global singleton

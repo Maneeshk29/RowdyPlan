@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import asyncio
+from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
@@ -80,7 +81,24 @@ async def generate_rowdy_plan_inline(body: dict):
 
     plan["student_id"] = student_id
     plan["source_status"] = source_status
+    _record_plan(student_id, plan)
     return plan
+
+
+def _record_plan(student_id: str, plan: dict) -> None:
+    """Keep a compact plan summary for the advisor brief and log the activity."""
+    resume = plan.get("resume_analysis") or {}
+    store.save_plan_summary(student_id, {
+        "profile_strength": plan.get("profile_strength"),
+        "resume_score": resume.get("resume_score") if resume.get("resume_score") else None,
+        "top_matches": [
+            {"title": m.get("title"), "organization": m.get("organization"), "match_score": m.get("match_score")}
+            for m in (plan.get("job_matches") or [])[:3]
+        ],
+        "skill_gaps": [g.get("skill") for g in (plan.get("skill_gaps") or [])[:5] if g.get("skill")],
+        "generated_at": datetime.utcnow().isoformat(),
+    })
+    store.add_activity(student_id, "plan_generated")
 
 
 @router.post("/rowdy-plan/generate-stream")

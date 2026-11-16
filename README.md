@@ -112,20 +112,30 @@ Instead of depending on which account you follow or which announcement you happe
 
 **No experience should mean a starting point—not a closed door.**
 
-### 6. Agentic Career Center With Career Advisors — Coming Soon
+### 6. Event Check-In and Outcome Reporting — New
 
-The next chapter of RowdyPlan brings AI-supported preparation and human career guidance closer together.
+- **QR event check-in.** Career fairs, workshops and club events display a QR code. Students scan it (or type the code in **My Dossier → Event Check-In**) and their attendance is verified. No more guessing who came.
+- **Report your outcome.** In **My Dossier → Report Your Outcome**, students record a job offer, internship, grad school admit or that they are still searching, and whether the role needs their degree.
+- **Activity that counts.** Resume checks, interview practice, missions added and completed are recorded so advisors can see effort, not just results.
 
-The planned Agentic Career Center will help students prepare for more productive advisor conversations by organizing their goals, experiences, resume priorities, and progress in one place.
+### 7. Career Center Console — New
 
-The vision includes:
+A staff view for career center directors and advisors. Open it from **For Career Centers** on the landing page, or go to `/?view=career-center`.
 
-- Personalized preparation before advisor meetings.
-- Shared context about a student’s goals and current challenges.
-- Action plans informed by career advisor guidance.
-- Follow-through that connects recommendations to concrete next steps.
+| Tab | What it answers |
+|-----|-----------------|
+| **Outcomes** | Are our students landing degree-level jobs? Degree-level placement rate, placement rate, outcome knowledge rate, first-destination breakdown, engaged-vs-not comparison, program table with a watchlist, top skill gaps, top hiring employers, and estimated advisor hours saved. |
+| **Advisor Caseload** | Who needs an advisor this week? Every student gets rule-based flags (for example *Graduating with no outcome reported* or *No interview practice yet*) and a priority. Click a student for a **pre-meeting brief** with suggested talking points. |
+| **Events & Check-In** | Create an event, get a QR code and code, and watch check-ins arrive. |
+| **Reports** | Download a first-destination outcomes CSV, print the Outcomes page, and open the trust and transparency notes. |
 
-**Coming Soon: a more connected experience between students, Rowdy, and career advisors.**
+**Humans stay in charge.** Flags and talking points follow written rules. Rowdy prepares the brief; the advisor decides what to recommend.
+
+**Demo vs. live data.** Without a staff key, the console runs on a **synthetic demo cohort of 240 fictional students** so anyone can try it safely. With `STAFF_ACCESS_KEY` set on the server and the same key entered in the console, it shows **live** records from real RowdyPlan users. Real student data is never returned without the key.
+
+### 8. How RowdyPlan Works — Transparency
+
+A **How It Works** panel (landing page, student sidebar and console) explains every scoring formula, what data is stored, that student data is not sold or used to train AI, and that this pilot stores data in memory.
 
 ---
 
@@ -217,6 +227,8 @@ No black boxes. No LLM-generated numbers. Every score is a deterministic formula
 │  │  /api/opportunities                (browse/search)   │ │
 │  │  /api/feedback                     (event logging)   │ │
 │  │  /api/admin/ingest                 (trigger scrape)  │ │
+│  │  /api/outcomes, /api/events/*      (student engage)  │ │
+│  │  /api/career-center/*              (staff console)   │ │
 │  └─────────────────────────────────────────────────────┘ │
 │                                                           │
 │  ┌─────────────────────────────────────────────────────┐ │
@@ -283,6 +295,8 @@ RowdyPlan/
 │   │   │   ├── opportunities.py        #   Browse & search opportunities
 │   │   │   ├── feedback.py             #   Feedback event collection
 │   │   │   ├── admin.py                #   Seed, ingest, manage data
+│   │   │   ├── engagement.py           #   Activity, outcome reports, event check-in
+│   │   │   ├── career_center.py        #   Staff console (outcomes, caseload, events, CSV)
 │   │   │   └── mock_store.py           #   In-memory database (demo mode)
 │   │   ├── recommendation/             # Prediction engine (all deterministic)
 │   │   │   ├── plan_generator.py       #   Orchestrates full pipeline
@@ -303,7 +317,9 @@ RowdyPlan/
 │   │   ├── models/                     # SQLAlchemy models (production DB)
 │   │   ├── schemas/                    # Pydantic v2 request/response schemas
 │   │   ├── services/                   # Business logic layer
-│   │   ├── tests/                      # 75 tests across 7 files
+│   │   │   ├── career_center.py        #   Outcome, caseload and brief analytics
+│   │   │   └── demo_cohort.py          #   Seeded synthetic cohort for the console
+│   │   ├── tests/                      # 141 tests
 │   │   ├── core/                       # Config & dependency injection
 │   │   ├── database/                   # DB session management
 │   │   └── workers/                    # Celery background jobs
@@ -333,6 +349,16 @@ Open **http://localhost:8000** — the app auto-seeds 48 UTSA opportunities on s
 - **Upload a resume** — real PDF/DOCX parsing during onboarding step 4
 - **Ask Rowdy** — chat with the AI agent about your career plan
 - **Practice Room** — interview simulation with scoring and feedback
+- **"For Career Centers"** — the staff console on the demo cohort; set `STAFF_ACCESS_KEY` to see live data
+
+To try the console with live records locally:
+
+```bash
+cd backend
+STAFF_ACCESS_KEY=choose-a-long-random-key python -m uvicorn app.main:app --reload --port 8000
+```
+
+Then open **http://localhost:8000/?view=career-center**, paste the key and click **Connect**.
 
 ### Run the CLI demo
 
@@ -439,7 +465,21 @@ Rowdy is the AI personality at the center of RowdyPlan — a career coach who kn
 | `POST` | `/api/feedback` | Log a feedback event |
 | `POST` | `/api/admin/seed` | Seed mock UTSA data |
 | `POST` | `/api/admin/ingest` | Import completed Apify output or trigger a Handshake scrape |
+| `POST` | `/api/activity` | Record a student action (resume check, interview practice, mission) |
+| `POST` | `/api/outcomes` | Self-report a first-destination outcome |
+| `GET` | `/api/events/{id}` | Public event details for the check-in page |
+| `POST` | `/api/events/{id}/check-in` | Check in from a QR link (event ID + code) |
+| `POST` | `/api/events/check-in` | Check in by typing the event code |
+| `GET` | `/api/career-center/access` | Shows whether the console is on demo or live data |
+| `GET` | `/api/career-center/overview` | Outcomes, engagement, programs, gaps, employers, events |
+| `GET` | `/api/career-center/caseload` | Students with risk flags and priority (`?priority=high`) |
+| `GET` | `/api/career-center/students/{id}/brief` | Advisor pre-meeting brief |
+| `GET` | `/api/career-center/events` | Events with check-in codes and attendance |
+| `POST` | `/api/career-center/events` | Create an event and get its QR check-in link |
+| `GET` | `/api/career-center/outcomes.csv` | First-destination outcomes export |
 | `GET` | `/health` | Health check |
+
+Career Center routes accept an optional `X-Staff-Key` header. With a valid key they return live records; without one they return the synthetic demo cohort.
 
 ---
 

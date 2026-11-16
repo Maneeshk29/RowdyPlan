@@ -58,6 +58,12 @@ class Settings(BaseSettings):
     AUTO_SYNC_OPPORTUNITIES: bool = True
     OPPORTUNITY_CACHE_TTL_SECONDS: int = Field(default=900, ge=60)
 
+    # --- Career Center console ---
+    # Staff routes show real student records only with this key (X-Staff-Key).
+    # Without it, the console runs on a synthetic demo cohort.
+    STAFF_ACCESS_KEY: Optional[str] = None
+    DEMO_COHORT_ENABLED: bool = True
+
 
 # Singleton – import this wherever settings are needed.
 settings = Settings()
