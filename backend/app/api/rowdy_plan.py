@@ -8,6 +8,7 @@ from fastapi.responses import StreamingResponse
 
 from app.api.mock_store import store
 from app.recommendation.plan_generator import PlanGenerator
+from app.services.source_sync import ensure_plan_sources
 
 router = APIRouter(tags=["rowdy-plan"])
 
@@ -32,6 +33,7 @@ async def generate_rowdy_plan(body: dict):
     max_careers = body.get("max_career_matches", 5)
     max_jobs = body.get("max_job_matches", 20)
 
+    source_status = await ensure_plan_sources(body.get("opportunity_source"))
     opportunities = store.list_opportunities(limit=None)
 
     plan = plan_generator.generate(
@@ -43,6 +45,7 @@ async def generate_rowdy_plan(body: dict):
         opportunity_source=body.get("opportunity_source"),
     )
 
+    plan["source_status"] = source_status
     return plan
 
 
@@ -63,6 +66,7 @@ async def generate_rowdy_plan_inline(body: dict):
     max_jobs = body.get("max_job_matches", 20)
     include_resume = body.get("include_resume_analysis", True)
 
+    source_status = await ensure_plan_sources(body.get("opportunity_source"))
     opportunities = store.list_opportunities(limit=None)
 
     plan = plan_generator.generate(
@@ -75,6 +79,7 @@ async def generate_rowdy_plan_inline(body: dict):
     )
 
     plan["student_id"] = student_id
+    plan["source_status"] = source_status
     return plan
 
 
@@ -97,6 +102,7 @@ async def generate_rowdy_plan_stream(body: dict):
     max_jobs = body.get("max_job_matches", 20)
 
     async def event_stream():
+        source_status = await ensure_plan_sources(body.get("opportunity_source"))
         steps = [
             "Analyzing your background",
             "Reading your resume",
@@ -125,6 +131,7 @@ async def generate_rowdy_plan_stream(body: dict):
             opportunity_source=body.get("opportunity_source"),
         )
 
+        plan["source_status"] = source_status
         # Send the complete result
         yield f"data: {json.dumps({'step': 'complete', 'result': plan})}\n\n"
 

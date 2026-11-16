@@ -9,6 +9,7 @@ career interest, location, and goals.
 from __future__ import annotations
 
 import re
+from datetime import datetime, time, timezone
 from typing import Any, Optional
 
 try:
@@ -184,6 +185,10 @@ class JobMatcher:
             "deadline": opportunity.get("deadline"),
             "url": opportunity.get("url", ""),
             "source": opportunity.get("source", ""),
+            "source_kind": opportunity.get("source_kind", "manual"),
+            "source_label": opportunity.get("source_label", opportunity.get("source", "")),
+            "source_url": opportunity.get("source_url") or opportunity.get("url", ""),
+            "source_timestamp": opportunity.get("source_timestamp"),
             "compensation": opportunity.get("compensation", ""),
             "match_score": match_score,
             "score_breakdown": {
@@ -533,6 +538,20 @@ class JobMatcher:
         """
         results = []
         for opp in opportunities:
+            expired = False
+            for value in (opp.get("deadline"), opp.get("expiration_date")):
+                if not value:
+                    continue
+                try:
+                    end = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+                    if len(str(value)) == 10:
+                        end = datetime.combine(end.date(), time.max)
+                    if (end.replace(tzinfo=timezone.utc) if end.tzinfo is None else end) < datetime.now(timezone.utc):
+                        expired = True
+                except ValueError:
+                    continue
+            if expired:
+                continue
             scored = self.score_opportunity(student, opp, student_features)
             results.append(scored)
         results.sort(key=lambda x: x["match_score"], reverse=True)

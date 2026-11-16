@@ -4,6 +4,12 @@ from __future__ import annotations
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def disable_live_source_sync(monkeypatch):
+    from app.core.config import settings
+    monkeypatch.setattr(settings, "AUTO_SYNC_OPPORTUNITIES", False)
+
+
 @pytest.fixture
 def sample_student_profile() -> dict:
     return {

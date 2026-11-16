@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, Query
 
 from app.api.mock_store import store
 from app.recommendation.job_matcher import JobMatcher
+from app.services.source_sync import ensure_source
 
 router = APIRouter(tags=["jobs"])
 
@@ -24,6 +25,8 @@ async def get_job_recommendations(
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
+    if source:
+        await ensure_source(source)
     opportunities = store.list_opportunities(filters={"source": source}, limit=None)
     if not opportunities:
         return {"student_id": student_id, "job_matches": [], "message": "No opportunities available. Seed the database first."}

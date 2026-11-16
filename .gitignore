@@ -30,3 +30,5 @@ backend/uploads/*
 
 # Docker
 *.log
+.vercel
+.env*

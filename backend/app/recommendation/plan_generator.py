@@ -5,6 +5,8 @@ and assembles the final plan output.
 from __future__ import annotations
 
 from typing import Any
+import re
+from datetime import datetime, timezone
 
 from app.recommendation.profile_builder import ProfileBuilder
 from app.recommendation.feature_extractor import FeatureExtractor
@@ -53,6 +55,7 @@ class PlanGenerator:
         skill gaps, next steps, and timeline.
         """
         processing_steps = []
+        campus_opportunities = [o for o in (opportunities or []) if o.get("source") in {"rowdylink", "instagram_acmutsa"}]
         if opportunity_source:
             opportunities = [
                 opp for opp in (opportunities or [])
@@ -144,6 +147,7 @@ class PlanGenerator:
             "career_matches": career_matches,
             "job_matches": job_matches,
             "experience_matches": experience_matches[:10],
+            "campus_matches": self._match_campus_opportunities(student, campus_opportunities) if opportunity_source != "utsa" else [],
             "resume_analysis": resume_analysis,
             "skill_gaps": skill_gaps[:10],
             "next_steps": next_steps,
@@ -151,6 +155,48 @@ class PlanGenerator:
             "processing_steps": processing_steps,
             "opportunity_source": opportunity_source,
         }
+
+    def _match_campus_opportunities(self, student: dict, opportunities: list[dict]) -> list[dict]:
+        """Rank real campus listings by explicit profile evidence, not inferred eligibility."""
+        profile_text = " ".join([
+            student.get("major") or "", student.get("short_term_goal") or "",
+            *student.get("career_interests", []), *student.get("skills", []),
+            *student.get("technical_skills", []), *student.get("coursework", []),
+        ]).lower()
+        stopwords = {
+            "utsa", "university", "student", "students", "science", "intern", "internship", "engineering",
+            "the", "and", "for", "with", "from", "that", "this", "land", "summer", "find", "get", "looking",
+            "want", "your", "our", "will", "can", "have", "more", "about", "into", "work", "job", "jobs",
+            "role", "roles", "help", "need", "their", "they", "learn", "year", "fall", "spring", "school",
+            "knowledge", "skills", "experience", "using", "build", "plan", "start", "achieve", "become",
+            "career", "opportunity", "opportunities", "interested", "apply", "seeking", "would", "like",
+        }
+        keywords = {word for word in re.findall(r"[a-z][a-z0-9+#.-]*", profile_text) if len(word) >= 3 and word not in stopwords}
+        results = []
+        now = datetime.now(timezone.utc)
+        for opportunity in opportunities:
+            expiration = opportunity.get("expiration_date")
+            if expiration:
+                try:
+                    end = datetime.fromisoformat(expiration.replace("Z", "+00:00"))
+                    if (end.replace(tzinfo=timezone.utc) if end.tzinfo is None else end) <= now:
+                        continue
+                except ValueError:
+                    continue
+            text = " ".join([opportunity.get("title", ""), opportunity.get("description", ""), opportunity.get("organization", "")]).lower()
+            words = set(re.findall(r"[a-z][a-z0-9+#.-]*", text))
+            shared = sorted(keywords & words)
+            general = any(phrase in text for phrase in ("all majors", "career fair", "resume workshop", "career readiness", "interview workshop"))
+            if not shared and not general:
+                continue
+            results.append({
+                **{key: opportunity.get(key) for key in ("title", "description", "organization", "url", "source", "source_kind", "source_label", "source_url", "source_timestamp", "starts_at", "posted_at", "type")},
+                "opportunity_id": opportunity["id"],
+                "profile_keywords": shared,
+                "reason": "Matches your profile: " + ", ".join(shared[:4]) + "." if shared else "Career preparation open to students across majors.",
+            })
+        results.sort(key=lambda result: (-len(result["profile_keywords"]), result.get("starts_at") or "9999"))
+        return results[:6]
 
     def _generate_next_steps(
         self,

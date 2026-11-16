@@ -54,6 +54,9 @@ class Settings(BaseSettings):
     APIFY_HANDSHAKE_TASK_ID: Optional[str] = None
     APIFY_HANDSHAKE_INPUT: Dict[str, Any] = Field(default_factory=dict)
     APIFY_TIMEOUT_SECONDS: int = 300
+    APIFY_ACM_INSTAGRAM_DATASET_ID: Optional[str] = None
+    AUTO_SYNC_OPPORTUNITIES: bool = True
+    OPPORTUNITY_CACHE_TTL_SECONDS: int = Field(default=900, ge=60)
 
 
 # Singleton – import this wherever settings are needed.

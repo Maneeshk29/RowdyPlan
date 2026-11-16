@@ -493,7 +493,51 @@ alone cannot validate that prediction.
 | Dataset has jobs but RowdyPlan imports zero | Check the imported dataset shape and title mappings in `handshake_provider.py`. |
 | Startup log says `LIMITED_PERMISSIONS` | This line did not stop the attached run; inspect subsequent warnings and dataset counts for the actual problem. |
 | Timeout | Reduce the Actor's batch size; check the existing run before retrying. |
-| Jobs vanish after a code change | Reload restarts the in-memory store. Re-import jobs or add database persistence. |
+| Jobs vanish after a code change | Handshake plans now automatically reload the latest completed dataset when configured. Check `AUTO_SYNC_OPPORTUNITIES`; permanent storage still needs a database. |
 | Matches show demo employers | Use `opportunity_source: "handshake"`, or Build My Plan rather than Explore Demo. |
-| Scheduling Apify does not update RowdyPlan | A schedule runs the Actor only. A worker/webhook must import that run's dataset into RowdyPlan. |
+| Scheduling Apify does not update RowdyPlan | A schedule runs the Actor only. New plans now check its latest successful dataset automatically, with a 15-minute cache. Sync Handshake also imports the completed run. |
 | Low scores for a strong student | Check imported requirements, skills, and profile inputs before adjusting weights. |
+
+## My Plan Sources and Missions
+
+With `AUTO_SYNC_OPPORTUNITIES=true` (default), a Handshake plan reads the latest
+successful Apify dataset and matches it in the same request. This also works
+after a Vercel cold start. Reads never start an Actor. Warm instances cache
+source results for `OPPORTUNITY_CACHE_TTL_SECONDS=900`; failed refreshes retain
+existing listings and show a warning. Expired job deadlines are excluded from
+recommendations. Demo listings remain labeled as demo data.
+
+RowdyLink events come from its [public RSS feed](https://rowdylink.utsa.edu/events.rss).
+The importer excludes ended or cancelled events and keeps source URLs and
+timestamps. My Plan ranks these events using the student's major, goals,
+interests, coursework, and skills, separately from Handshake job matching.
+Each imported recommendation has a clickable **Scraped from RowdyLink** or
+**Scraped from Handshake** label. Suggested catalog activities are not presented
+as scraped listings.
+
+The verified [ACM UTSA Instagram account](https://www.instagram.com/acmutsa/)
+is a resource link until an actual dataset is connected. To import posts:
+
+1. Use your authorized Apify Instagram scraper to collect public posts from
+   `acmutsa`, respecting the platform's terms and access restrictions.
+2. In the successful run, open its dataset and copy the **dataset ID**, not
+   another API token. Required row fields are `ownerUsername`, `url`,
+   `caption`, and an ISO `timestamp`.
+3. Add `APIFY_ACM_INSTAGRAM_DATASET_ID=your_dataset_id` to the backend's private
+   environment or Vercel Environment Variables, then restart or redeploy.
+   Reuse the server-side `APIFY_API_TOKEN` that can read that dataset.
+4. Generate a Handshake plan. Only recent posts from `acmutsa` with real
+   Instagram post/reel links are imported. Their label is **Scraped from
+   Instagram of ACM UTSA**. Post captions are announcements, not verified
+   event dates or eligibility claims.
+
+For a manual read-only import, send `{"provider":"rowdylink"}` or
+`{"provider":"instagram_acmutsa","dataset_id":"your_dataset_id"}` to
+`POST /api/admin/ingest` on the protected app. Keep the dataset environment
+variable configured if you want future cold instances to reload it.
+
+Missions start empty for each new student profile. **Add to Missions** saves
+a chosen matched listing or campus recommendation, with profile-specific
+preparation steps. The student checks off progress and changes the stage;
+nothing is marked applied or completed automatically. Missions currently
+last for the browser visit only, until account-backed storage is implemented.

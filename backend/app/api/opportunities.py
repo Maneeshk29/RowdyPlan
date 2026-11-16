@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Query
 from typing import Optional
 
 from app.api.mock_store import store
+from app.services.source_sync import ensure_source
 
 router = APIRouter(tags=["opportunities"])
 
@@ -28,6 +29,7 @@ async def list_opportunities(
         filters["location"] = location
     if source:
         filters["source"] = source
+        await ensure_source(source)
 
     return store.list_opportunities(filters=filters, skip=skip, limit=limit)
 

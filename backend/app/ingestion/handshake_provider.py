@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import re
+import uuid
 from datetime import datetime
 from typing import Any
 from urllib.parse import quote
@@ -217,6 +218,7 @@ class HandshakeProvider(UniversityOpportunityProvider):
 
         normalized = normalize_opportunity(
             {
+                "id": str(uuid.uuid5(uuid.NAMESPACE_URL, "handshake:" + (source_id or str(url)))) if source_id or url else None,
                 "title": title,
                 "description": description or requirements_text,
                 "organization": organization,
@@ -236,6 +238,8 @@ class HandshakeProvider(UniversityOpportunityProvider):
         )
         normalized.update({
             "source_id": source_id,
+            "source_kind": "scraped",
+            "source_label": "Handshake",
             "required_skills": skills,
             "required_majors": majors,
             "job_type": employment_type_text,

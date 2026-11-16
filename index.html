@@ -269,6 +269,7 @@
     .reveal-bird .rowdy-logo { width: 72px; height: 72px; }
     .fab-bird .rowdy-logo { width: 46px; height: 46px; }
     .fab-bird { overflow: hidden; }
+    .dashboard-active .fab-bird { display: none; }
     .sidebar-brand .rowdy-logo { width: 32px; height: 32px; }
     .btn-ask-side .rowdy-logo { width: 28px; height: 28px; }
     .wizard-profile-fields { margin-top: 20px; }
@@ -1078,7 +1079,7 @@
     .mission-card {
       background: #fff;
       border: 1px solid var(--line);
-      border-radius: 20px;
+      border-radius: 8px;
       padding: 24px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
@@ -1090,6 +1091,33 @@
       font-size: 13px;
       font-weight: 600;
       color: #334155;
+    }
+    .checklist-row input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--orange-500); }
+    .mission-card h2 { font-size: 19px; line-height: 1.4; margin: 12px 0 4px; overflow-wrap: anywhere; }
+    .mission-heading, .mission-actions { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .mission-actions { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .mission-remove { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer; }
+    .mission-remove:hover { background: #fee2e2; }
+    .mission-stage { max-width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 8px; font: inherit; font-size: 13px; background: white; }
+    .mission-empty { padding: 32px 0; color: var(--muted); }
+    .mission-empty h2 { color: var(--navy-900); font-size: 20px; margin-bottom: 16px; }
+    .add-mission-button { display: inline-flex; align-items: center; gap: 8px; }
+    .plan-sources { margin: 32px 0; }
+    .plan-target-hero { flex-wrap: wrap; gap: 20px; }
+    .plan-target-hero > div { min-width: 0; }
+    .plan-target-hero h1 { font-size: 28px; line-height: 1.3; }
+    .plan-sources h2 { font-size: 20px; margin-bottom: 12px; }
+    .plan-source-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); align-items: center; }
+    .plan-source-item h3 { font-size: 16px; line-height: 1.45; overflow-wrap: anywhere; }
+    .plan-source-item p { font-size: 13px; color: var(--muted); margin-top: 6px; overflow-wrap: anywhere; }
+    .plan-source-item .source-label { color: var(--green); }
+    .source-label a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+    .plan-source-status { font-size: 13px; color: var(--muted); margin: 12px 0; }
+    .source-resource { font-size: 13px; color: var(--muted); margin-top: 20px; }
+    .source-resource a { color: var(--navy-900); }
+    @media (max-width: 640px) {
+      .plan-source-item { grid-template-columns: minmax(0, 1fr); }
+      .plan-source-item .add-mission-button { justify-self: start; }
     }
 
     /* ========================================================
@@ -1208,6 +1236,7 @@
       .nav-btn .icon { font-size: 20px; }
       .nav-badge { display: none; }
       .sidebar-footer { display: none; }
+      .dashboard-active .fab-bird { display: flex; width: 50px; height: 50px; left: 10px; right: auto; bottom: 16px; }
       .main-canvas { margin-left: 70px; width: calc(100% - 70px); padding: 20px; }
       .resume-workspace { grid-template-columns: minmax(0, 1fr); gap: 24px; }
       .opp-grid, .dash-metrics, .w-form-grid, .w-cards-grid, .landing-values, .mission-grid {
@@ -1576,7 +1605,7 @@
           </button>
           <button class="nav-btn" aria-label="Missions" aria-controls="tab-missions" data-tab="tab-missions" onclick="showAppTab('tab-missions', this)">
             <span class="icon" aria-hidden="true">✓</span><span class="nav-label">Missions</span>
-            <span class="nav-badge">2</span>
+            <span class="nav-badge" id="mission-count" hidden>0</span>
             <span class="nav-tooltip" role="tooltip">Missions</span>
           </button>
           <button class="nav-btn" aria-label="AI Interview" aria-controls="tab-interview" data-tab="tab-interview" onclick="enterDistractionFreeInterview()">
@@ -1641,8 +1670,8 @@
               <span>🆕 Just Discovered</span>
             </div>
             <div class="metric-tile">
-              <strong>2</strong>
-              <span>📋 Active Missions</span>
+              <strong id="active-mission-metric">0</strong>
+              <span>Active Missions</span>
             </div>
           </div>
 
@@ -1699,54 +1728,32 @@
             <div>
               <div class="eyebrow" style="color:var(--orange-400);">OPTIMAL CAREER SEQUENCER</div>
               <h1 style="color:white; margin:4px 0 6px;">Your Plan</h1>
-              <p style="color:#cbd5e1; font-size:15px;">🎯 Target: AI Internship — Summer 2027</p>
+              <p style="color:#cbd5e1; font-size:15px;">Your career goal</p>
             </div>
             <div style="text-align:right;">
               <span style="font-size:12px; color:#94a3b8; font-weight:700;">CURRENT READINESS</span>
-              <div style="font-size:38px; font-weight:900; color:var(--orange-400);">78%</div>
+              <div style="font-size:38px; font-weight:900; color:var(--orange-400);">--</div>
             </div>
           </div>
 
           <div class="roadmap-track" id="roadmap-items-area"></div>
+          <section class="plan-sources" aria-labelledby="plan-sources-title">
+            <h2 id="plan-sources-title">Opportunities for Your Plan</h2>
+            <p id="plan-source-status" class="plan-source-status" role="status"></p>
+            <div id="plan-source-items"></div>
+            <p class="source-resource"><a href="https://www.instagram.com/acmutsa/" target="_blank" rel="noopener noreferrer">ACM UTSA on Instagram</a> <span id="acm-source-status">Official account</span></p>
+          </section>
         </section>
 
         <!-- TAB 5: MISSIONS -->
         <section id="tab-missions" class="app-tab" style="display:none;">
           <div class="eyebrow">EXECUTION CONTROL</div>
           <h1>Active Missions</h1>
-          <p class="sub">Track applications that have converted into active high-stakes missions.</p>
-
-          <div class="mission-grid">
-            <div class="mission-card">
-              <span class="opp-pill">MISSION #1 · 80% READY</span>
-              <h3 style="font-size:19px; font-weight:800; margin:10px 0 4px; color:var(--navy-900);">USAA Data Analyst Internship</h3>
-              <div class="progress-bar" style="margin:12px 0 16px;"><i style="width:80%;"></i></div>
-              <div class="checklist-row"><span style="color:var(--green)">✓</span> Opportunity discovered & matched</div>
-              <div class="checklist-row"><span style="color:var(--green)">✓</span> Résumé tailored to SQL & risk analytics</div>
-              <div class="checklist-row"><span style="color:var(--green)">✓</span> Application submitted</div>
-              <div class="checklist-row"><span style="color:var(--muted)">○</span> Technical Assessment</div>
-              <div class="checklist-row"><span style="color:var(--muted)">○</span> Final Round Interview</div>
-              <div style="margin-top:20px; padding-top:14px; border-top:1px solid #f1f5f9; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;">
-                <span style="font-size:12px; font-weight:700; color:var(--orange-500);">NEXT: Practice behavioral & SQL with Rowdy</span>
-                <button class="btn-solid mission-interview-button" style="padding:8px 16px; font-size:13px;" onclick="enterDistractionFreeInterview()"><img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="24" height="24">AI Interview</button>
-              </div>
-            </div>
-
-            <div class="mission-card">
-              <span class="opp-pill">MISSION #2 · 60% READY</span>
-              <h3 style="font-size:19px; font-weight:800; margin:10px 0 4px; color:var(--navy-900);">AI Undergraduate Research Fellowship</h3>
-              <div class="progress-bar" style="margin:12px 0 16px;"><i style="width:60%;"></i></div>
-              <div class="checklist-row"><span style="color:var(--green)">✓</span> Eligibility verified (3.70 GPA)</div>
-              <div class="checklist-row"><span style="color:var(--green)">✓</span> Résumé evidence synchronized</div>
-              <div class="checklist-row"><span style="color:var(--muted)">○</span> Faculty mentor endorsement</div>
-              <div class="checklist-row"><span style="color:var(--muted)">○</span> Personal research proposal draft</div>
-              <div class="checklist-row"><span style="color:var(--muted)">○</span> Formal UTSA submission</div>
-              <div style="margin-top:20px; padding-top:14px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:12px; font-weight:700; color:var(--orange-500);">NEXT: Find & pitch faculty mentor</span>
-                <button class="btn-outline" style="padding:8px 16px; font-size:13px;" onclick="toggleChatDrawer()">Ask Rowdy 🐦</button>
-              </div>
-            </div>
+          <div id="missions-empty" class="mission-empty">
+            <h2>No active missions</h2>
+            <button class="btn-outline" onclick="showAppTab('tab-explore')">Explore Matches</button>
           </div>
+          <div class="mission-grid" id="mission-items"></div>
         </section>
 
         <section id="tab-resume" class="app-tab" style="display:none;" aria-labelledby="resume-page-title">
@@ -1978,6 +1985,9 @@
     let selectedOppForWNM = null;
     let currentStudentId = null;
     let currentPlan = null;
+    let currentProfile = null;
+    let missions = [];
+    let planSourceOpportunities = [];
 
     function mapCategory(title) {
       if (!title) return 'INTERNSHIP';
@@ -2007,6 +2017,12 @@
           deadline: jm.deadline || '',
           opportunityId: jm.opportunity_id,
           source: jm.source || '',
+          source_kind: jm.source_kind || 'manual',
+          source_label: jm.source_label || jm.source || '',
+          source_url: safeJobURL(jm.source_url || jm.url),
+          source_timestamp: jm.source_timestamp,
+          missing_skills: jm.missing_skills || [],
+          matched_skills: jm.matched_skills || [],
           url: safeJobURL(jm.url),
           location: jm.location || '',
           description: jm.description || '',
@@ -2030,6 +2046,7 @@
        VIEW SWITCHING LOGIC
        ======================================================== */
     function switchMasterView(viewId) {
+      document.body.classList.toggle('dashboard-active', viewId === 'dashboard');
       var interviewVideo = document.getElementById('rowdy-interview-video');
       if (interviewVideo && viewId !== 'dashboard') interviewVideo.pause();
       document.querySelectorAll('.view-container').forEach(function(v) { v.classList.remove('active'); });
@@ -2115,20 +2132,12 @@
       };
 
       try {
-        try {
-          var existingJobs = await apiGet('/opportunities?source=handshake&limit=1');
-          if (!existingJobs.length) {
-            addGenStep('Loading the latest Handshake listings...');
-            var imported = await apiPost('/admin/ingest', { provider: 'handshake', use_latest_run: true });
-            addGenStep(imported.fetched + ' Handshake listings loaded');
-          }
-        } catch (syncError) {
-          addGenStep('Handshake listings are currently unavailable.');
-        }
-        addGenStep('Creating your student profile...');
+        addGenStep('Loading Handshake listings and matching your profile...');
         var plan = await apiPost('/rowdy-plan/generate-inline', profileData);
         currentPlan = plan;
         currentStudentId = plan.student_id;
+        currentProfile = profileData;
+        missions = [];
         addGenStep('✓ Profile created');
         addGenStep('✓ Prediction engine complete');
         addGenStep('✓ ' + (plan.job_matches || []).length + ' opportunities matched');
@@ -2172,11 +2181,11 @@
       if (tiles[0]) tiles[0].textContent = strong;
       if (tiles[1]) tiles[1].textContent = qualified;
       if (tiles[2]) tiles[2].textContent = (plan.career_matches || []).length;
-      if (tiles[3]) tiles[3].textContent = (plan.skill_gaps || []).length;
+      if (tiles[3]) tiles[3].textContent = missions.length;
       if (labels[0]) labels[0].innerHTML = '🎯 Strong Matches';
       if (labels[1]) labels[1].innerHTML = '✓ Qualified For';
       if (labels[2]) labels[2].innerHTML = '🔥 Career Paths';
-      if (labels[3]) labels[3].innerHTML = '📋 Skill Gaps';
+      if (labels[3]) labels[3].textContent = 'Active Missions';
       var matches = plan.job_matches || [];
       var isDemo = plan.opportunity_source === 'utsa';
       document.getElementById('dashboard-source-summary').textContent = isDemo
@@ -2187,6 +2196,12 @@
         : 'Handshake listings matched to your profile.';
       document.getElementById('handshake-sync-button').hidden = isDemo;
       document.getElementById('handshake-sync-status').textContent = '';
+      var handshakeStatus = (plan.source_status || []).find(function(source) { return source.source === 'handshake'; });
+      if (handshakeStatus && ['unavailable', 'unconfigured', 'stale'].includes(handshakeStatus.status)) {
+        document.getElementById('handshake-sync-status').textContent = handshakeStatus.status === 'stale'
+          ? 'Showing cached Handshake listings. The latest refresh failed.'
+          : 'Handshake listings are unavailable. Check the completed Apify run and sync again.';
+      }
       document.getElementById('view-all-matches').textContent = 'View all (' + matches.length + ') →';
     }
 
@@ -2203,12 +2218,9 @@
           status.textContent = 'The latest completed run has no usable jobs. Existing listings are unchanged.';
           return;
         }
-        if (currentStudentId) {
-          var plan = await apiPost('/rowdy-plan/generate', {
-            student_id: currentStudentId,
-            opportunity_source: 'handshake'
-          });
-          plan.student_id = currentStudentId;
+        if (currentProfile) {
+          var plan = await apiPost('/rowdy-plan/generate-inline', Object.assign({}, currentProfile, { opportunity_source: 'handshake' }));
+          currentStudentId = plan.student_id;
           currentPlan = plan;
           transformJobMatches(plan);
           updateDashMetrics(plan);
@@ -2293,6 +2305,8 @@
         var plan = await apiPost('/rowdy-plan/generate-inline', demoProfile);
         currentPlan = plan;
         currentStudentId = plan.student_id;
+        currentProfile = demoProfile;
+        missions = [];
         transformJobMatches(plan);
         updateDashMetrics(plan);
         updateDossierTab(demoProfile, plan);
@@ -2534,6 +2548,7 @@
         var analysis = await apiPost('/resume/analyze', { student_id: studentId, target_career: role });
         if (currentStudentId !== studentId) return;
         if (currentPlan) currentPlan.resume_analysis = analysis;
+        if (currentProfile) currentProfile.resume_text = resumeText;
         renderResumeToolAnalysis(analysis, role);
         setResumeToolStatus('Analysis complete.', false);
       } catch (error) {
@@ -2571,7 +2586,7 @@
        RENDER OPPORTUNITY CARDS (from backend data)
        ======================================================== */
     function renderCardHTML(o) {
-      var sourceLabel = o.source === 'handshake' ? 'Handshake' : o.source === 'utsa' ? 'UTSA demo' : o.source;
+      var sourceLabel = sourceText(o);
       return '<div class="opp-card" role="button" tabindex="0" onclick="openOppDetail(' + o.id + ')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openOppDetail(' + o.id + ')}">' +
         '<div style="display:flex; justify-content:space-between; align-items:center;">' +
         '<span class="opp-pill">' + o.type + '</span>' +
@@ -2605,6 +2620,7 @@
 
       renderExploreCards();
       renderRoadmap();
+      renderMissions();
     }
 
     function renderExploreCards() {
@@ -2654,7 +2670,6 @@
 
       var isHighMatch = o.match >= 60;
       var ctaLabel = isHighMatch ? 'Prepare for this role' : 'Close my skill gaps';
-      var sourceLabel = o.source === 'handshake' ? 'Handshake' : o.source === 'utsa' ? 'UTSA demo' : o.source;
 
       document.getElementById('detail-render-area').innerHTML =
         '<div class="detail-card">' +
@@ -2663,7 +2678,7 @@
         '<h1 style="font-size:28px; margin:8px 0 4px;">' + escapeHTML(o.title) + '</h1>' +
         '<p class="sub">' + escapeHTML(o.org) + (o.money ? ' · <b style="color:var(--navy-900)">' + escapeHTML(o.money) + '</b>' : '') + '</p>' +
         '<p class="sub">' + escapeHTML(o.location) + '</p>' +
-        '<p class="source-label">' + escapeHTML(sourceLabel) + (o.deadline ? ' · Apply by ' + escapeHTML(new Date(o.deadline).toLocaleDateString()) : '') + '</p></div>' +
+        '<p class="source-label">' + sourceHTML(o) + (o.deadline ? ' · Apply by ' + escapeHTML(new Date(o.deadline).toLocaleDateString()) : '') + '</p></div>' +
         '<div class="detail-score"><div class="opp-score ' + (isHighMatch ? 'high' : '') + '" style="margin:0;">' + o.match + '%</div>' +
         '<div class="opp-score-sub">MATCH SCORE</div></div></div>' +
         (o.description ? '<p class="job-description">' + escapeHTML(o.description) + '</p>' : '') +
@@ -2687,6 +2702,7 @@
 
         '<div class="detail-footer"><p>' + escapeHTML(o.why) + '</p><div class="detail-actions">' +
         (o.url ? '<a class="btn-solid" href="' + escapeHTML(o.url) + '" target="_blank" rel="noopener noreferrer">' + (o.source === 'handshake' ? 'Open on Handshake' : 'Open listing') + ' ↗</a>' : '') +
+        '<button class="btn-outline add-mission-button" onclick="addMissionFromMatch(' + o.id + ')"><img class="tool-icon" src="/assets/icons/plus.svg" alt="" width="18" height="18">' + (missions.some(function(m) { return m.opportunityId === o.opportunityId; }) ? 'View Mission' : 'Add to Missions') + '</button>' +
         '<button class="btn-outline" onclick="openWhyNotMeModal()">' + ctaLabel + '</button></div></div></div>';
 
       showAppTab('tab-detail');
@@ -2741,7 +2757,7 @@
 
       steps.forEach(function(text, idx) {
         setTimeout(function() {
-          logs.innerHTML += '<div class="agent-step"><span>›</span> ' + text + '</div>';
+          logs.innerHTML += '<div class="agent-step"><span>›</span> ' + escapeHTML(text) + '</div>';
         }, (idx + 1) * 350);
       });
 
@@ -2791,26 +2807,129 @@
         return '<div class="roadmap-node ' + (i === 0 ? 'active' : '') + '">' +
           '<div class="node-pin">' + (i === nodes.length - 1 ? '🎯' : (i + 1)) + '</div>' +
           '<div class="node-body">' +
-          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
-          '<span class="node-tag">' + n.month + '</span>' +
-          '<span style="font-size:11px; font-weight:800; color:' + (n.status.includes('✓') || n.status.includes('🎯') ? 'var(--green)' : 'var(--orange-500)') + '">' + n.status + '</span></div>' +
-          '<div class="node-title">' + n.title + '</div>' +
-          '<div class="node-desc">' + n.desc + '</div></div></div>';
+          '<div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center;">' +
+          '<span class="node-tag">' + escapeHTML(n.month) + '</span>' +
+          '<span style="font-size:11px; font-weight:800; color:' + (n.status.includes('✓') || n.status.includes('🎯') ? 'var(--green)' : 'var(--orange-500)') + '">' + escapeHTML(n.status) + '</span></div>' +
+          '<div class="node-title">' + escapeHTML(n.title) + '</div>' +
+          '<div class="node-desc">' + escapeHTML(n.desc) + '</div></div></div>';
       }).join('');
 
       if (currentPlan) {
         var hero = document.querySelector('.plan-target-hero');
         if (hero) {
-          var targetGoal = currentPlan.next_steps ? currentPlan.next_steps[0] : 'Complete your plan';
+          var targetGoal = currentProfile && currentProfile.short_term_goal || (currentPlan.next_steps || [])[0] || 'Complete your plan';
           var readiness = currentPlan.profile_strength || 0;
           hero.innerHTML =
             '<div><div class="eyebrow" style="color:var(--orange-400);">YOUR PERSONALIZED CAREER PLAN</div>' +
             '<h1 style="color:white; margin:4px 0 6px;">Your Rowdy Plan</h1>' +
-            '<p style="color:#cbd5e1; font-size:14px; max-width:400px;">🎯 ' + targetGoal + '</p></div>' +
+            '<p style="color:#cbd5e1; font-size:14px; max-width:400px; overflow-wrap:anywhere;">' + escapeHTML(targetGoal) + '</p></div>' +
             '<div style="text-align:right;"><span style="font-size:12px; color:#94a3b8; font-weight:700;">PROFILE STRENGTH</span>' +
             '<div style="font-size:38px; font-weight:900; color:var(--orange-400);">' + readiness + '%</div></div>';
         }
       }
+      renderPlanSources();
+    }
+
+    /* ========================================================
+       SOURCES AND PERSONAL MISSIONS
+       ======================================================== */
+    function sourceText(item) {
+      if (item.source === 'utsa' || item.source_kind === 'demo') return 'UTSA demo listing';
+      var label = item.source_label || item.source || 'Listing';
+      return (item.source_kind === 'scraped' ? 'Scraped from ' : 'Source: ') + label;
+    }
+
+    function sourceHTML(item) {
+      var url = safeJobURL(item.source_url || item.url);
+      var label = escapeHTML(sourceText(item));
+      return (url ? '<a href="' + escapeHTML(url) + '" target="_blank" rel="noopener noreferrer">' + label + '</a>' : label) +
+        (item.source_timestamp ? ' · Retrieved ' + escapeHTML(new Date(item.source_timestamp).toLocaleDateString()) : '');
+    }
+
+    function renderPlanSources() {
+      planSourceOpportunities = (currentPlan && currentPlan.campus_matches || []).map(function(item) {
+        return Object.assign({}, item, { opportunityId: item.opportunity_id, org: item.organization, match: null });
+      }).concat(opportunities.slice(0, 3));
+      document.getElementById('plan-source-items').innerHTML = planSourceOpportunities.map(function(item, index) {
+        var isSaved = missions.some(function(mission) { return mission.opportunityId === item.opportunityId; });
+        return '<article class="plan-source-item"><div><h3>' + escapeHTML(item.title) + '</h3>' +
+          '<p>' + escapeHTML(item.org || '') + (item.starts_at ? ' · ' + escapeHTML(new Date(item.starts_at).toLocaleString()) : '') + '</p>' +
+          '<p>' + escapeHTML(item.reason || item.why || '') + '</p><p class="source-label">' + sourceHTML(item) + '</p></div>' +
+          '<button class="btn-outline add-mission-button" onclick="addMissionFromPlan(' + index + ')"><img class="tool-icon" src="/assets/icons/plus.svg" alt="" width="18" height="18">' + (isSaved ? 'View Mission' : 'Add to Missions') + '</button></article>';
+      }).join('');
+      var warnings = (currentPlan && currentPlan.source_status || []).filter(function(item) { return ['unavailable', 'stale'].includes(item.status); });
+      document.getElementById('plan-source-status').textContent = warnings.length
+        ? warnings.map(function(item) { return item.source === 'rowdylink' ? 'RowdyLink refresh unavailable.' : item.source === 'handshake' ? 'Handshake refresh unavailable.' : 'Instagram refresh unavailable.'; }).join(' ')
+        : planSourceOpportunities.length ? '' : 'No imported opportunities for this profile yet.';
+      var instagram = (currentPlan && currentPlan.source_status || []).find(function(item) { return item.source === 'instagram_acmutsa'; });
+      document.getElementById('acm-source-status').textContent = instagram && instagram.status === 'ready'
+        ? 'Official account · ' + instagram.count + ' posts imported'
+        : 'Official account · Posts not imported';
+    }
+
+    function addMissionFromMatch(id) {
+      addMission(opportunities.find(function(item) { return item.id === id; }));
+    }
+
+    function addMissionFromPlan(index) {
+      addMission(planSourceOpportunities[index]);
+    }
+
+    function addMission(item) {
+      if (!item || !currentProfile || !item.opportunityId) return;
+      if (!missions.some(function(mission) { return mission.opportunityId === item.opportunityId; })) {
+        var steps = ['Review requirements for ' + item.title];
+        var isJob = item.source === 'handshake' || item.source === 'utsa';
+        if (isJob) {
+          if ((item.missing_skills || []).length) steps.push('Build evidence for ' + item.missing_skills.slice(0, 2).join(', '));
+          steps.push('Tailor your resume' + ((item.matched_skills || []).length ? ' to ' + item.matched_skills.slice(0, 3).join(', ') : ' for this role'));
+          steps.push('Submit your application', 'Prepare for an interview at ' + item.org);
+        } else {
+          steps.push(item.source === 'instagram_acmutsa' ? 'Confirm current details with ACM UTSA' : 'Confirm attendance and registration details');
+          steps.push('Participate and record what you learned');
+        }
+        missions.push(Object.assign({}, item, { isJob: isJob, stage: 'planned', steps: steps.map(function(label) { return { label: label, done: false }; }) }));
+      }
+      renderMissions();
+      renderPlanSources();
+      showAppTab('tab-missions');
+    }
+
+    function renderMissions() {
+      var badge = document.getElementById('mission-count');
+      badge.textContent = missions.length;
+      badge.hidden = missions.length === 0;
+      document.getElementById('active-mission-metric').textContent = missions.length;
+      document.getElementById('missions-empty').hidden = missions.length > 0;
+      document.getElementById('mission-items').innerHTML = missions.map(function(mission, index) {
+        var completed = mission.steps.filter(function(step) { return step.done; }).length;
+        var progress = Math.round(completed / mission.steps.length * 100);
+        var stages = mission.isJob ? ['planned', 'applied', 'interviewing', 'completed'] : ['planned', 'registered', 'completed'];
+        return '<article class="mission-card"><div class="mission-heading"><span class="opp-pill">' + progress + '% COMPLETE</span>' +
+          '<button class="mission-remove" title="Remove mission" aria-label="Remove mission" onclick="removeMission(' + index + ')"><img class="tool-icon" src="/assets/icons/trash-2.svg" alt="" width="18" height="18"></button></div>' +
+          '<h2>' + escapeHTML(mission.title) + '</h2><p class="opp-meta">' + escapeHTML(mission.org || '') + '</p>' +
+          '<p class="source-label">' + sourceHTML(mission) + '</p>' +
+          '<div class="progress-bar" style="margin:16px 0;"><i style="width:' + progress + '%;"></i></div>' +
+          mission.steps.map(function(step, stepIndex) { return '<label class="checklist-row"><input type="checkbox" ' + (step.done ? 'checked ' : '') + 'onchange="toggleMissionStep(' + index + ',' + stepIndex + ',this.checked)"><span>' + escapeHTML(step.label) + '</span></label>'; }).join('') +
+          '<div class="mission-actions"><label>Stage <select class="mission-stage" onchange="missions[' + index + '].stage=this.value" aria-label="Mission stage">' +
+          stages.map(function(stage) { return '<option value="' + stage + '"' + (stage === mission.stage ? ' selected' : '') + '>' + stage.charAt(0).toUpperCase() + stage.slice(1) + '</option>'; }).join('') + '</select></label>' +
+          (mission.isJob ? '<button class="btn-solid mission-interview-button" onclick="enterDistractionFreeInterview()"><img class="rowdy-logo" src="/assets/rowdy-logo.png" alt="" width="24" height="24">AI Interview</button>' : '') + '</div></article>';
+      }).join('');
+    }
+
+    function toggleMissionStep(index, stepIndex, checked) {
+      missions[index].steps[stepIndex].done = checked;
+      var mission = missions[index];
+      var progress = Math.round(mission.steps.filter(function(step) { return step.done; }).length / mission.steps.length * 100);
+      var card = document.querySelectorAll('#mission-items .mission-card')[index];
+      card.querySelector('.opp-pill').textContent = progress + '% COMPLETE';
+      card.querySelector('.progress-bar i').style.width = progress + '%';
+    }
+
+    function removeMission(index) {
+      missions.splice(index, 1);
+      renderMissions();
+      renderPlanSources();
     }
 
     /* ========================================================

@@ -58,11 +58,18 @@ environment files from CLI uploads, so configure secrets in Vercel separately.
 Environment changes apply to new deployments: redeploy after changing a key.
 See [Vercel environment variables](https://vercel.com/docs/environment-variables).
 
-Let the existing Apify schedule run the scraper. **Sync Handshake** imports
-the latest completed dataset without starting a new paid run. The Vercel
-function has a 60-second limit, so do not start a long synchronous scrape from
-this hosted backend. Scheduling in Apify does not automatically push results
-into the Vercel app.
+Let the existing Apify schedule run the scraper. **Build My Plan** now reads
+the latest successful Handshake dataset in the same request that computes
+matches. Cold instances reload it automatically; warm instances check again
+after 15 minutes. **Sync Handshake** also imports without starting a paid run.
+Source refreshes have bounded timeouts within the function's 60-second limit.
+No additional Vercel cron is needed: Apify runs the scheduled scraper, while
+the app reads its completed results when students request a plan.
+
+My Plan also reads UTSA's public RowdyLink RSS feed and links each real event
+to its source. ACM UTSA's Instagram is an official resource link until
+`APIFY_ACM_INSTAGRAM_DATASET_ID` is configured. See the campus-source section
+in [HANDSHAKE_SETUP.md](HANDSHAKE_SETUP.md).
 
 ## Current Prototype Limitations
 
@@ -70,8 +77,12 @@ Use a protected test deployment before inviting real students:
 
 - API routes currently use an in-memory store. Profiles, imported jobs, and
   feedback can disappear on a cold start or differ across serverless instances.
-  Multi-request onboarding and syncing are therefore not reliable on Vercel
-  yet. Merely adding `DATABASE_URL` does not fix this: the API still calls the
+  Inline onboarding and matching now reload source data in the same request,
+  and frontend sync resends the current profile to avoid cold-start ID errors.
+  Other multi-request profile and resume operations still need persistence.
+  Missions start empty for each new profile and remain in the current browser
+  visit only; reloading resets them. Merely adding `DATABASE_URL` does not fix
+  this: the API still calls the
   in-memory store and must be migrated to persistent database access.
 - The API has no user/admin authentication. Admin routes can edit jobs or
   start paid scraper runs, and student routes can expose profile data. Do not

@@ -8,6 +8,7 @@ from app.api.mock_store import store
 from app.schemas.opportunity import OpportunityCreate, OpportunityUpdate
 from app.ingestion.handshake_provider import HandshakeProvider
 from app.ingestion.utsa_provider import UTSAProvider
+from app.ingestion.campus_provider import ACMInstagramProvider, RowdyLinkProvider
 
 router = APIRouter(tags=["admin"])
 
@@ -66,6 +67,13 @@ async def trigger_ingestion(body: dict):
             dataset_id=dataset_id,
             use_latest_run=use_latest_run,
         )
+    elif provider_name == "rowdylink":
+        provider = RowdyLinkProvider()
+    elif provider_name == "instagram_acmutsa":
+        dataset_id = body.get("dataset_id")
+        if dataset_id is not None and (not isinstance(dataset_id, str) or not dataset_id.strip()):
+            raise HTTPException(status_code=422, detail="dataset_id must be a non-empty string")
+        provider = ACMInstagramProvider(dataset_id=dataset_id)
     else:
         raise HTTPException(status_code=422, detail=f"Unknown provider: {provider_name}")
 
